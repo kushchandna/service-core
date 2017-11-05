@@ -3,7 +3,7 @@ package com.kush.lib.service.api.client;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Executor;
 
-public class Responder<T> {
+public class Responder {
 
     private final Executor executor;
 
@@ -11,7 +11,7 @@ public class Responder<T> {
         this.executor = executor;
     }
 
-    public Response<T> invoke(Callable<T> callable) {
+    public <T> Response<T> invoke(Callable<T> callable) {
         Response<T> response = new Response<>();
         executor.execute(new Runnable() {
 
@@ -28,11 +28,11 @@ public class Responder<T> {
         return response;
     }
 
-    private void sendResult(Response<T> response, T result) {
+    private <T> void sendResult(Response<T> response, T result) {
         response.setResult(result);
     }
 
-    private void sendError(Response<T> response, Exception e) {
+    private <T> void sendError(Response<T> response, Exception e) {
         response.setError(e);
     }
 }

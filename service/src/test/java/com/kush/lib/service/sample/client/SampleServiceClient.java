@@ -1,7 +1,6 @@
 package com.kush.lib.service.sample.client;
 
 import java.util.concurrent.Callable;
-import java.util.concurrent.Executor;
 
 import com.kush.lib.service.api.client.Responder;
 import com.kush.lib.service.api.client.Response;
@@ -10,15 +9,14 @@ import com.kush.lib.service.sample.server.SampleService;
 public class SampleServiceClient {
 
     private final SampleService sampleService;
-    private final Executor executor;
+    private final Responder responder;
 
-    public SampleServiceClient(SampleService sampleService, Executor executor) {
+    public SampleServiceClient(SampleService sampleService, Responder responder) {
         this.sampleService = sampleService;
-        this.executor = executor;
+        this.responder = responder;
     }
 
     public Response<String> getHelloText(String name) {
-        Responder<String> responder = new Responder<>(executor);
         return responder.invoke(new Callable<String>() {
 
             @Override

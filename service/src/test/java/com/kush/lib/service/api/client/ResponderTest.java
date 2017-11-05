@@ -1,4 +1,4 @@
-package com.kush.lib.service.api;
+package com.kush.lib.service.api.client;
 
 import static com.kush.utils.time.TimeMonitor.ACCURACY_IN_MILLIS;
 import static java.lang.String.format;
@@ -33,13 +33,13 @@ public class ResponderTest {
     @Rule
     public ExpectedException expected = ExpectedException.none();
 
-    private Responder<String> responder;
+    private Responder responder;
     private TimeMonitor timeMonitor;
 
     @Before
     public void beforeEachTest() throws Exception {
         Executor executor = Executors.newSingleThreadExecutor();
-        responder = new Responder<>(executor);
+        responder = new Responder(executor);
         timeMonitor = new TimeMonitor();
     }
 
