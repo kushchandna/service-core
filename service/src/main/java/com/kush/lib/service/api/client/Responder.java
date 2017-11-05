@@ -3,7 +3,7 @@ package com.kush.lib.service.api.client;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Executor;
 
-public class Responder {
+class Responder {
 
     private final Executor executor;
 
