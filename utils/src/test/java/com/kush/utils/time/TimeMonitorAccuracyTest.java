@@ -48,27 +48,33 @@ public class TimeMonitorAccuracyTest {
             TimeMonitor monitor = new TimeMonitor();
             monitor.start();
             sleep(elapsedTime);
-            long elapsed = monitor.stop();
-            assertThat(getActualElapsedTimeLessThanExpectedMessage(elapsed),
-                    elapsed, is(greaterThanOrEqualTo(elapsedTime)));
-            assertThat(getActualElapsedTimeGreaterThanExpectedMessage(elapsed),
-                    elapsed, is(lessThanOrEqualTo(elapsedTime + accuracy)));
+            long actual = monitor.stop();
+            assertElapsedTimeIsWithingAcceptableRange(actual, elapsedTime, accuracy);
         }
     }
 
-    private String getActualElapsedTimeGreaterThanExpectedMessage(long actualElapsedTime) {
+    private static void assertElapsedTimeIsWithingAcceptableRange(long actualElapsedTime, long expectedElapsedTime,
+            long accuracy) {
+        assertThat(getActualElapsedTimeLessThanExpectedMessage(actualElapsedTime, expectedElapsedTime),
+                actualElapsedTime, is(greaterThanOrEqualTo(expectedElapsedTime)));
+        assertThat(getActualElapsedTimeGreaterThanExpectedMessage(actualElapsedTime, expectedElapsedTime, accuracy),
+                actualElapsedTime, is(lessThanOrEqualTo(expectedElapsedTime + accuracy)));
+    }
+
+    private static String getActualElapsedTimeGreaterThanExpectedMessage(long actualElapsedTime, long expectedElapsedTime,
+            long accuracy) {
         return format(""
                 + "Maximum elapsed time found to be [%d ms] "
                 + "which is larger than acceptable accuracy of [%d ms] "
                 + "for elapsed times of the order of [%d ms]",
-                actualElapsedTime, accuracy, elapsedTime);
+                actualElapsedTime, accuracy, expectedElapsedTime);
     }
 
-    private String getActualElapsedTimeLessThanExpectedMessage(long actualElapsedTime) {
+    private static String getActualElapsedTimeLessThanExpectedMessage(long actualElapsedTime, long expectedElapsedTime) {
         return format(""
                 + "Minimum elapsed time found to be [%d ms] "
                 + "which is less than actual elapsed time [%d ms]",
-                actualElapsedTime, elapsedTime);
+                actualElapsedTime, expectedElapsedTime);
     }
 
     private void sleep(long time) throws InterruptedException {
