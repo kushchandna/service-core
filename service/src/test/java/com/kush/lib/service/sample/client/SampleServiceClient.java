@@ -3,8 +3,8 @@ package com.kush.lib.service.sample.client;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Executor;
 
-import com.kush.lib.service.api.client.Response;
-import com.kush.lib.service.api.client.ServiceClient;
+import com.kush.lib.service.client.api.Response;
+import com.kush.lib.service.client.api.ServiceClient;
 import com.kush.lib.service.sample.server.SampleService;
 
 public class SampleServiceClient extends ServiceClient {

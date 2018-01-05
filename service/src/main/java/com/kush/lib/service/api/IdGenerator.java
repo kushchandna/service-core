@@ -1,4 +1,4 @@
-package com.kush.lib.service.api.server.id;
+package com.kush.lib.service.api;
 
 public interface IdGenerator {
 

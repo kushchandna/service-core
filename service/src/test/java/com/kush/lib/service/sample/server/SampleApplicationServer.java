@@ -3,9 +3,9 @@ package com.kush.lib.service.sample.server;
 import java.util.Arrays;
 import java.util.Collection;
 
-import com.kush.lib.service.api.server.Context;
-import com.kush.lib.service.api.server.Service;
-import com.kush.lib.service.api.server.ServiceProvider;
+import com.kush.lib.service.server.api.Context;
+import com.kush.lib.service.server.api.Service;
+import com.kush.lib.service.server.api.ServiceProvider;
 
 public class SampleApplicationServer {
 

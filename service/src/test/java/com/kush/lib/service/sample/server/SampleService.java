@@ -1,6 +1,6 @@
 package com.kush.lib.service.sample.server;
 
-import com.kush.lib.service.api.server.Service;
+import com.kush.lib.service.server.api.Service;
 
 public class SampleService extends Service {
 

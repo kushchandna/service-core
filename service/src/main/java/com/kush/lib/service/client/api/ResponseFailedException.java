@@ -1,4 +1,4 @@
-package com.kush.lib.service.api.client;
+package com.kush.lib.service.client.api;
 
 public class ResponseFailedException extends Exception {
 

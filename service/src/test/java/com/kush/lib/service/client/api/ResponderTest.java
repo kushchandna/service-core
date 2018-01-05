@@ -1,4 +1,4 @@
-package com.kush.lib.service.api.client;
+package com.kush.lib.service.client.api;
 
 import static com.kush.utils.time.TimeMonitor.ACCURACY_IN_MILLIS;
 import static java.lang.String.format;
@@ -20,10 +20,10 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import com.kush.lib.service.api.client.Responder;
-import com.kush.lib.service.api.client.Response;
-import com.kush.lib.service.api.client.Response.ResultListener;
-import com.kush.lib.service.api.client.ResponseFailedException;
+import com.kush.lib.service.client.api.Responder;
+import com.kush.lib.service.client.api.Response;
+import com.kush.lib.service.client.api.ResponseFailedException;
+import com.kush.lib.service.client.api.Response.ResultListener;
 import com.kush.utils.time.TimeMonitor;
 
 public class ResponderTest {

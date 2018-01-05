@@ -1,4 +1,4 @@
-package com.kush.lib.service.api.server;
+package com.kush.lib.service.server.api;
 
 import java.util.Collection;
 import java.util.Map;
