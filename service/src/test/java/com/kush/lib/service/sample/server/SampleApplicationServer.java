@@ -1,7 +1,6 @@
 package com.kush.lib.service.sample.server;
 
-import java.util.Arrays;
-import java.util.Collection;
+import static java.util.Arrays.asList;
 
 import com.kush.lib.service.server.api.Context;
 import com.kush.lib.service.server.api.Service;
@@ -12,11 +11,9 @@ public class SampleApplicationServer {
     private ServiceProvider serviceProvider;
 
     public void init() {
+        serviceProvider = new ServiceProvider(asList(SampleService.class));
         Context context = new Context();
-        serviceProvider = new ServiceProvider(context);
-        Collection<Class<? extends Service>> serviceClasses = Arrays.asList(
-                SampleService.class);
-        serviceProvider.initialize(serviceClasses);
+        serviceProvider.initialize(context);
     }
 
     public <S extends Service> S getService(Class<S> serviceClass) {

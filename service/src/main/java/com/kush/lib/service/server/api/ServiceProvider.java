@@ -1,19 +1,21 @@
 package com.kush.lib.service.server.api;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class ServiceProvider {
 
-    private final Map<String, Service> services = new ConcurrentHashMap<>();
-    private final Context context;
+    private final Collection<Class<? extends Service>> serviceClasses;
+    private final Map<String, Service> services;
 
-    public ServiceProvider(Context context) {
-        this.context = context;
+    public ServiceProvider(Collection<Class<? extends Service>> serviceClasses) {
+        this.serviceClasses = new ArrayList<>(serviceClasses);
+        services = new ConcurrentHashMap<>();
     }
 
-    public void initialize(Collection<Class<? extends Service>> serviceClasses) {
+    public void initialize(Context context) {
         for (Class<? extends Service> serviceClass : serviceClasses) {
             Service service = instantiateService(serviceClass);
             service.initialize(context);
