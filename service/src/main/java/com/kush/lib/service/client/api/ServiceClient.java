@@ -1,6 +1,5 @@
 package com.kush.lib.service.client.api;
 
-import java.util.concurrent.Callable;
 import java.util.concurrent.Executor;
 
 public abstract class ServiceClient {
@@ -11,7 +10,7 @@ public abstract class ServiceClient {
         responder = new Responder(executor);
     }
 
-    protected <T> Response<T> invoke(Callable<T> callable) {
-        return responder.invoke(callable);
+    protected <T> Response<T> invoke(ServiceTask<T> task) {
+        return responder.invoke(task);
     }
 }

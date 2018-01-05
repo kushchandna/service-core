@@ -1,13 +1,13 @@
 package com.kush.lib.service.client.api;
 
-public class ResponseFailedException extends Exception {
+public class ServiceFailedException extends Exception {
 
     private static final long serialVersionUID = 1L;
 
-    public ResponseFailedException() {
+    public ServiceFailedException() {
     }
 
-    public ResponseFailedException(Throwable e) {
+    public ServiceFailedException(Throwable e) {
         super(e.getMessage(), e);
     }
 }

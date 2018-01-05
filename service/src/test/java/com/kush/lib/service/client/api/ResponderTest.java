@@ -10,7 +10,6 @@ import static org.hamcrest.Matchers.lessThanOrEqualTo;
 import static org.hamcrest.Matchers.sameInstance;
 import static org.junit.Assert.assertThat;
 
-import java.util.concurrent.Callable;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicReference;
@@ -20,9 +19,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import com.kush.lib.service.client.api.Responder;
-import com.kush.lib.service.client.api.Response;
-import com.kush.lib.service.client.api.ResponseFailedException;
 import com.kush.lib.service.client.api.Response.ResultListener;
 import com.kush.utils.time.TimeMonitor;
 
@@ -47,11 +43,11 @@ public class ResponderTest {
     public void getResult_WhenResultIsDelayed_WaitsForResult() throws Exception {
         int testSleepTime = 100;
         timeMonitor.start();
-        Response<String> response = responder.invoke(new Callable<String>() {
+        Response<String> response = responder.invoke(new ServiceTask<String>() {
 
             @Override
-            public String call() throws Exception {
-                MILLISECONDS.sleep(testSleepTime);
+            public String execute() throws ServiceFailedException {
+                sleep(testSleepTime);
                 return RESULT_SUCCESS;
             }
         });
@@ -64,16 +60,15 @@ public class ResponderTest {
     @Test
     public void getResult_WhenResultIsDelayed_ThrowsExceptionIfErrorOccured() throws Exception {
         int testSleepTime = 100;
-        ResponderTestException testException = new ResponderTestException();
-        Response<String> response = responder.invoke(new Callable<String>() {
+        ServiceFailedException testException = new ServiceFailedException();
+        Response<String> response = responder.invoke(new ServiceTask<String>() {
 
             @Override
-            public String call() throws Exception {
-                MILLISECONDS.sleep(testSleepTime);
+            public String execute() throws ServiceFailedException {
+                sleep(testSleepTime);
                 throw testException;
             }
         });
-        expected.expect(ResponseFailedException.class);
         expected.expectCause(is(sameInstance(testException)));
         response.getResult();
     }
@@ -81,11 +76,11 @@ public class ResponderTest {
     @Test
     public void onResult_WhenDelayedResultIsReceived_GetsCallbackWithResult() throws Exception {
         int testSleepTime = 100;
-        Response<String> response = responder.invoke(new Callable<String>() {
+        Response<String> response = responder.invoke(new ServiceTask<String>() {
 
             @Override
-            public String call() throws Exception {
-                MILLISECONDS.sleep(testSleepTime);
+            public String execute() throws ServiceFailedException {
+                sleep(testSleepTime);
                 return RESULT_SUCCESS;
             }
         });
@@ -104,10 +99,10 @@ public class ResponderTest {
     @Test
     public void onResult_WhenResultListenerAttachedAfterResultReceived_StillGetsCallbackWithResult() throws Exception {
         long testSleepTime = 100;
-        Response<String> response = responder.invoke(new Callable<String>() {
+        Response<String> response = responder.invoke(new ServiceTask<String>() {
 
             @Override
-            public String call() throws Exception {
+            public String execute() throws ServiceFailedException {
                 return RESULT_SUCCESS;
             }
         });
@@ -162,7 +157,11 @@ public class ResponderTest {
                 actualElapsedTime, expectedElapsedTime);
     }
 
-    private static class ResponderTestException extends Exception {
-        private static final long serialVersionUID = 1L;
+    private void sleep(int testSleepTime) throws ServiceFailedException {
+        try {
+            MILLISECONDS.sleep(testSleepTime);
+        } catch (InterruptedException e) {
+            throw new ServiceFailedException(e);
+        }
     }
 }

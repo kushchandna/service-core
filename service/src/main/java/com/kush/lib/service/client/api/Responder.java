@@ -1,6 +1,5 @@
 package com.kush.lib.service.client.api;
 
-import java.util.concurrent.Callable;
 import java.util.concurrent.Executor;
 
 class Responder {
@@ -11,16 +10,16 @@ class Responder {
         this.executor = executor;
     }
 
-    public <T> Response<T> invoke(Callable<T> callable) {
+    public <T> Response<T> invoke(ServiceTask<T> task) {
         Response<T> response = new Response<>();
         executor.execute(new Runnable() {
 
             @Override
             public void run() {
                 try {
-                    T result = callable.call();
+                    T result = task.execute();
                     sendResult(response, result);
-                } catch (Exception e) {
+                } catch (ServiceFailedException e) {
                     sendError(response, e);
                 }
             }

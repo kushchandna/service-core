@@ -1,10 +1,11 @@
 package com.kush.lib.service.sample.client;
 
-import java.util.concurrent.Callable;
 import java.util.concurrent.Executor;
 
 import com.kush.lib.service.client.api.Response;
 import com.kush.lib.service.client.api.ServiceClient;
+import com.kush.lib.service.client.api.ServiceFailedException;
+import com.kush.lib.service.client.api.ServiceTask;
 import com.kush.lib.service.sample.server.SampleService;
 
 public class SampleServiceClient extends ServiceClient {
@@ -17,10 +18,10 @@ public class SampleServiceClient extends ServiceClient {
     }
 
     public Response<String> getHelloText(String name) {
-        return invoke(new Callable<String>() {
+        return invoke(new ServiceTask<String>() {
 
             @Override
-            public String call() throws Exception {
+            public String execute() throws ServiceFailedException {
                 return sampleService.getHelloText(name);
             }
         });
