@@ -3,6 +3,8 @@ package com.kush.lib.persistence.api;
 import java.util.Collection;
 import java.util.Iterator;
 
+import com.kush.lib.service.api.Identifier;
+
 public interface Persistor<T extends Persistable> {
 
     T save(T object);

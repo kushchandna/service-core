@@ -7,9 +7,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import com.kush.lib.persistence.api.Identifier;
 import com.kush.lib.persistence.api.Persistable;
 import com.kush.lib.persistence.api.Persistor;
+import com.kush.lib.service.api.IdGenerator;
+import com.kush.lib.service.api.Identifier;
 
 public class InMemoryPersistor<T extends Persistable> implements Persistor<T> {
 

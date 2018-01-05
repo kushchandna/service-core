@@ -1,5 +1,7 @@
 package com.kush.lib.persistence.api;
 
+import com.kush.lib.service.api.Identifier;
+
 public class Persistable {
 
     private final Identifier id;

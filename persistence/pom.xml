@@ -18,4 +18,11 @@
   	<groupId>com.kush</groupId>
   	<artifactId>parent</artifactId>
   </parent>
+  <dependencies>
+  	<dependency>
+  		<groupId>com.kush</groupId>
+  		<artifactId>service</artifactId>
+  		<version>0.0.1-SNAPSHOT</version>
+  	</dependency>
+  </dependencies>
 </project>
