@@ -5,6 +5,7 @@ import com.kush.lib.service.server.api.Service;
 public class SampleService extends Service {
 
     public String getHelloText(String name) {
-        return "Hello " + name;
+        SampleGreetingProvider greetingProvider = getContext().getInstance(SampleGreetingProvider.class);
+        return greetingProvider.getHelloGreeting() + " " + name;
     }
 }
