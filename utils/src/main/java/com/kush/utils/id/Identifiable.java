@@ -1,4 +1,4 @@
-package com.kush.lib.service.api;
+package com.kush.utils.id;
 
 public interface Identifiable {
 

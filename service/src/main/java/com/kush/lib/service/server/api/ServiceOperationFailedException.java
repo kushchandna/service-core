@@ -1,4 +1,4 @@
-package com.kush.lib.service.api;
+package com.kush.lib.service.server.api;
 
 public class ServiceOperationFailedException extends Exception {
 

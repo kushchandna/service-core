@@ -1,6 +1,6 @@
-package com.kush.lib.service.api;
+package com.kush.utils.id;
 
-import static com.kush.lib.service.api.Identifier.id;
+import static com.kush.utils.id.Identifier.id;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
