@@ -12,7 +12,7 @@ public class SampleServiceClient extends ServiceClient {
         super(executor, serviceInvoker, "Sample Service");
     }
 
-    public Response<String> getHelloText(String name) {
+    public Response<String> sayHello(String name) {
         return invoke(String.class, "sayHello", name);
     }
 }

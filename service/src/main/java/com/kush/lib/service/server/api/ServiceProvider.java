@@ -6,8 +6,12 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.kush.lib.service.server.api.annotations.Service;
+import com.kush.logger.Logger;
+import com.kush.logger.LoggerFactory;
 
 public class ServiceProvider {
+
+    private static final Logger LOGGER = LoggerFactory.INSTANCE.getLogger(ServiceProvider.class);
 
     private final Collection<Class<? extends BaseService>> serviceClasses;
     private final Map<String, BaseService> services;
@@ -19,9 +23,19 @@ public class ServiceProvider {
 
     public void initialize(Context context) {
         for (Class<? extends BaseService> serviceClass : serviceClasses) {
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("Creating instance for service class %s", serviceClass.getName());
+            }
             BaseService service = instantiateService(serviceClass);
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("Initializing created instance of service %s", serviceClass.getName());
+            }
             service.initialize(context);
-            services.put(getServiceKey(serviceClass), service);
+            String serviceKey = getServiceKey(serviceClass);
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("Service %s initialized with key %s", serviceClass.getName(), serviceKey);
+            }
+            services.put(serviceKey, service);
         }
     }
 

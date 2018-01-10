@@ -4,8 +4,12 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.kush.lib.service.server.api.annotations.Service;
+import com.kush.logger.Logger;
+import com.kush.logger.LoggerFactory;
 
 public class ApplicationServer {
+
+    private static final Logger LOGGER = LoggerFactory.INSTANCE.getLogger(ApplicationServer.class);
 
     private final Context context;
     private final Set<Class<? extends BaseService>> serviceClasses = new HashSet<>();
@@ -18,14 +22,25 @@ public class ApplicationServer {
 
     public void registerService(Class<? extends BaseService> serviceClass) {
         if (!serviceClass.isAnnotationPresent(Service.class)) {
-            throw new IllegalArgumentException("No @Service annotation found on class " + serviceClass.getName());
+            String errorMessage = "No @Service annotation found on class " + serviceClass.getName();
+            LOGGER.error(errorMessage);
+            throw new IllegalArgumentException(errorMessage);
         }
-        serviceClasses.add(serviceClass);
+        if (!serviceClasses.contains(serviceClass)) {
+            serviceClasses.add(serviceClass);
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("Registered service %s", serviceClass.getName());
+            }
+        } else {
+            LOGGER.warn("Service with name %s is already registered. Ignoring...", serviceClass.getName());
+        }
     }
 
     public void start() {
         serviceProvider = new ServiceProvider(serviceClasses);
+        LOGGER.info("Initializing service provider...");
         serviceProvider.initialize(context);
+        LOGGER.info("Initialized service provider with %d services", serviceClasses.size());
     }
 
     public ServiceProvider getServiceProvider() {

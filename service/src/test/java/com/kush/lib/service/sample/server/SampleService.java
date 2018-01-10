@@ -8,7 +8,7 @@ import com.kush.lib.service.server.api.annotations.ServiceMethod;
 public class SampleService extends BaseService {
 
     @ServiceMethod
-    public String getHelloText(String name) {
+    public String sayHello(String name) {
         SampleGreetingProvider greetingProvider = getContext().getInstance(SampleGreetingProvider.class);
         return greetingProvider.getHelloGreeting() + " " + name;
     }

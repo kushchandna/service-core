@@ -42,7 +42,7 @@ public class SampleApplication {
 
     private static void invokeGetHelloText(ServiceClientProvider serviceClientProvider) {
         SampleServiceClient sampleServiceClient = serviceClientProvider.getServiceClient(SampleServiceClient.class);
-        Response<String> response = sampleServiceClient.getHelloText("TestUser");
+        Response<String> response = sampleServiceClient.sayHello("TestUser");
         response.setResultListener(new ResultListener<String>() {
 
             @Override
