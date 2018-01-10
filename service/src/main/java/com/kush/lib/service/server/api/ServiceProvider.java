@@ -7,27 +7,27 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class ServiceProvider {
 
-    private final Collection<Class<? extends Service>> serviceClasses;
-    private final Map<String, Service> services;
+    private final Collection<Class<? extends BaseService>> serviceClasses;
+    private final Map<String, BaseService> services;
 
-    public ServiceProvider(Collection<Class<? extends Service>> serviceClasses) {
+    public ServiceProvider(Collection<Class<? extends BaseService>> serviceClasses) {
         this.serviceClasses = new ArrayList<>(serviceClasses);
         services = new ConcurrentHashMap<>();
     }
 
     public void initialize(Context context) {
-        for (Class<? extends Service> serviceClass : serviceClasses) {
-            Service service = instantiateService(serviceClass);
+        for (Class<? extends BaseService> serviceClass : serviceClasses) {
+            BaseService service = instantiateService(serviceClass);
             service.initialize(context);
             services.put(getServiceKey(serviceClass), service);
         }
     }
 
-    private String getServiceKey(Class<? extends Service> serviceClass) {
+    private String getServiceKey(Class<? extends BaseService> serviceClass) {
         return serviceClass.getName();
     }
 
-    private Service instantiateService(Class<? extends Service> serviceClass) {
+    private BaseService instantiateService(Class<? extends BaseService> serviceClass) {
         try {
             return serviceClass.newInstance();
         } catch (InstantiationException | IllegalAccessException e) {
@@ -35,8 +35,8 @@ public class ServiceProvider {
         }
     }
 
-    public <S extends Service> S getService(Class<S> serviceClass) {
-        Service service = services.get(getServiceKey(serviceClass));
+    public <S extends BaseService> S getService(Class<S> serviceClass) {
+        BaseService service = services.get(getServiceKey(serviceClass));
         if (service == null) {
             throw new NoSuchServiceExistsException(serviceClass);
         }

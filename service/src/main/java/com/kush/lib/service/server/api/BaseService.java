@@ -1,6 +1,6 @@
 package com.kush.lib.service.server.api;
 
-public abstract class Service {
+public abstract class BaseService {
 
     private Context context;
 

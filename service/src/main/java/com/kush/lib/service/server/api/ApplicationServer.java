@@ -6,7 +6,7 @@ import java.util.Set;
 public class ApplicationServer {
 
     private final Context context;
-    private final Set<Class<? extends Service>> serviceClasses = new HashSet<>();
+    private final Set<Class<? extends BaseService>> serviceClasses = new HashSet<>();
 
     private ServiceProvider serviceProvider;
 
@@ -14,7 +14,7 @@ public class ApplicationServer {
         this.context = context;
     }
 
-    public void registerService(Class<? extends Service> serviceClass) {
+    public void registerService(Class<? extends BaseService> serviceClass) {
         serviceClasses.add(serviceClass);
     }
 
