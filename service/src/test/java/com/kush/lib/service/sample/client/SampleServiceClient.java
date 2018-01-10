@@ -5,16 +5,16 @@ import java.util.concurrent.Executor;
 import com.kush.lib.service.client.api.Response;
 import com.kush.lib.service.client.api.ServiceClient;
 import com.kush.lib.service.client.api.ServiceFailedException;
+import com.kush.lib.service.client.api.ServiceInvoker;
 import com.kush.lib.service.client.api.ServiceTask;
-import com.kush.lib.service.sample.server.SampleService;
 
 public class SampleServiceClient extends ServiceClient {
 
-    private final SampleService sampleService;
+    private final ServiceInvoker serviceInvoker;
 
-    public SampleServiceClient(SampleService sampleService, Executor executor) {
+    public SampleServiceClient(Executor executor, ServiceInvoker serviceInvoker) {
         super(executor);
-        this.sampleService = sampleService;
+        this.serviceInvoker = serviceInvoker;
     }
 
     public Response<String> getHelloText(String name) {
@@ -22,7 +22,7 @@ public class SampleServiceClient extends ServiceClient {
 
             @Override
             public String execute() throws ServiceFailedException {
-                return sampleService.getHelloText(name);
+                return (String) serviceInvoker.invoke("Sample Service", "getHelloText");
             }
         });
     }

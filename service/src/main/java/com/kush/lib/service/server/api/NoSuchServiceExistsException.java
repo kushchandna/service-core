@@ -7,7 +7,7 @@ public class NoSuchServiceExistsException extends RuntimeException {
     public NoSuchServiceExistsException() {
     }
 
-    public NoSuchServiceExistsException(Class<? extends BaseService> serviceClass) {
-        super("No service found for service class " + serviceClass.getName());
+    public NoSuchServiceExistsException(String serviceName) {
+        super("No service found with name " + serviceName);
     }
 }

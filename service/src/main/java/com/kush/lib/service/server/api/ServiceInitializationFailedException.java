@@ -7,6 +7,10 @@ public class ServiceInitializationFailedException extends RuntimeException {
     public ServiceInitializationFailedException() {
     }
 
+    public ServiceInitializationFailedException(String message) {
+        super(message);
+    }
+
     public ServiceInitializationFailedException(String message, Throwable e) {
         super(message, e);
     }
