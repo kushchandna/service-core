@@ -5,21 +5,21 @@ import java.util.concurrent.Executors;
 
 import com.kush.lib.service.client.api.Response;
 import com.kush.lib.service.client.api.Response.ResultListener;
-import com.kush.lib.service.sample.server.SampleApplicationServer;
 import com.kush.lib.service.sample.server.SampleService;
+import com.kush.lib.service.server.api.ServiceProvider;
 
 public class SampleApplicationClient {
 
     private final ExecutorService executor;
 
-    private SampleApplicationServer server;
+    private ServiceProvider serviceProvider;
 
     public SampleApplicationClient() {
         executor = Executors.newSingleThreadExecutor();
     }
 
-    public void init(SampleApplicationServer server) {
-        this.server = server;
+    public void init(ServiceProvider serviceProvider) {
+        this.serviceProvider = serviceProvider;
     }
 
     public void invokeGetHelloText() {
@@ -35,6 +35,6 @@ public class SampleApplicationClient {
     }
 
     private SampleService getSampleService() {
-        return server.getService(SampleService.class);
+        return serviceProvider.getService(SampleService.class);
     }
 }
