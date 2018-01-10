@@ -3,23 +3,23 @@ package com.kush.lib.service.sample.client;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import com.kush.lib.service.client.api.ConnectionSpecification;
 import com.kush.lib.service.client.api.Response;
 import com.kush.lib.service.client.api.Response.ResultListener;
 import com.kush.lib.service.sample.server.SampleService;
-import com.kush.lib.service.server.api.ServiceProvider;
 
 public class SampleApplicationClient {
 
     private final ExecutorService executor;
 
-    private ServiceProvider serviceProvider;
+    private ConnectionSpecification connSpec;
 
     public SampleApplicationClient() {
         executor = Executors.newSingleThreadExecutor();
     }
 
-    public void init(ServiceProvider serviceProvider) {
-        this.serviceProvider = serviceProvider;
+    public void connect(ConnectionSpecification connSpec) {
+        this.connSpec = connSpec;
     }
 
     public void invokeGetHelloText() {
@@ -35,6 +35,6 @@ public class SampleApplicationClient {
     }
 
     private SampleService getSampleService() {
-        return serviceProvider.getService(SampleService.class);
+        return connSpec.getService(SampleService.class);
     }
 }

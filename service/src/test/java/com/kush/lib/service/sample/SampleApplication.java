@@ -1,6 +1,8 @@
 package com.kush.lib.service.sample;
 
+import com.kush.lib.service.client.api.ConnectionSpecification;
 import com.kush.lib.service.sample.client.SampleApplicationClient;
+import com.kush.lib.service.sample.client.SampleConnectionSpecification;
 import com.kush.lib.service.sample.server.SampleGreetingProvider;
 import com.kush.lib.service.server.api.ApplicationServer;
 import com.kush.lib.service.server.api.Context;
@@ -16,7 +18,9 @@ public class SampleApplication {
         ApplicationServer server = new ApplicationServer(context);
         server.start();
 
+        ConnectionSpecification connSpec = new SampleConnectionSpecification(server);
+
         SampleApplicationClient client = new SampleApplicationClient();
-        client.init(server.getServiceProvider());
+        client.connect(connSpec);
     }
 }
