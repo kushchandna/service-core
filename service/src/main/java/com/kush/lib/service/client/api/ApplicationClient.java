@@ -1,24 +1,17 @@
 package com.kush.lib.service.client.api;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.Executor;
 
 public class ApplicationClient {
 
-    private final ExecutorService executor;
-
     private ServiceClientProvider serviceClientProvider;
 
-    public ApplicationClient() {
-        executor = Executors.newSingleThreadExecutor();
-    }
-
     public void connect(ConnectionSpecification connSpec) {
-        serviceClientProvider = new ServiceClientProvider(executor, connSpec);
+        serviceClientProvider = new ServiceClientProvider(connSpec);
     }
 
-    public void activateServiceClient(Class<? extends ServiceClient> serviceClientClass) {
-        serviceClientProvider.addServiceClient(serviceClientClass);
+    public void activateServiceClient(Class<? extends ServiceClient> serviceClientClass, Executor executor) {
+        serviceClientProvider.addServiceClient(serviceClientClass, executor);
     }
 
     public ServiceClientProvider getServiceClientProvider() {

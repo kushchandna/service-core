@@ -8,24 +8,22 @@ import java.util.concurrent.Executor;
 public class ServiceClientProvider {
 
     private final Map<Class<? extends ServiceClient>, ServiceClient> serviceClients = new HashMap<>();
-    private final Executor executor;
     private final ServiceInvoker serviceInvoker;
 
-    public ServiceClientProvider(Executor executor, ConnectionSpecification connSpec) {
-        this.executor = executor;
+    public ServiceClientProvider(ConnectionSpecification connSpec) {
         serviceInvoker = connSpec.getServiceInvoker();
     }
 
-    public void addServiceClient(Class<? extends ServiceClient> serviceClientClass) {
+    public void addServiceClient(Class<? extends ServiceClient> serviceClientClass, Executor executor) {
         try {
-            ServiceClient serviceClient = instantiateServiceClient(serviceClientClass);
+            ServiceClient serviceClient = instantiateServiceClient(serviceClientClass, executor);
             serviceClients.put(serviceClientClass, serviceClient);
         } catch (ReflectiveOperationException e) {
             throw new IllegalArgumentException(e);
         }
     }
 
-    private ServiceClient instantiateServiceClient(Class<? extends ServiceClient> serviceClientClass)
+    private ServiceClient instantiateServiceClient(Class<? extends ServiceClient> serviceClientClass, Executor executor)
             throws ReflectiveOperationException {
         Constructor<? extends ServiceClient> serviceClientConstructor =
                 serviceClientClass.getConstructor(Executor.class, ServiceInvoker.class);

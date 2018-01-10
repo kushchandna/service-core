@@ -1,5 +1,8 @@
 package com.kush.lib.service.sample;
 
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+
 import com.kush.lib.service.client.api.ApplicationClient;
 import com.kush.lib.service.client.api.ConnectionSpecification;
 import com.kush.lib.service.client.api.Response;
@@ -28,9 +31,10 @@ public class SampleApplication {
         ServiceProvider serviceProvider = server.getServiceProvider();
         ConnectionSpecification connSpec = new SampleConnectionSpecification(serviceProvider);
 
+        Executor executor = Executors.newSingleThreadExecutor();
         ApplicationClient client = new ApplicationClient();
         client.connect(connSpec);
-        client.activateServiceClient(SampleServiceClient.class);
+        client.activateServiceClient(SampleServiceClient.class, executor);
 
         ServiceClientProvider serviceClientProvider = client.getServiceClientProvider();
         invokeGetHelloText(serviceClientProvider);
