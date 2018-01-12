@@ -3,6 +3,7 @@ package com.kush.lib.service.server.api;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.kush.lib.service.remoting.ServiceProvider;
 import com.kush.lib.service.server.api.annotations.Service;
 import com.kush.logger.Logger;
 import com.kush.logger.LoggerFactory;
@@ -14,7 +15,7 @@ public class ApplicationServer {
     private final Context context;
     private final Set<Class<? extends BaseService>> serviceClasses = new HashSet<>();
 
-    private ServiceProvider serviceProvider;
+    private ApplicationServiceProvider serviceProvider;
 
     public ApplicationServer(Context context) {
         this.context = context;
@@ -37,7 +38,7 @@ public class ApplicationServer {
     }
 
     public void start() {
-        serviceProvider = new ServiceProvider(serviceClasses);
+        serviceProvider = new ApplicationServiceProvider(serviceClasses);
         LOGGER.info("Initializing service provider...");
         serviceProvider.initialize(context);
         LOGGER.info("Initialized service provider with %d services", serviceClasses.size());

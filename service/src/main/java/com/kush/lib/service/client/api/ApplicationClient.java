@@ -2,6 +2,8 @@ package com.kush.lib.service.client.api;
 
 import java.util.concurrent.Executor;
 
+import com.kush.lib.service.remoting.ServiceApi;
+
 public class ApplicationClient {
 
     private ServiceClientProvider serviceClientProvider;
@@ -10,8 +12,9 @@ public class ApplicationClient {
         serviceClientProvider = new ServiceClientProvider(connSpec);
     }
 
-    public void activateServiceClient(Class<? extends ServiceClient> serviceClientClass, Executor executor) {
-        serviceClientProvider.addServiceClient(serviceClientClass, executor);
+    public <S extends ServiceApi, C extends ServiceClient<S>> void activateServiceClient(Class<C> serviceClientClass,
+            Class<S> serviceApiClass, Executor executor) {
+        serviceClientProvider.addServiceClient(serviceClientClass, serviceApiClass, executor);
     }
 
     public ServiceClientProvider getServiceClientProvider() {

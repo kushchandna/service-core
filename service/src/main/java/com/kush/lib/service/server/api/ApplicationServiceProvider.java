@@ -5,18 +5,20 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import com.kush.lib.service.remoting.ServiceApi;
+import com.kush.lib.service.remoting.ServiceProvider;
 import com.kush.lib.service.server.api.annotations.Service;
 import com.kush.logger.Logger;
 import com.kush.logger.LoggerFactory;
 
-public class ServiceProvider {
+public class ApplicationServiceProvider implements ServiceProvider {
 
-    private static final Logger LOGGER = LoggerFactory.INSTANCE.getLogger(ServiceProvider.class);
+    private static final Logger LOGGER = LoggerFactory.INSTANCE.getLogger(ApplicationServiceProvider.class);
 
     private final Collection<Class<? extends BaseService>> serviceClasses;
     private final Map<String, BaseService> services;
 
-    public ServiceProvider(Collection<Class<? extends BaseService>> serviceClasses) {
+    public ApplicationServiceProvider(Collection<Class<? extends BaseService>> serviceClasses) {
         this.serviceClasses = new ArrayList<>(serviceClasses);
         services = new ConcurrentHashMap<>();
     }
@@ -39,7 +41,7 @@ public class ServiceProvider {
         }
     }
 
-    private String getServiceKey(Class<? extends BaseService> serviceClass) {
+    private String getServiceKey(Class<? extends ServiceApi> serviceClass) {
         if (!serviceClass.isAnnotationPresent(Service.class)) {
             throw new IllegalArgumentException("No @Service annotation found on class " + serviceClass.getName());
         }
@@ -55,11 +57,12 @@ public class ServiceProvider {
         }
     }
 
-    public BaseService getService(String serviceName) {
-        BaseService service = services.get(serviceName);
+    @Override
+    public <S extends ServiceApi> S getService(Class<S> serviceApiClass) {
+        BaseService service = services.get(getServiceKey(serviceApiClass));
         if (service == null) {
-            throw new NoSuchServiceExistsException(serviceName);
+            throw new NoSuchServiceExistsException(serviceApiClass);
         }
-        return service;
+        return serviceApiClass.cast(service);
     }
 }
