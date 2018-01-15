@@ -3,7 +3,6 @@ package com.kush.lib.service.server.api;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.kush.lib.service.remoting.ServiceProvider;
 import com.kush.lib.service.server.api.annotations.Service;
 import com.kush.logger.Logger;
 import com.kush.logger.LoggerFactory;
@@ -35,6 +34,10 @@ public class ApplicationServer {
         } else {
             LOGGER.warn("Service with name %s is already registered. Ignoring...", serviceClass.getName());
         }
+    }
+
+    public Set<Class<? extends BaseService>> getRegisteredServices() {
+        return serviceClasses;
     }
 
     public void start() {

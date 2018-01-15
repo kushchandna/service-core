@@ -1,17 +1,16 @@
 package com.kush.lib.service.client.api;
 
-import java.lang.reflect.Constructor;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Executor;
 
-import com.kush.lib.service.remoting.ServiceProvider;
+import com.kush.lib.service.remoting.RemoteServiceProvider;
 import com.kush.lib.service.remoting.ServiceApi;
 
 public class ServiceClientProvider {
 
     private final Map<Class<? extends ServiceClient<?>>, ServiceClient<?>> serviceClients = new HashMap<>();
-    private final ServiceProvider serviceProvider;
+    private final RemoteServiceProvider serviceProvider;
 
     public ServiceClientProvider(ConnectionSpecification connSpec) {
         serviceProvider = connSpec.getRemoteServiceProvider();
@@ -25,24 +24,13 @@ public class ServiceClientProvider {
         return serviceClientClass.cast(serviceClient);
     }
 
-    public <S extends ServiceApi, C extends ServiceClient<S>> void addServiceClient(Class<C> serviceClientClass,
-            Class<S> serviceApiClass, Executor executor) {
-        S serviceApi = serviceProvider.getService(serviceApiClass);
+    public void addServiceClient(Class<? extends ServiceClient<? extends ServiceApi>> serviceClientClass, Executor executor) {
         try {
-            ServiceClient<?> serviceClient = instantiateServiceClient(serviceClientClass, executor, serviceApi);
-            serviceClients.put(serviceClientClass, serviceClient);
+            ServiceClient<? extends ServiceApi> clientInstance = serviceClientClass.newInstance();
+            clientInstance.activate(serviceProvider, executor);
+            serviceClients.put(serviceClientClass, clientInstance);
         } catch (ReflectiveOperationException e) {
-            throw new IllegalArgumentException(e);
+            throw new IllegalStateException(e.getMessage(), e);
         }
-    }
-
-    private <S extends ServiceApi, C extends ServiceClient<S>> C instantiateServiceClient(Class<C> serviceClientClass,
-            Executor executor, S serviceApi) throws ReflectiveOperationException {
-        Constructor<?>[] constructors = serviceClientClass.getConstructors();
-        if (constructors.length > 1) {
-            throw new IllegalArgumentException("Unsupported constructor found");
-        }
-        Object clientInstance = constructors[0].newInstance(executor, serviceApi);
-        return serviceClientClass.cast(clientInstance);
     }
 }

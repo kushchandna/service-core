@@ -1,8 +1,8 @@
 package com.kush.lib.service.client.api;
 
-import com.kush.lib.service.remoting.ServiceProvider;
+import com.kush.lib.service.remoting.RemoteServiceProvider;
 
 public interface ConnectionSpecification {
 
-    ServiceProvider getRemoteServiceProvider();
+    RemoteServiceProvider getRemoteServiceProvider();
 }

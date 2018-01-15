@@ -7,11 +7,9 @@ import com.kush.lib.service.client.api.ApplicationClient;
 import com.kush.lib.service.client.api.ConnectionSpecification;
 import com.kush.lib.service.client.api.Response;
 import com.kush.lib.service.client.api.Response.ResultListener;
-import com.kush.lib.service.remoting.ServiceProvider;
 import com.kush.lib.service.client.api.ServiceClientProvider;
-import com.kush.lib.service.sample.api.SampleServiceApi;
-import com.kush.lib.service.sample.client.SampleConnectionSpecification;
 import com.kush.lib.service.sample.client.SampleServiceClient;
+import com.kush.lib.service.sample.remoting.SampleConnectionSpecification;
 import com.kush.lib.service.sample.server.SampleGreetingProvider;
 import com.kush.lib.service.sample.server.SampleService;
 import com.kush.lib.service.server.api.ApplicationServer;
@@ -29,13 +27,12 @@ public class SampleApplication {
         server.registerService(SampleService.class);
         server.start();
 
-        ServiceProvider serviceProvider = server.getServiceProvider();
-        ConnectionSpecification connSpec = new SampleConnectionSpecification(serviceProvider);
+        ConnectionSpecification connSpec = new SampleConnectionSpecification(server);
 
         Executor executor = Executors.newSingleThreadExecutor();
         ApplicationClient client = new ApplicationClient();
         client.connect(connSpec);
-        client.activateServiceClient(SampleServiceClient.class, SampleServiceApi.class, executor);
+        client.activateServiceClient(SampleServiceClient.class, executor);
 
         ServiceClientProvider serviceClientProvider = client.getServiceClientProvider();
         invokeGetHelloText(serviceClientProvider);

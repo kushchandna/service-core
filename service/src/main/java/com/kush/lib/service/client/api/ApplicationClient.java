@@ -12,9 +12,9 @@ public class ApplicationClient {
         serviceClientProvider = new ServiceClientProvider(connSpec);
     }
 
-    public <S extends ServiceApi, C extends ServiceClient<S>> void activateServiceClient(Class<C> serviceClientClass,
-            Class<S> serviceApiClass, Executor executor) {
-        serviceClientProvider.addServiceClient(serviceClientClass, serviceApiClass, executor);
+    public void activateServiceClient(Class<? extends ServiceClient<? extends ServiceApi>> serviceClientClass,
+            Executor executor) {
+        serviceClientProvider.addServiceClient(serviceClientClass, executor);
     }
 
     public ServiceClientProvider getServiceClientProvider() {
