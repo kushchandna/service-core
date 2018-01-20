@@ -6,7 +6,7 @@ import com.kush.lib.service.client.api.ServiceClient;
 import com.kush.lib.service.client.api.ServiceClientActivationFailedException;
 import com.kush.lib.service.remoting.api.RemoteServiceProvider;
 import com.kush.lib.service.remoting.api.ServiceApi;
-import com.kush.lib.service.server.api.NoSuchServiceExistsException;
+import com.kush.utils.exceptions.ObjectNotFoundException;
 
 public class DefaultServiceClientActivator implements ServiceClientActivator {
 
@@ -24,7 +24,7 @@ public class DefaultServiceClientActivator implements ServiceClientActivator {
             ServiceApi serviceApi = serviceApiProvider.getService(serviceName);
             serviceClient.activate(executor, serviceApi);
             return serviceClient;
-        } catch (ReflectiveOperationException | NoSuchServiceExistsException e) {
+        } catch (ReflectiveOperationException | ObjectNotFoundException e) {
             throw new ServiceClientActivationFailedException("Failed to activate service client " + serviceClientClass.getName(),
                     e);
         }

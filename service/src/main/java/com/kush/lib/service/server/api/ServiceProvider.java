@@ -5,8 +5,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import com.kush.lib.service.server.internal.ServiceInitializer;
-import com.kush.lib.service.server.utils.ClassNameProvider;
+import com.kush.utils.exceptions.ObjectNotFoundException;
 
 public class ServiceProvider {
 
@@ -24,7 +23,7 @@ public class ServiceProvider {
     }
 
     void initialize(Context context) throws ServiceInitializationFailedException {
-        ServiceNameProvider nameProvider = getServiceNameProvider(context);
+        ServiceNameProvider nameProvider = context.getInstance(ServiceNameProvider.class);
         for (Class<? extends BaseService> serviceClass : serviceClasses) {
             BaseService service = initializer.initialize(serviceClass, context);
             String serviceName = nameProvider.getServiceName(serviceClass);
@@ -32,19 +31,11 @@ public class ServiceProvider {
         }
     }
 
-    public BaseService getService(String serviceName) throws NoSuchServiceExistsException {
+    public BaseService getService(String serviceName) throws ObjectNotFoundException {
         BaseService service = services.get(serviceName);
         if (service == null) {
-            throw new NoSuchServiceExistsException(serviceName);
+            throw new ObjectNotFoundException("service", serviceName);
         }
         return service;
-    }
-
-    private ServiceNameProvider getServiceNameProvider(Context context) {
-        ServiceNameProvider nameProvider = context.getInstance(ServiceNameProvider.class);
-        if (nameProvider == null) {
-            nameProvider = new ClassNameProvider();
-        }
-        return nameProvider;
     }
 }

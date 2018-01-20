@@ -1,13 +1,8 @@
-package com.kush.lib.service.server.internal;
+package com.kush.lib.service.server.api;
 
-import com.kush.lib.service.server.api.BaseService;
-import com.kush.lib.service.server.api.Context;
-import com.kush.lib.service.server.api.ServiceInitializationFailedException;
+public class ServiceInitializer {
 
-public class DefaultServiceInitializer implements ServiceInitializer {
-
-    @Override
-    public <S extends BaseService> S initialize(Class<S> serviceClass, Context context)
+    <S extends BaseService> S initialize(Class<S> serviceClass, Context context)
             throws ServiceInitializationFailedException {
         BaseService service = instantiateService(serviceClass);
         service.initialize(context);

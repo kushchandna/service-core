@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.concurrent.Executor;
 
 import com.kush.lib.service.client.internal.ServiceClientActivator;
+import com.kush.utils.exceptions.ObjectNotFoundException;
 
 public class ServiceClientProvider {
 
@@ -22,10 +23,10 @@ public class ServiceClientProvider {
         serviceClients.put(serviceClientClass, serviceClient);
     }
 
-    public <S extends ServiceClient<?>> S getServiceClient(Class<S> serviceClientClass) {
+    public <S extends ServiceClient<?>> S getServiceClient(Class<S> serviceClientClass) throws ObjectNotFoundException {
         ServiceClient<?> serviceClient = serviceClients.get(serviceClientClass);
         if (serviceClient == null) {
-            throw new NoSuchServiceClientExistsException(serviceClientClass);
+            throw new ObjectNotFoundException("service client", serviceClientClass);
         }
         return serviceClientClass.cast(serviceClient);
     }

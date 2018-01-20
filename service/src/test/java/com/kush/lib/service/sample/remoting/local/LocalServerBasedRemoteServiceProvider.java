@@ -4,9 +4,9 @@ import com.kush.lib.service.remoting.api.RemoteServiceProvider;
 import com.kush.lib.service.remoting.api.ServiceApi;
 import com.kush.lib.service.sample.server.SampleHelloService;
 import com.kush.lib.service.server.api.BaseService;
-import com.kush.lib.service.server.api.NoSuchServiceExistsException;
 import com.kush.lib.service.server.api.ServiceNameProvider;
 import com.kush.lib.service.server.api.ServiceProvider;
+import com.kush.utils.exceptions.ObjectNotFoundException;
 
 public class LocalServerBasedRemoteServiceProvider implements RemoteServiceProvider {
 
@@ -19,12 +19,12 @@ public class LocalServerBasedRemoteServiceProvider implements RemoteServiceProvi
     }
 
     @Override
-    public ServiceApi getService(String serviceName) throws NoSuchServiceExistsException {
+    public ServiceApi getService(String serviceName) throws ObjectNotFoundException {
         BaseService service = serviceProvider.getService(serviceName);
         String sampleServiceName = serviceNameProvider.getServiceName(SampleHelloService.class);
         if (sampleServiceName.equals(serviceName)) {
             return new SampleLocalHelloServiceApi(SampleHelloService.class.cast(service));
         }
-        throw new NoSuchServiceExistsException(serviceName);
+        throw new ObjectNotFoundException("remote service", serviceName);
     }
 }

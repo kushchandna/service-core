@@ -1,8 +1,8 @@
 package com.kush.lib.service.remoting.api;
 
-import com.kush.lib.service.server.api.NoSuchServiceExistsException;
+import com.kush.utils.exceptions.ObjectNotFoundException;
 
 public interface RemoteServiceProvider {
 
-    ServiceApi getService(String serviceName) throws NoSuchServiceExistsException;
+    ServiceApi getService(String serviceName) throws ObjectNotFoundException;
 }

@@ -1,14 +1,11 @@
 package com.kush.lib.service.server.api;
 
-import com.kush.lib.service.server.internal.DefaultServiceInitializer;
-import com.kush.lib.service.server.internal.ServiceInitializer;
-
 public class ApplicationServer {
 
     private final ServiceProvider serviceProvider;
 
     public ApplicationServer() {
-        ServiceInitializer initializer = new DefaultServiceInitializer();
+        ServiceInitializer initializer = new ServiceInitializer();
         serviceProvider = new ServiceProvider(initializer);
     }
 

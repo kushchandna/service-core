@@ -11,8 +11,8 @@ import com.kush.lib.service.client.api.ServiceClientProvider;
 import com.kush.lib.service.remoting.api.ConnectionSpecification;
 import com.kush.lib.service.sample.client.SampleConnectionSpecification;
 import com.kush.lib.service.sample.client.SampleHelloServiceClient;
-import com.kush.lib.service.sample.server.SampleHelloTextProvider;
 import com.kush.lib.service.sample.server.SampleHelloService;
+import com.kush.lib.service.sample.server.SampleHelloTextProvider;
 import com.kush.lib.service.sample.server.SampleServiceNameProvider;
 import com.kush.lib.service.server.api.ApplicationServer;
 import com.kush.lib.service.server.api.Context;
@@ -20,6 +20,7 @@ import com.kush.lib.service.server.api.ContextBuilder;
 import com.kush.lib.service.server.api.ServiceInitializationFailedException;
 import com.kush.lib.service.server.api.ServiceNameProvider;
 import com.kush.lib.service.server.api.ServiceProvider;
+import com.kush.utils.exceptions.ObjectNotFoundException;
 
 public class SampleApplication {
 
@@ -63,7 +64,7 @@ public class SampleApplication {
             .build();
     }
 
-    private static void invokeGetHelloText(ServiceClientProvider serviceClientProvider) {
+    private static void invokeGetHelloText(ServiceClientProvider serviceClientProvider) throws ObjectNotFoundException {
         SampleHelloServiceClient sampleServiceClient = serviceClientProvider.getServiceClient(SampleHelloServiceClient.class);
         Response<String> response = sampleServiceClient.sayHello("TestUser");
         response.setResultListener(new ResultListener<String>() {
