@@ -1,6 +1,7 @@
 package com.kush.lib.service.server.api;
 
 import com.kush.lib.service.server.internal.DefaultServiceInitializer;
+import com.kush.lib.service.server.internal.ServiceInitializer;
 
 public class ApplicationServer {
 

@@ -3,7 +3,6 @@ package com.kush.lib.service.server.internal;
 import com.kush.lib.service.server.api.BaseService;
 import com.kush.lib.service.server.api.Context;
 import com.kush.lib.service.server.api.ServiceInitializationFailedException;
-import com.kush.lib.service.server.api.ServiceInitializer;
 
 public class DefaultServiceInitializer implements ServiceInitializer {
 

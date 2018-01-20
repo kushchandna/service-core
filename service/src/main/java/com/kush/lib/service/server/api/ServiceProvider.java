@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import com.kush.lib.service.server.internal.ServiceInitializer;
 import com.kush.lib.service.server.utils.ClassNameProvider;
 
 public class ServiceProvider {
