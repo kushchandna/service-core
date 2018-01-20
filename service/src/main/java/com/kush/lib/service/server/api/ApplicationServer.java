@@ -1,25 +1,21 @@
 package com.kush.lib.service.server.api;
 
-import java.util.HashSet;
-import java.util.Set;
+import com.kush.lib.service.server.internal.DefaultServiceInitializer;
 
 public class ApplicationServer {
 
-    private final Context context;
-    private final Set<Class<? extends BaseService>> serviceClasses = new HashSet<>();
+    private final ServiceProvider serviceProvider;
 
-    private ServiceProvider serviceProvider;
-
-    public ApplicationServer(Context context) {
-        this.context = context;
+    public ApplicationServer() {
+        ServiceInitializer initializer = new DefaultServiceInitializer();
+        serviceProvider = new ServiceProvider(initializer);
     }
 
     public void registerService(Class<? extends BaseService> serviceClass) {
-        serviceClasses.add(serviceClass);
+        serviceProvider.addService(serviceClass);
     }
 
-    public void start() {
-        serviceProvider = new ServiceProvider(serviceClasses);
+    public void start(Context context) throws ServiceInitializationFailedException {
         serviceProvider.initialize(context);
     }
 

@@ -1,6 +1,6 @@
 package com.kush.lib.service.server.api;
 
-public class NoSuchServiceExistsException extends RuntimeException {
+public class NoSuchServiceExistsException extends Exception {
 
     private static final long serialVersionUID = 1L;
 

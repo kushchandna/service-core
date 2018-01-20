@@ -4,6 +4,7 @@ import com.kush.lib.service.client.api.RemoteServiceInvocationFailedException;
 import com.kush.lib.service.client.api.ServiceInvoker;
 import com.kush.lib.service.client.helpers.ReflectionBasedServiceInvoker;
 import com.kush.lib.service.server.api.BaseService;
+import com.kush.lib.service.server.api.NoSuchServiceExistsException;
 import com.kush.lib.service.server.api.ServiceProvider;
 
 public class SampleServiceInvoker implements ServiceInvoker {
@@ -17,8 +18,13 @@ public class SampleServiceInvoker implements ServiceInvoker {
     @Override
     public Object invoke(String serviceName, String methodName, Object... arguments)
             throws RemoteServiceInvocationFailedException {
-        BaseService service = serviceProvider.getService(serviceName);
-        ServiceInvoker serviceInvoker = new ReflectionBasedServiceInvoker(service);
-        return serviceInvoker.invoke(serviceName, methodName, arguments);
+        BaseService service;
+        try {
+            service = serviceProvider.getService(serviceName);
+            ServiceInvoker serviceInvoker = new ReflectionBasedServiceInvoker(service);
+            return serviceInvoker.invoke(serviceName, methodName, arguments);
+        } catch (NoSuchServiceExistsException e) {
+            throw new RemoteServiceInvocationFailedException(e);
+        }
     }
 }

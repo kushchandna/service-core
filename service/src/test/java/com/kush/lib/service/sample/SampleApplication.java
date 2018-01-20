@@ -15,18 +15,23 @@ import com.kush.lib.service.sample.server.SampleService;
 import com.kush.lib.service.server.api.ApplicationServer;
 import com.kush.lib.service.server.api.Context;
 import com.kush.lib.service.server.api.ContextBuilder;
+import com.kush.lib.service.server.api.ServiceInitializationFailedException;
 import com.kush.lib.service.server.api.ServiceProvider;
 
 public class SampleApplication {
 
     public static void main(String[] args) {
         SampleGreetingProvider greetingProvider = new SampleGreetingProvider();
+        ApplicationServer server = new ApplicationServer();
+        server.registerService(SampleService.class);
         Context context = ContextBuilder.create()
             .withInstance(SampleGreetingProvider.class, greetingProvider)
             .build();
-        ApplicationServer server = new ApplicationServer(context);
-        server.registerService(SampleService.class);
-        server.start();
+        try {
+            server.start(context);
+        } catch (ServiceInitializationFailedException e) {
+            e.printStackTrace();
+        }
 
         ServiceProvider serviceProvider = server.getServiceProvider();
         ConnectionSpecification connSpec = new SampleConnectionSpecification(serviceProvider);
