@@ -1,6 +1,6 @@
 package com.kush.lib.service.server.api;
 
-public class ServiceInitializationFailedException extends RuntimeException {
+public class ServiceInitializationFailedException extends Exception {
 
     private static final long serialVersionUID = 1L;
 

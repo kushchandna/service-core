@@ -10,14 +10,22 @@ public class Context {
         this.instances = instances;
     }
 
-    public <T> T getInstance(Class<T> typeClass) {
-        return getInstance(typeClass, typeClass);
+    public <T> T getInstance(Object key, Class<T> returnType, T defaultValue) {
+        if (!instances.containsKey(key)) {
+            return defaultValue;
+        }
+        return returnType.cast(instances.get(key));
     }
 
-    public <T> T getInstance(Object key, Class<T> typeClass) {
-        if (instances.containsKey(key)) {
-            return typeClass.cast(instances.get(key));
-        }
-        throw new IllegalArgumentException("No instance found for key " + key);
+    public <T> T getInstance(Object key, Class<T> returnType) {
+        return getInstance(key, returnType, null);
+    }
+
+    public <T> T getInstance(Class<T> returnType, T defaultValue) {
+        return getInstance(returnType, returnType, defaultValue);
+    }
+
+    public <T> T getInstance(Class<T> returnType) {
+        return getInstance(returnType, returnType, null);
     }
 }

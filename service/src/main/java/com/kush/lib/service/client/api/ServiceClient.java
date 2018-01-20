@@ -2,20 +2,16 @@ package com.kush.lib.service.client.api;
 
 import java.util.concurrent.Executor;
 
-import com.kush.lib.service.remoting.RemoteServiceProvider;
-import com.kush.lib.service.remoting.ServiceApi;
+import com.kush.lib.service.remoting.api.ServiceApi;
 
 public abstract class ServiceClient<S extends ServiceApi> {
 
-    private final String serviceName;
-    private final Class<S> serviceApiClass;
-
     private Responder responder;
-    private S serviceApi;
+    private S service;
 
-    public ServiceClient(String serviceName, Class<S> serviceApiClass) {
-        this.serviceName = serviceName;
-        this.serviceApiClass = serviceApiClass;
+    public void activate(Executor executor, ServiceApi serviceApi) {
+        responder = new Responder(executor);
+        service = getServiceApiClass().cast(serviceApi);
     }
 
     protected final <T> Response<T> invoke(ServiceTask<T> serviceTask) {
@@ -23,11 +19,8 @@ public abstract class ServiceClient<S extends ServiceApi> {
     }
 
     protected final S getService() {
-        return serviceApi;
+        return service;
     }
 
-    public final void activate(RemoteServiceProvider serviceProvider, Executor executor) {
-        serviceApi = serviceApiClass.cast(serviceProvider.getRemoteService(serviceName));
-        responder = new Responder(executor);
-    }
+    protected abstract Class<S> getServiceApiClass();
 }
