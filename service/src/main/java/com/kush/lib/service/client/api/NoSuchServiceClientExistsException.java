@@ -7,7 +7,7 @@ public class NoSuchServiceClientExistsException extends RuntimeException {
     public NoSuchServiceClientExistsException() {
     }
 
-    public NoSuchServiceClientExistsException(Class<? extends ServiceClient> serviceClientClass) {
+    public NoSuchServiceClientExistsException(Class<? extends ServiceClient<?>> serviceClientClass) {
         super("No service client found for class " + serviceClientClass.getName());
     }
 }

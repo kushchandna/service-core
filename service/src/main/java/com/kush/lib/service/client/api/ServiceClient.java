@@ -2,30 +2,25 @@ package com.kush.lib.service.client.api;
 
 import java.util.concurrent.Executor;
 
-public abstract class ServiceClient {
+import com.kush.lib.service.remoting.api.ServiceApi;
 
-    private final Responder responder;
-    private final ServiceInvoker serviceInvoker;
-    private final String serviceName;
+public abstract class ServiceClient<S extends ServiceApi> {
 
-    public ServiceClient(Executor executor, ServiceInvoker serviceInvoker, String serviceName) {
-        this.serviceInvoker = serviceInvoker;
-        this.serviceName = serviceName;
+    private Responder responder;
+    private S service;
+
+    public void activate(Executor executor, ServiceApi serviceApi) {
         responder = new Responder(executor);
+        service = getServiceApiClass().cast(serviceApi);
     }
 
-    protected final <T> Response<T> invoke(Class<T> returnType, String methodName, Object... arguments) {
-        ServiceTask<T> serviceTask = createServiceTask(returnType, methodName, arguments);
+    protected final <T> Response<T> invoke(ServiceTask<T> serviceTask) {
         return responder.invoke(serviceTask);
     }
 
-    private <T> ServiceTask<T> createServiceTask(Class<T> returnType, String methodName, Object... arguments) {
-        return new ServiceTask<T>() {
-
-            @Override
-            public T execute() throws ServiceFailedException {
-                return returnType.cast(serviceInvoker.invoke(serviceName, methodName, arguments));
-            }
-        };
+    protected final S getService() {
+        return service;
     }
+
+    protected abstract Class<S> getServiceApiClass();
 }

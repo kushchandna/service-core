@@ -1,19 +1,21 @@
 package com.kush.lib.service.sample.client;
 
-import com.kush.lib.service.client.api.ConnectionSpecification;
-import com.kush.lib.service.client.api.ServiceInvoker;
+import com.kush.lib.service.remoting.api.ConnectionSpecification;
+import com.kush.lib.service.remoting.api.RemoteServiceProvider;
+import com.kush.lib.service.sample.remoting.local.LocalServerBasedRemoteServiceProvider;
+import com.kush.lib.service.server.api.ServiceNameProvider;
 import com.kush.lib.service.server.api.ServiceProvider;
 
 public class SampleConnectionSpecification implements ConnectionSpecification {
 
-    private final SampleServiceInvoker serviceInvoker;
+    private final RemoteServiceProvider remoteServiceProvider;
 
-    public SampleConnectionSpecification(ServiceProvider serviceProvider) {
-        serviceInvoker = new SampleServiceInvoker(serviceProvider);
+    public SampleConnectionSpecification(ServiceProvider serviceProvider, ServiceNameProvider serviceNameProvider) {
+        remoteServiceProvider = new LocalServerBasedRemoteServiceProvider(serviceProvider, serviceNameProvider);
     }
 
     @Override
-    public ServiceInvoker getServiceInvoker() {
-        return serviceInvoker;
+    public RemoteServiceProvider getServiceProvider() {
+        return remoteServiceProvider;
     }
 }

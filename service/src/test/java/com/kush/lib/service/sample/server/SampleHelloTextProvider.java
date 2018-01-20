@@ -1,8 +1,8 @@
 package com.kush.lib.service.sample.server;
 
-public class SampleGreetingProvider {
+public class SampleHelloTextProvider {
 
-    public String getHelloGreeting() {
+    public String getHelloText() {
         return "Hello";
     }
 }
