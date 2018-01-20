@@ -19,7 +19,7 @@ class Responder {
                 try {
                     T result = task.execute();
                     sendResult(response, result);
-                } catch (Exception e) {
+                } catch (ServiceFailedException e) {
                     sendError(response, e);
                 }
             }

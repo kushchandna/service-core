@@ -1,8 +1,6 @@
 package com.kush.lib.service.server.api;
 
-import com.kush.lib.service.remoting.ServiceApi;
-
-public abstract class BaseService implements ServiceApi {
+public abstract class BaseService {
 
     private Context context;
 

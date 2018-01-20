@@ -30,14 +30,4 @@ public class ServiceClientProvider {
         }
         return serviceClientClass.cast(serviceClient);
     }
-
-    public void addServiceClient(Class<? extends ServiceClient<? extends ServiceApi>> serviceClientClass, Executor executor) {
-        try {
-            ServiceClient<? extends ServiceApi> clientInstance = serviceClientClass.newInstance();
-            clientInstance.activate(serviceProvider, executor);
-            serviceClients.put(serviceClientClass, clientInstance);
-        } catch (ReflectiveOperationException e) {
-            throw new IllegalStateException(e.getMessage(), e);
-        }
-    }
 }
