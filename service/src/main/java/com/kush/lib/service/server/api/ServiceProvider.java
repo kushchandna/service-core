@@ -5,8 +5,6 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import com.kush.lib.service.server.api.annotations.Service;
-
 public class ServiceProvider {
 
     private final Collection<Class<? extends BaseService>> serviceClasses;
@@ -26,11 +24,7 @@ public class ServiceProvider {
     }
 
     private String getServiceKey(Class<? extends BaseService> serviceClass) {
-        if (!serviceClass.isAnnotationPresent(Service.class)) {
-            throw new IllegalArgumentException("No @Service annotation found on class " + serviceClass.getName());
-        }
-        Service serviceAnnotation = serviceClass.getAnnotation(Service.class);
-        return serviceAnnotation.name();
+        return serviceClass.getName();
     }
 
     private BaseService instantiateService(Class<? extends BaseService> serviceClass) {

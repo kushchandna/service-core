@@ -3,8 +3,6 @@ package com.kush.lib.service.server.api;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.kush.lib.service.server.api.annotations.Service;
-
 public class ApplicationServer {
 
     private final Context context;
@@ -17,9 +15,6 @@ public class ApplicationServer {
     }
 
     public void registerService(Class<? extends BaseService> serviceClass) {
-        if (!serviceClass.isAnnotationPresent(Service.class)) {
-            throw new IllegalArgumentException("No @Service annotation found on class " + serviceClass.getName());
-        }
         serviceClasses.add(serviceClass);
     }
 
