@@ -1,4 +1,4 @@
-package com.kush.servicegen.javapoet;
+package com.kush.servicegen.defaults;
 
 import static java.lang.reflect.Modifier.isPublic;
 import static java.util.Collections.unmodifiableList;
@@ -8,10 +8,10 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-import com.kush.servicegen.api.ServiceInfo;
 import com.kush.servicegen.api.MethodInfo;
+import com.kush.servicegen.api.ServiceInfo;
 
-class DefaultServiceInfo implements ServiceInfo {
+public class DefaultServiceInfo implements ServiceInfo {
 
     private final Class<?> serviceClass;
 

@@ -1,4 +1,4 @@
-package com.kush.servicegen.javapoet;
+package com.kush.servicegen.defaults;
 
 import java.lang.reflect.Parameter;
 import java.lang.reflect.Type;

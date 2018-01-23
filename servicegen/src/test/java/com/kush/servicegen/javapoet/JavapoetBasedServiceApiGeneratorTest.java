@@ -26,6 +26,7 @@ import org.junit.rules.TemporaryFolder;
 import com.kush.lib.service.remoting.api.ServiceApi;
 import com.kush.servicegen.api.ServiceApiGenerator;
 import com.kush.servicegen.api.ServiceReader;
+import com.kush.servicegen.defaults.DefaultServiceReader;
 
 public class JavapoetBasedServiceApiGeneratorTest {
 

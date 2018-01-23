@@ -1,4 +1,4 @@
-package com.kush.servicegen.javapoet;
+package com.kush.servicegen.defaults;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
@@ -9,7 +9,7 @@ import java.util.List;
 import com.kush.servicegen.api.MethodInfo;
 import com.kush.servicegen.api.ParameterInfo;
 
-class DefaultMethodInfo implements MethodInfo {
+public class DefaultMethodInfo implements MethodInfo {
 
     private final Method method;
 
