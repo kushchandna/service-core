@@ -1,5 +1,7 @@
 package com.kush.servicegen.javapoet;
 
+import static com.kush.utils.commons.GenericsUtils.getGenericReturnTypeName;
+import static com.kush.utils.commons.GenericsUtils.getGenericTypeName;
 import static java.util.Arrays.asList;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
@@ -83,13 +85,9 @@ public class JavapoetBasedServiceApiGeneratorTest {
     public void stringListMethodWithTwoGenericParams() throws Exception {
         Method method = serviceApiClass.getMethod("eStringListMethodWithTwoGenericParams", List.class, Set.class);
         Parameter[] parameters = method.getParameters();
-        assertThat(getGenericTypeName(parameters[0]), is(equalTo("java.util.List<java.lang.Integer>")));
-        assertThat(getGenericTypeName(parameters[1]), is(equalTo("java.util.Set<java.lang.Double>")));
-        assertThat(method.getGenericReturnType().getTypeName(), is(equalTo("java.util.List<java.lang.String>")));
-    }
-
-    private String getGenericTypeName(Parameter parameter) {
-        return parameter.getParameterizedType().getTypeName();
+        assertThat(getGenericTypeName(parameters[0]), is(equalTo(getGenericTypeName(List.class, Integer.class))));
+        assertThat(getGenericTypeName(parameters[1]), is(equalTo(getGenericTypeName(Set.class, Double.class))));
+        assertThat(getGenericReturnTypeName(method), is(equalTo(getGenericTypeName(List.class, String.class))));
     }
 
     private static void compileGeneratedFile(JavaFileObject generatedFileObject) {
