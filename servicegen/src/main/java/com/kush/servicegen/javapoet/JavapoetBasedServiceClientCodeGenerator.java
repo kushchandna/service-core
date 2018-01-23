@@ -20,11 +20,11 @@ import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.ParameterSpec;
 import com.squareup.javapoet.TypeSpec;
 
-public class JavapoetBasedServiceApiCodeGenerator implements CodeGenerator {
+public class JavapoetBasedServiceClientCodeGenerator implements CodeGenerator {
 
     private final ServiceInfo serviceInfo;
 
-    public JavapoetBasedServiceApiCodeGenerator(ServiceInfo serviceInfo) {
+    public JavapoetBasedServiceClientCodeGenerator(ServiceInfo serviceInfo) {
         this.serviceInfo = serviceInfo;
     }
 
