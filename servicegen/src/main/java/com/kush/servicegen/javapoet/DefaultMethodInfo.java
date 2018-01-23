@@ -35,6 +35,6 @@ class DefaultMethodInfo implements MethodInfo {
 
     @Override
     public Type getReturnType() {
-        return method.getReturnType();
+        return method.getGenericReturnType();
     }
 }

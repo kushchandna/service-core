@@ -1,14 +1,13 @@
 package com.kush.servicegen.javapoet;
 
 import static java.util.Arrays.asList;
-import static java.util.Collections.emptyList;
-import static java.util.Collections.emptySet;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
 import java.io.File;
 import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.List;
@@ -81,12 +80,15 @@ public class JavapoetBasedServiceApiGeneratorTest {
 
     @Test
     public void stringListMethodWithTwoGenericParams() throws Exception {
-        List<Integer> integerList = emptyList();
-        Set<Double> doubleSet = emptySet();
-        Method method =
-                serviceApiClass.getMethod("eStringListMethodWithTwoGenericParams", integerList.getClass(), doubleSet.getClass());
-        List<String> stringList = emptyList();
-        assertThat(method.getReturnType(), is(equalTo(stringList.getClass())));
+        Method method = serviceApiClass.getMethod("eStringListMethodWithTwoGenericParams", List.class, Set.class);
+        Parameter[] parameters = method.getParameters();
+        assertThat(getGenericTypeName(parameters[0]), is(equalTo("java.util.List<java.lang.Integer>")));
+        assertThat(getGenericTypeName(parameters[1]), is(equalTo("java.util.Set<java.lang.Double>")));
+        assertThat(method.getGenericReturnType().getTypeName(), is(equalTo("java.util.List<java.lang.String>")));
+    }
+
+    private String getGenericTypeName(Parameter parameter) {
+        return parameter.getParameterizedType().getTypeName();
     }
 
     private static void compileGeneratedFile(JavaFileObject generatedFileObject) {
