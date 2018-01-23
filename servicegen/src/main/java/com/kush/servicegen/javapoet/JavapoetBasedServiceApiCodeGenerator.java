@@ -13,7 +13,7 @@ import javax.tools.JavaFileObject;
 import com.kush.lib.service.remoting.api.ServiceApi;
 import com.kush.servicegen.MethodInfo;
 import com.kush.servicegen.ParameterInfo;
-import com.kush.servicegen.ServiceApiGenerator;
+import com.kush.servicegen.ServiceApiCodeGenerator;
 import com.kush.servicegen.ServiceInfo;
 import com.kush.servicegen.ServiceReader;
 import com.squareup.javapoet.JavaFile;
@@ -21,16 +21,16 @@ import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.ParameterSpec;
 import com.squareup.javapoet.TypeSpec;
 
-public class JavapoetBasedServiceApiGenerator implements ServiceApiGenerator {
+public class JavapoetBasedServiceApiCodeGenerator implements ServiceApiCodeGenerator {
 
     private final ServiceReader serviceReader;
 
-    public JavapoetBasedServiceApiGenerator(ServiceReader serviceReader) {
+    public JavapoetBasedServiceApiCodeGenerator(ServiceReader serviceReader) {
         this.serviceReader = serviceReader;
     }
 
     @Override
-    public JavaFileObject generateServiceApiClass(Class<?> serviceClass, String targetPackage, File targetDirectory)
+    public JavaFileObject generate(Class<?> serviceClass, String targetPackage, File targetDirectory)
             throws IOException {
         ServiceInfo serviceInfo = serviceReader.readService(serviceClass);
         JavaFile javaFile = createJavaFile(targetPackage, serviceInfo);

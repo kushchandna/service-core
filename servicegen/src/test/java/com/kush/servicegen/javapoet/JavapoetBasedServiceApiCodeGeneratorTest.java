@@ -26,10 +26,10 @@ import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
 import com.kush.lib.service.remoting.api.ServiceApi;
-import com.kush.servicegen.ServiceApiGenerator;
+import com.kush.servicegen.ServiceApiCodeGenerator;
 import com.kush.servicegen.ServiceReader;
 
-public class JavapoetBasedServiceApiGeneratorTest {
+public class JavapoetBasedServiceApiCodeGeneratorTest {
 
     private static final String TARGET_PACKAGE = "com.kush.service.api.gen";
     private static final String GENERATED_SERVICE_API_NAME = "DummyServiceApi";
@@ -44,8 +44,8 @@ public class JavapoetBasedServiceApiGeneratorTest {
     public static void setup() throws Exception {
         temp = folder.getRoot();
         ServiceReader serviceReader = new ServiceReader();
-        ServiceApiGenerator generator = new JavapoetBasedServiceApiGenerator(serviceReader);
-        JavaFileObject generatedFileObject = generator.generateServiceApiClass(DummyService.class, TARGET_PACKAGE, temp);
+        ServiceApiCodeGenerator generator = new JavapoetBasedServiceApiCodeGenerator(serviceReader);
+        JavaFileObject generatedFileObject = generator.generate(DummyService.class, TARGET_PACKAGE, temp);
         System.out.println(generatedFileObject.getCharContent(true));
         compileGeneratedFile(generatedFileObject);
         loadCompiledClass();
