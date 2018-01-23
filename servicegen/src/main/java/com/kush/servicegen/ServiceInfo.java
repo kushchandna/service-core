@@ -1,4 +1,4 @@
-package com.kush.servicegen.defaults;
+package com.kush.servicegen;
 
 import static java.lang.reflect.Modifier.isPublic;
 import static java.util.Collections.unmodifiableList;
@@ -8,29 +8,24 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-import com.kush.servicegen.api.MethodInfo;
-import com.kush.servicegen.api.ServiceInfo;
-
-public class DefaultServiceInfo implements ServiceInfo {
+public class ServiceInfo {
 
     private final Class<?> serviceClass;
 
-    public DefaultServiceInfo(Class<?> serviceClass) {
+    public ServiceInfo(Class<?> serviceClass) {
         this.serviceClass = serviceClass;
     }
 
-    @Override
     public String getName() {
         return serviceClass.getSimpleName();
     }
 
-    @Override
     public List<MethodInfo> getServiceMethods() {
         Method[] declaredMethods = serviceClass.getDeclaredMethods();
         List<MethodInfo> serviceMethodInfos = new ArrayList<>();
         for (Method method : declaredMethods) {
             if (isPublic(method.getModifiers())) {
-                serviceMethodInfos.add(new DefaultMethodInfo(method));
+                serviceMethodInfos.add(new MethodInfo(method));
             }
         }
         sortMethodsWithName(serviceMethodInfos);

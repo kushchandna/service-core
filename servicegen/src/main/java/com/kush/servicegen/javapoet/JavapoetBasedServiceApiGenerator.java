@@ -11,11 +11,11 @@ import java.util.List;
 import javax.tools.JavaFileObject;
 
 import com.kush.lib.service.remoting.api.ServiceApi;
-import com.kush.servicegen.api.MethodInfo;
-import com.kush.servicegen.api.ParameterInfo;
-import com.kush.servicegen.api.ServiceApiGenerator;
-import com.kush.servicegen.api.ServiceInfo;
-import com.kush.servicegen.api.ServiceReader;
+import com.kush.servicegen.MethodInfo;
+import com.kush.servicegen.ParameterInfo;
+import com.kush.servicegen.ServiceApiGenerator;
+import com.kush.servicegen.ServiceInfo;
+import com.kush.servicegen.ServiceReader;
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.ParameterSpec;

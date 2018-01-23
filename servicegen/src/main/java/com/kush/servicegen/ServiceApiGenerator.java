@@ -1,4 +1,4 @@
-package com.kush.servicegen.api;
+package com.kush.servicegen;
 
 import java.io.File;
 import java.io.IOException;
