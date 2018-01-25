@@ -2,7 +2,7 @@ package com.kush.servicegen.javapoet;
 
 import static com.kush.servicegen.utils.GenericUtilsForTest.assertGenericMethodReturnType;
 import static com.kush.servicegen.utils.GenericUtilsForTest.assertGenericParameterType;
-import static com.kush.utils.commons.GenericsUtils.getGenericTypeName;
+import static com.kush.utils.commons.TypeUtils.getGenericTypeName;
 import static java.util.Arrays.asList;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
