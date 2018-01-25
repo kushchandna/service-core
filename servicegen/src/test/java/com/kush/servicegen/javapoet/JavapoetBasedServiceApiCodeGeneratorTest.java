@@ -1,9 +1,9 @@
 package com.kush.servicegen.javapoet;
 
-import static com.kush.utils.commons.GenericsUtils.getGenericReturnTypeName;
-import static com.kush.utils.commons.GenericsUtils.getGenericTypeName;
+import static com.kush.servicegen.utils.GenericUtilsForTest.assertGenericMethodReturnType;
+import static com.kush.servicegen.utils.GenericUtilsForTest.assertGenericParameterType;
+import static com.kush.servicegen.utils.GenericUtilsForTest.assertMethodReturnType;
 import static java.util.Arrays.asList;
-import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -45,10 +45,7 @@ public class JavapoetBasedServiceApiCodeGeneratorTest {
     @BeforeClass
     public static void setup() throws Exception {
         temp = folder.getRoot();
-        ServiceReader serviceReader = new ServiceReader();
-        ServiceInfo serviceInfo = serviceReader.readService(DummyService.class);
-        CodeGenerator generator = new JavapoetBasedServiceApiCodeGenerator(serviceInfo);
-        JavaFileObject generatedFileObject = generator.generate(TARGET_PACKAGE, temp);
+        JavaFileObject generatedFileObject = generateDummyServiceApi();
         System.out.println(generatedFileObject.getCharContent(true));
         compileGeneratedFile(generatedFileObject);
         loadCompiledClass();
@@ -62,34 +59,34 @@ public class JavapoetBasedServiceApiCodeGeneratorTest {
     @Test
     public void voidMethodWithNoParams() throws Exception {
         Method method = serviceApiClass.getMethod("aVoidMethodWithNoParams");
-        assertThat(method.getReturnType(), is(equalTo(void.class)));
+        assertMethodReturnType(method, void.class);
     }
 
     @Test
     public void intMethodWithTwoPrimitiveParams() throws Exception {
         Method method = serviceApiClass.getMethod("bIntMethodWithTwoPrimitiveParams", int.class, double.class);
-        assertThat(method.getReturnType(), is(equalTo(int.class)));
+        assertMethodReturnType(method, int.class);
     }
 
     @Test
     public void stringMethodWithTwoNonPrimitiveParams() throws Exception {
         Method method = serviceApiClass.getMethod("cStringMethodWithTwoNonPrimitiveParams", Integer.class, Double.class);
-        assertThat(method.getReturnType(), is(equalTo(String.class)));
+        assertMethodReturnType(method, String.class);
     }
 
     @Test
     public void intArrayMethodWithTwoArrayParams() throws Exception {
         Method method = serviceApiClass.getMethod("dIntArrayMethodWithTwoArrayParams", int[].class, Double[].class);
-        assertThat(method.getReturnType(), is(equalTo(int[].class)));
+        assertMethodReturnType(method, int[].class);
     }
 
     @Test
     public void stringListMethodWithTwoGenericParams() throws Exception {
         Method method = serviceApiClass.getMethod("eStringListMethodWithTwoGenericParams", List.class, Set.class);
         Parameter[] parameters = method.getParameters();
-        assertThat(getGenericTypeName(parameters[0]), is(equalTo(getGenericTypeName(List.class, Integer.class))));
-        assertThat(getGenericTypeName(parameters[1]), is(equalTo(getGenericTypeName(Set.class, Double.class))));
-        assertThat(getGenericReturnTypeName(method), is(equalTo(getGenericTypeName(List.class, String.class))));
+        assertGenericParameterType(parameters[0], List.class, Integer.class);
+        assertGenericParameterType(parameters[1], Set.class, Double.class);
+        assertGenericMethodReturnType(method, List.class, String.class);
     }
 
     private static void compileGeneratedFile(JavaFileObject generatedFileObject) {
@@ -104,6 +101,13 @@ public class JavapoetBasedServiceApiCodeGeneratorTest {
         try (URLClassLoader urlClassLoader = new URLClassLoader(new URL[] { generatedFileUrl })) {
             serviceApiClass = urlClassLoader.loadClass(TARGET_PACKAGE + "." + GENERATED_SERVICE_API_NAME);
         }
+    }
+
+    private static JavaFileObject generateDummyServiceApi() throws Exception {
+        ServiceReader serviceReader = new ServiceReader();
+        ServiceInfo serviceInfo = serviceReader.readService(DummyService.class);
+        CodeGenerator generator = new JavapoetBasedServiceApiCodeGenerator(serviceInfo);
+        return generator.generate(TARGET_PACKAGE, temp);
     }
 
     static class DummyService extends BaseService {

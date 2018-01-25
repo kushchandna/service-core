@@ -11,6 +11,7 @@ import java.util.List;
 import javax.tools.JavaFileObject;
 
 import com.kush.lib.service.remoting.api.ServiceApi;
+import com.kush.servicegen.CodeGenerationFailedException;
 import com.kush.servicegen.CodeGenerator;
 import com.kush.servicegen.MethodInfo;
 import com.kush.servicegen.ParameterInfo;
@@ -29,10 +30,14 @@ public class JavapoetBasedServiceApiCodeGenerator implements CodeGenerator {
     }
 
     @Override
-    public JavaFileObject generate(String targetPackage, File targetDirectory) throws IOException {
+    public JavaFileObject generate(String targetPackage, File targetDirectory) throws CodeGenerationFailedException {
         JavaFile javaFile = createJavaFile(targetPackage, serviceInfo);
-        javaFile.writeTo(targetDirectory);
-        return javaFile.toJavaFileObject();
+        try {
+            javaFile.writeTo(targetDirectory);
+            return javaFile.toJavaFileObject();
+        } catch (IOException e) {
+            throw new CodeGenerationFailedException(e.getMessage(), e);
+        }
     }
 
     private JavaFile createJavaFile(String targetPackage, ServiceInfo serviceInfo) {
