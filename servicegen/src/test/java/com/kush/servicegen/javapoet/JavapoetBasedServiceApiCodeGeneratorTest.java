@@ -26,7 +26,6 @@ import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
 import com.kush.lib.service.remoting.api.ServiceApi;
-import com.kush.lib.service.server.api.BaseService;
 import com.kush.servicegen.CodeGenerator;
 import com.kush.servicegen.ServiceInfo;
 import com.kush.servicegen.ServiceReader;
@@ -108,27 +107,5 @@ public class JavapoetBasedServiceApiCodeGeneratorTest {
         ServiceInfo serviceInfo = serviceReader.readService(DummyService.class);
         CodeGenerator generator = new JavapoetBasedServiceApiCodeGenerator(serviceInfo);
         return generator.generate(TARGET_PACKAGE, temp);
-    }
-
-    static class DummyService extends BaseService {
-
-        public void aVoidMethodWithNoParams() {
-        }
-
-        public int bIntMethodWithTwoPrimitiveParams(int param1, double param2) {
-            return 0;
-        }
-
-        public String cStringMethodWithTwoNonPrimitiveParams(Integer param1, Double param2) {
-            return null;
-        }
-
-        public int[] dIntArrayMethodWithTwoArrayParams(int[] param1, Double[] param2) {
-            return null;
-        }
-
-        public List<String> eStringListMethodWithTwoGenericParams(List<Integer> param1, Set<Double> param2) {
-            return null;
-        }
     }
 }

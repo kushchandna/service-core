@@ -17,15 +17,9 @@ public class GenericUtilsForTest {
         assertThat(actualTypeName, is(equalTo(expectedTypeName)));
     }
 
-    public static void assertGenericMethodReturnType(Method method, Type outerType, Type innerType, Type innermostType) {
+    public static void assertGenericMethodReturnType(Method method, Type... typesInOrder) {
         String actualReturnTypeName = getGenericReturnTypeName(method);
-        String expectedReturnTypeName = getGenericTypeName(outerType, innerType, innermostType);
-        assertThat(actualReturnTypeName, is(equalTo(expectedReturnTypeName)));
-    }
-
-    public static void assertGenericMethodReturnType(Method method, Type outerType, Type innerType) {
-        String actualReturnTypeName = getGenericReturnTypeName(method);
-        String expectedReturnTypeName = getGenericTypeName(outerType, innerType);
+        String expectedReturnTypeName = getGenericTypeName(typesInOrder);
         assertThat(actualReturnTypeName, is(equalTo(expectedReturnTypeName)));
     }
 

@@ -29,8 +29,6 @@ import org.junit.rules.TemporaryFolder;
 
 import com.kush.lib.service.client.api.Response;
 import com.kush.lib.service.client.api.ServiceClient;
-import com.kush.lib.service.remoting.api.ServiceApi;
-import com.kush.lib.service.server.api.BaseService;
 import com.kush.servicegen.CodeGenerator;
 import com.kush.servicegen.ServiceInfo;
 import com.kush.servicegen.ServiceReader;
@@ -65,25 +63,25 @@ public class JavapoetBasedServiceClientCodeGeneratorTest {
     @Test
     public void voidMethodWithNoParams() throws Exception {
         Method method = serviceClientClass.getMethod("aVoidMethodWithNoParams");
-        assertGenericMethodReturnType(method, Response.class, Void.class);
+        assertGenericMethodReturnTypeWithResponse(method, Void.class);
     }
 
     @Test
     public void intMethodWithTwoPrimitiveParams() throws Exception {
         Method method = serviceClientClass.getMethod("bIntMethodWithTwoPrimitiveParams", int.class, double.class);
-        assertGenericMethodReturnType(method, Response.class, int.class);
+        assertGenericMethodReturnTypeWithResponse(method, Integer.class);
     }
 
     @Test
     public void stringMethodWithTwoNonPrimitiveParams() throws Exception {
         Method method = serviceClientClass.getMethod("cStringMethodWithTwoNonPrimitiveParams", Integer.class, Double.class);
-        assertGenericMethodReturnType(method, Response.class, String.class);
+        assertGenericMethodReturnTypeWithResponse(method, String.class);
     }
 
     @Test
     public void intArrayMethodWithTwoArrayParams() throws Exception {
         Method method = serviceClientClass.getMethod("dIntArrayMethodWithTwoArrayParams", int[].class, Double[].class);
-        assertGenericMethodReturnType(method, Response.class, int[].class);
+        assertGenericMethodReturnTypeWithResponse(method, int[].class);
     }
 
     @Test
@@ -92,14 +90,13 @@ public class JavapoetBasedServiceClientCodeGeneratorTest {
         Parameter[] parameters = method.getParameters();
         assertGenericParameterType(parameters[0], List.class, Integer.class);
         assertGenericParameterType(parameters[1], Set.class, Double.class);
-        assertGenericMethodReturnType(method, Response.class, List.class, String.class);
+        assertGenericMethodReturnTypeWithResponse(method, List.class, String.class);
     }
 
     private static void compileGeneratedFile(JavaFileObject generatedFileObject) {
         JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
         List<String> options = asList("-d", temp.getAbsolutePath());
-        CompilationTask task =
-                compiler.getTask(null, null, null, options, asList(DummyServiceApi.class.getName()), asList(generatedFileObject));
+        CompilationTask task = compiler.getTask(null, null, null, options, null, asList(generatedFileObject));
         task.call();
     }
 
@@ -117,38 +114,10 @@ public class JavapoetBasedServiceClientCodeGeneratorTest {
         return generator.generate(TARGET_PACKAGE_CLIENT, temp);
     }
 
-    public static interface DummyServiceApi extends ServiceApi {
-
-        void aVoidMethodWithNoParams();
-
-        int bIntMethodWithTwoPrimitiveParams(int param1, double param2);
-
-        String cStringMethodWithTwoNonPrimitiveParams(Integer param1, Double param2);
-
-        int[] dIntArrayMethodWithTwoArrayParams(int[] param1, Double[] param2);
-
-        List<String> eStringListMethodWithTwoGenericParams(List<Integer> param1, Set<Double> param2);
-    }
-
-    public static class DummyService extends BaseService {
-
-        public void aVoidMethodWithNoParams() {
-        }
-
-        public int bIntMethodWithTwoPrimitiveParams(int param1, double param2) {
-            return 0;
-        }
-
-        public String cStringMethodWithTwoNonPrimitiveParams(Integer param1, Double param2) {
-            return null;
-        }
-
-        public int[] dIntArrayMethodWithTwoArrayParams(int[] param1, Double[] param2) {
-            return null;
-        }
-
-        public List<String> eStringListMethodWithTwoGenericParams(List<Integer> param1, Set<Double> param2) {
-            return null;
-        }
+    private void assertGenericMethodReturnTypeWithResponse(Method method, Type... typesInOrder) {
+        Type[] types = new Type[typesInOrder.length + 1];
+        types[0] = Response.class;
+        System.arraycopy(typesInOrder, 0, types, 1, typesInOrder.length);
+        assertGenericMethodReturnType(method, types);
     }
 }

@@ -10,4 +10,8 @@ public class CodeGenerationFailedException extends Exception {
     public CodeGenerationFailedException(String message, Throwable e) {
         super(message, e);
     }
+
+    public CodeGenerationFailedException(String message) {
+        super(message);
+    }
 }

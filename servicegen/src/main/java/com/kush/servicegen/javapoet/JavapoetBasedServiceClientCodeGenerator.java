@@ -12,6 +12,8 @@ import javax.lang.model.element.Modifier;
 import javax.tools.JavaFileObject;
 
 import com.google.common.base.Defaults;
+import com.google.common.primitives.Primitives;
+import com.kush.lib.service.client.api.Response;
 import com.kush.lib.service.client.api.ServiceClient;
 import com.kush.servicegen.CodeGenerationFailedException;
 import com.kush.servicegen.CodeGenerator;
@@ -79,9 +81,12 @@ public class JavapoetBasedServiceClientCodeGenerator implements CodeGenerator {
 
     private Builder createMethodBuilder(MethodInfo serviceMethod) throws CodeGenerationFailedException {
         Type returnType = serviceMethod.getReturnType();
+        if (returnType instanceof Class<?>) {
+            returnType = Primitives.wrap((Class<?>) returnType);
+        }
+        ParameterizedTypeName responseReturnTypeName = ParameterizedTypeName.get(Response.class, returnType);
         Builder methodBuilder = MethodSpec.methodBuilder(serviceMethod.getName())
-            .addStatement("return $L.class", serviceApiType.getTypeName())
-            .returns(returnType);
+            .returns(responseReturnTypeName);
         enrichReturnStatement(returnType, methodBuilder);
         return methodBuilder;
     }
@@ -101,6 +106,7 @@ public class JavapoetBasedServiceClientCodeGenerator implements CodeGenerator {
         return MethodSpec.methodBuilder("getServiceApiClass")
             .addModifiers(Modifier.PROTECTED)
             .addAnnotation(Override.class)
+            .addStatement("return $L.class", serviceApiType.getTypeName())
             .returns(ParameterizedTypeName.get(Class.class, serviceApiType))
             .build();
     }
