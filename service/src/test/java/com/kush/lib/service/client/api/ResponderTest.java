@@ -1,6 +1,5 @@
 package com.kush.lib.service.client.api;
 
-import static com.kush.utils.time.TimeMonitor.ACCURACY_IN_MILLIS;
 import static java.lang.String.format;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static org.hamcrest.Matchers.equalTo;
@@ -19,30 +18,32 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import com.google.common.base.Stopwatch;
 import com.kush.lib.service.client.api.Response.ResultListener;
-import com.kush.utils.time.TimeMonitor;
 
 public class ResponderTest {
 
     private static final String RESULT_SUCCESS = "SUCCESS";
+    private static final long ACCURACY = 10;
+
+    private final Stopwatch watch = Stopwatch.createUnstarted();
 
     @Rule
     public ExpectedException expected = ExpectedException.none();
 
     private Responder responder;
-    private TimeMonitor timeMonitor;
 
     @Before
     public void beforeEachTest() throws Exception {
         Executor executor = Executors.newSingleThreadExecutor();
         responder = new Responder(executor);
-        timeMonitor = new TimeMonitor();
+        watch.reset();
     }
 
     @Test
     public void getResult_WhenResultIsDelayed_WaitsForResult() throws Exception {
         int testSleepTime = 100;
-        timeMonitor.start();
+        watch.start();
         Response<String> response = responder.invoke(new ServiceTask<String>() {
 
             @Override
@@ -52,7 +53,7 @@ public class ResponderTest {
             }
         });
         String result = response.getResult();
-        long elapsed = timeMonitor.stop();
+        long elapsed = watch.stop().elapsed(MILLISECONDS);
         assertElapsedTimeIsWithingAcceptableRange(elapsed, testSleepTime);
         assertThat(result, is(equalTo(RESULT_SUCCESS)));
     }
@@ -130,24 +131,21 @@ public class ResponderTest {
     }
 
     private void waitUntillTestFinishes(int testSleepTime) throws InterruptedException {
-        MILLISECONDS.sleep(testSleepTime + ACCURACY_IN_MILLIS + 1);
+        MILLISECONDS.sleep(testSleepTime + 1);
     }
 
     private static void assertElapsedTimeIsWithingAcceptableRange(long actualElapsedTime, long expectedElapsedTime) {
         assertThat(getActualElapsedTimeLessThanExpectedMessage(actualElapsedTime, expectedElapsedTime),
-                actualElapsedTime, is(greaterThanOrEqualTo(expectedElapsedTime)));
-        long accuracy = ACCURACY_IN_MILLIS;
-        assertThat(getActualElapsedTimeGreaterThanExpectedMessage(actualElapsedTime, expectedElapsedTime, accuracy),
-                actualElapsedTime, is(lessThanOrEqualTo(expectedElapsedTime + accuracy)));
+                actualElapsedTime, is(greaterThanOrEqualTo(expectedElapsedTime - ACCURACY)));
+        assertThat(getActualElapsedTimeGreaterThanExpectedMessage(actualElapsedTime, expectedElapsedTime),
+                actualElapsedTime, is(lessThanOrEqualTo(expectedElapsedTime + ACCURACY)));
     }
 
-    private static String getActualElapsedTimeGreaterThanExpectedMessage(long actualElapsedTime, long expectedElapsedTime,
-            long accuracy) {
+    private static String getActualElapsedTimeGreaterThanExpectedMessage(long actualElapsedTime, long expectedElapsedTime) {
         return format(""
                 + "Maximum elapsed time found to be [%d ms] "
-                + "which is larger than acceptable accuracy of [%d ms] "
-                + "for elapsed times of the order of [%d ms]",
-                actualElapsedTime, accuracy, expectedElapsedTime);
+                + "which is larger than the expected elapsed time [%d ms]",
+                actualElapsedTime, expectedElapsedTime);
     }
 
     private static String getActualElapsedTimeLessThanExpectedMessage(long actualElapsedTime, long expectedElapsedTime) {
