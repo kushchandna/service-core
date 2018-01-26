@@ -1,5 +1,6 @@
 package com.kush.servicegen.javapoet;
 
+import static java.lang.String.format;
 import static javax.lang.model.element.Modifier.PUBLIC;
 
 import java.io.File;
@@ -11,10 +12,11 @@ import java.util.List;
 import javax.lang.model.element.Modifier;
 import javax.tools.JavaFileObject;
 
-import com.google.common.base.Defaults;
 import com.google.common.primitives.Primitives;
 import com.kush.lib.service.client.api.Response;
 import com.kush.lib.service.client.api.ServiceClient;
+import com.kush.lib.service.client.api.ServiceFailedException;
+import com.kush.lib.service.client.api.ServiceTask;
 import com.kush.servicegen.CodeGenerationFailedException;
 import com.kush.servicegen.CodeGenerator;
 import com.kush.servicegen.MethodInfo;
@@ -67,11 +69,7 @@ public class JavapoetBasedServiceClientCodeGenerator implements CodeGenerator {
     private List<MethodSpec> createMethodSpecs(ServiceInfo serviceInfo) throws CodeGenerationFailedException {
         List<MethodSpec> methodSpecs = new ArrayList<>();
         for (MethodInfo serviceMethod : serviceInfo.getServiceMethods()) {
-            List<ParameterSpec> parameterSpecs = createParameterSpecs(serviceMethod);
-            MethodSpec methodSpec = createMethodBuilder(serviceMethod)
-                .addModifiers(PUBLIC)
-                .addParameters(parameterSpecs)
-                .build();
+            MethodSpec methodSpec = createServiceClientMethodSpec(serviceMethod);
             methodSpecs.add(methodSpec);
         }
         MethodSpec getServiceApiClassMethod = createGetServiceApiClassMethod();
@@ -79,27 +77,47 @@ public class JavapoetBasedServiceClientCodeGenerator implements CodeGenerator {
         return methodSpecs;
     }
 
-    private Builder createMethodBuilder(MethodInfo serviceMethod) throws CodeGenerationFailedException {
-        Type returnType = serviceMethod.getReturnType();
-        if (returnType instanceof Class<?>) {
-            returnType = Primitives.wrap((Class<?>) returnType);
-        }
+    private MethodSpec createServiceClientMethodSpec(MethodInfo serviceMethod) {
+        String methodName = serviceMethod.getName();
+        Type returnType = wrapType(serviceMethod.getReturnType());
+        List<ParameterSpec> parameterSpecs = createParameterSpecs(serviceMethod);
+        TypeSpec serviceTaskTypeSpec = createServiceTaskAnonymousClass(methodName, returnType, parameterSpecs);
         ParameterizedTypeName responseReturnTypeName = ParameterizedTypeName.get(Response.class, returnType);
-        Builder methodBuilder = MethodSpec.methodBuilder(serviceMethod.getName())
-            .returns(responseReturnTypeName);
-        enrichReturnStatement(returnType, methodBuilder);
-        return methodBuilder;
+        return MethodSpec.methodBuilder(methodName)
+            .returns(responseReturnTypeName)
+            .addModifiers(PUBLIC)
+            .addParameters(parameterSpecs)
+            .addStatement("return invoke($L)", serviceTaskTypeSpec)
+            .build();
     }
 
-    private void enrichReturnStatement(Type returnType, Builder methodBuilder) throws CodeGenerationFailedException {
-        if (returnType == void.class) {
-            return;
+    private TypeSpec createServiceTaskAnonymousClass(String methodName, Type returnType, List<ParameterSpec> parameterSpecs) {
+        MethodSpec executeMethodSpec = createServiceTaskExecuteMethod(methodName, returnType, parameterSpecs);
+        return TypeSpec.anonymousClassBuilder("")
+            .addSuperinterface(ParameterizedTypeName.get(ServiceTask.class, returnType))
+            .addMethod(executeMethodSpec)
+            .build();
+    }
+
+    private MethodSpec createServiceTaskExecuteMethod(String methodName, Type returnType, List<ParameterSpec> parameterSpecs) {
+        String serviceTaskMethodCallText = getServiceTaskMethodCallText(methodName, parameterSpecs);
+        return createServiceTaskExecuteMethodSpecBuilder(returnType, serviceTaskMethodCallText)
+            .addAnnotation(Override.class)
+            .addModifiers(PUBLIC)
+            .addException(ServiceFailedException.class)
+            .build();
+    }
+
+    private Builder createServiceTaskExecuteMethodSpecBuilder(Type returnType, String serviceTaskMethodCallText) {
+        Builder methodBuilder = MethodSpec.methodBuilder("execute")
+            .returns(returnType);
+        if (Void.class.equals(returnType)) {
+            methodBuilder.addStatement("getService().$L", serviceTaskMethodCallText)
+                .addStatement("return null");
+        } else {
+            methodBuilder.addStatement("return getService().$L", serviceTaskMethodCallText);
         }
-        Object defaultValue = null;
-        if (returnType instanceof Class<?>) {
-            defaultValue = Defaults.defaultValue((Class<?>) returnType);
-        }
-        methodBuilder.addStatement("return $L", defaultValue);
+        return methodBuilder;
     }
 
     private MethodSpec createGetServiceApiClassMethod() {
@@ -124,5 +142,24 @@ public class JavapoetBasedServiceClientCodeGenerator implements CodeGenerator {
 
     private String getServiceApiName(ServiceInfo serviceInfo) {
         return serviceInfo.getName() + "Client";
+    }
+
+    private Type wrapType(Type returnType) {
+        if (returnType instanceof Class<?>) {
+            returnType = Primitives.wrap((Class<?>) returnType);
+        }
+        return returnType;
+    }
+
+    private String getServiceTaskMethodCallText(String methodName, List<ParameterSpec> parameterSpecs) {
+        StringBuilder builder = new StringBuilder();
+        if (!parameterSpecs.isEmpty()) {
+            for (ParameterSpec parameterSpec : parameterSpecs) {
+                builder.append(parameterSpec.name).append(",").append(" ");
+            }
+            builder.deleteCharAt(builder.length() - 1);
+            builder.deleteCharAt(builder.length() - 1);
+        }
+        return format("%s(%s)", methodName, builder.toString());
     }
 }
