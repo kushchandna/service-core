@@ -1,4 +1,4 @@
-package com.kush.lib.service.client.api;
+package com.kush.utils.async;
 
 import java.util.concurrent.CountDownLatch;
 

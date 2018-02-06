@@ -27,11 +27,11 @@ import org.junit.ClassRule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
-import com.kush.lib.service.client.api.Response;
 import com.kush.lib.service.client.api.ServiceClient;
 import com.kush.servicegen.CodeGenerator;
 import com.kush.servicegen.ServiceInfo;
 import com.kush.servicegen.ServiceReader;
+import com.kush.utils.async.Response;
 
 public class JavapoetBasedServiceClientCodeGeneratorTest {
 

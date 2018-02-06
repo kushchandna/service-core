@@ -4,8 +4,6 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 import com.kush.lib.service.client.api.ApplicationClient;
-import com.kush.lib.service.client.api.Response;
-import com.kush.lib.service.client.api.Response.ResultListener;
 import com.kush.lib.service.client.api.ServiceClientActivationFailedException;
 import com.kush.lib.service.client.api.ServiceClientProvider;
 import com.kush.lib.service.remoting.api.ConnectionSpecification;
@@ -20,6 +18,8 @@ import com.kush.lib.service.server.api.ContextBuilder;
 import com.kush.lib.service.server.api.ServiceInitializationFailedException;
 import com.kush.lib.service.server.api.ServiceNameProvider;
 import com.kush.lib.service.server.api.ServiceProvider;
+import com.kush.utils.async.Response;
+import com.kush.utils.async.Response.ResultListener;
 import com.kush.utils.exceptions.ObjectNotFoundException;
 
 public class SampleApplication {

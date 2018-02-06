@@ -13,15 +13,15 @@ import javax.lang.model.element.Modifier;
 import javax.tools.JavaFileObject;
 
 import com.google.common.primitives.Primitives;
-import com.kush.lib.service.client.api.Response;
 import com.kush.lib.service.client.api.ServiceClient;
-import com.kush.lib.service.client.api.ServiceFailedException;
-import com.kush.lib.service.client.api.ServiceTask;
 import com.kush.servicegen.CodeGenerationFailedException;
 import com.kush.servicegen.CodeGenerator;
 import com.kush.servicegen.MethodInfo;
 import com.kush.servicegen.ParameterInfo;
 import com.kush.servicegen.ServiceInfo;
+import com.kush.utils.async.Response;
+import com.kush.utils.async.ServiceFailedException;
+import com.kush.utils.async.ServiceTask;
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.MethodSpec.Builder;

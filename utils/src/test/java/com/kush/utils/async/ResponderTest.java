@@ -1,4 +1,4 @@
-package com.kush.lib.service.client.api;
+package com.kush.utils.async;
 
 import static java.lang.String.format;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
@@ -19,7 +19,11 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import com.google.common.base.Stopwatch;
-import com.kush.lib.service.client.api.Response.ResultListener;
+import com.kush.utils.async.Responder;
+import com.kush.utils.async.Response;
+import com.kush.utils.async.ServiceFailedException;
+import com.kush.utils.async.ServiceTask;
+import com.kush.utils.async.Response.ResultListener;
 
 public class ResponderTest {
 

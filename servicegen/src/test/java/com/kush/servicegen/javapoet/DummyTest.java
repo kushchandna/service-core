@@ -4,7 +4,7 @@ import java.lang.reflect.Type;
 
 import org.junit.Test;
 
-import com.kush.lib.service.client.api.Response;
+import com.kush.utils.async.Response;
 import com.squareup.javapoet.ParameterizedTypeName;
 
 public class DummyTest {
