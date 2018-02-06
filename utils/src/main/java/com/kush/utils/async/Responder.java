@@ -10,16 +10,16 @@ public class Responder {
         this.executor = executor;
     }
 
-    public <T> Response<T> invoke(ServiceTask<T> task) {
+    public <T> Response<T> process(Request<T> request) {
         Response<T> response = new Response<>();
         executor.execute(new Runnable() {
 
             @Override
             public void run() {
                 try {
-                    T result = task.execute();
+                    T result = request.process();
                     sendResult(response, result);
-                } catch (ServiceFailedException e) {
+                } catch (RequestFailedException e) {
                     sendError(response, e);
                 }
             }

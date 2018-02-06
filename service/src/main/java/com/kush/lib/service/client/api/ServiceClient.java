@@ -5,7 +5,7 @@ import java.util.concurrent.Executor;
 import com.kush.lib.service.remoting.api.ServiceApi;
 import com.kush.utils.async.Responder;
 import com.kush.utils.async.Response;
-import com.kush.utils.async.ServiceTask;
+import com.kush.utils.async.Request;
 
 public abstract class ServiceClient<S extends ServiceApi> {
 
@@ -17,8 +17,8 @@ public abstract class ServiceClient<S extends ServiceApi> {
         service = getServiceApiClass().cast(serviceApi);
     }
 
-    protected final <T> Response<T> invoke(ServiceTask<T> serviceTask) {
-        return responder.invoke(serviceTask);
+    protected final <T> Response<T> invoke(Request<T> serviceRequest) {
+        return responder.process(serviceRequest);
     }
 
     protected final S getService() {

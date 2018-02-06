@@ -14,14 +14,14 @@ public class Response<T> {
         latch = new CountDownLatch(1);
     }
 
-    public void waitForResult() throws InterruptedException, ServiceFailedException {
+    public void waitForResult() throws InterruptedException, RequestFailedException {
         latch.await();
         if (error != null) {
-            throw new ServiceFailedException(error);
+            throw new RequestFailedException(error);
         }
     }
 
-    public T getResult() throws ServiceFailedException, InterruptedException {
+    public T getResult() throws RequestFailedException, InterruptedException {
         waitForResult();
         return result;
     }

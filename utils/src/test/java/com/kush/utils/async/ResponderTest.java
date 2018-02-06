@@ -21,8 +21,8 @@ import org.junit.rules.ExpectedException;
 import com.google.common.base.Stopwatch;
 import com.kush.utils.async.Responder;
 import com.kush.utils.async.Response;
-import com.kush.utils.async.ServiceFailedException;
-import com.kush.utils.async.ServiceTask;
+import com.kush.utils.async.RequestFailedException;
+import com.kush.utils.async.Request;
 import com.kush.utils.async.Response.ResultListener;
 
 public class ResponderTest {
@@ -48,10 +48,10 @@ public class ResponderTest {
     public void getResult_WhenResultIsDelayed_WaitsForResult() throws Exception {
         int testSleepTime = 100;
         watch.start();
-        Response<String> response = responder.invoke(new ServiceTask<String>() {
+        Response<String> response = responder.process(new Request<String>() {
 
             @Override
-            public String execute() throws ServiceFailedException {
+            public String process() throws RequestFailedException {
                 sleep(testSleepTime);
                 return RESULT_SUCCESS;
             }
@@ -65,11 +65,11 @@ public class ResponderTest {
     @Test
     public void getResult_WhenResultIsDelayed_ThrowsExceptionIfErrorOccured() throws Exception {
         int testSleepTime = 100;
-        ServiceFailedException testException = new ServiceFailedException();
-        Response<String> response = responder.invoke(new ServiceTask<String>() {
+        RequestFailedException testException = new RequestFailedException();
+        Response<String> response = responder.process(new Request<String>() {
 
             @Override
-            public String execute() throws ServiceFailedException {
+            public String process() throws RequestFailedException {
                 sleep(testSleepTime);
                 throw testException;
             }
@@ -81,10 +81,10 @@ public class ResponderTest {
     @Test
     public void onResult_WhenDelayedResultIsReceived_GetsCallbackWithResult() throws Exception {
         int testSleepTime = 100;
-        Response<String> response = responder.invoke(new ServiceTask<String>() {
+        Response<String> response = responder.process(new Request<String>() {
 
             @Override
-            public String execute() throws ServiceFailedException {
+            public String process() throws RequestFailedException {
                 sleep(testSleepTime);
                 return RESULT_SUCCESS;
             }
@@ -104,10 +104,10 @@ public class ResponderTest {
     @Test
     public void onResult_WhenResultListenerAttachedAfterResultReceived_StillGetsCallbackWithResult() throws Exception {
         long testSleepTime = 100;
-        Response<String> response = responder.invoke(new ServiceTask<String>() {
+        Response<String> response = responder.process(new Request<String>() {
 
             @Override
-            public String execute() throws ServiceFailedException {
+            public String process() throws RequestFailedException {
                 return RESULT_SUCCESS;
             }
         });
@@ -159,11 +159,11 @@ public class ResponderTest {
                 actualElapsedTime, expectedElapsedTime);
     }
 
-    private void sleep(int testSleepTime) throws ServiceFailedException {
+    private void sleep(int testSleepTime) throws RequestFailedException {
         try {
             MILLISECONDS.sleep(testSleepTime);
         } catch (InterruptedException e) {
-            throw new ServiceFailedException(e);
+            throw new RequestFailedException(e);
         }
     }
 }
