@@ -19,19 +19,28 @@ public class DefaultServiceClientActivator implements ServiceClientActivator {
     @Override
     public <C extends ServiceClient<?>> C activate(Class<C> serviceClientClass, String serviceName, Executor executor)
             throws ServiceClientActivationFailedException {
+        ServiceApi serviceApi = getServiceApi(serviceName);
+        C serviceClient = instantiateServiceClient(serviceClientClass);
+        serviceClient.activate(executor, serviceApi);
+        return serviceClient;
+    }
+
+    private <C extends ServiceClient<?>> ServiceApi getServiceApi(String serviceName)
+            throws ServiceClientActivationFailedException {
         try {
-            C serviceClient = instantiateServiceClient(serviceClientClass);
-            ServiceApi serviceApi = serviceApiProvider.getService(serviceName);
-            serviceClient.activate(executor, serviceApi);
-            return serviceClient;
-        } catch (ReflectiveOperationException | ObjectNotFoundException e) {
-            throw new ServiceClientActivationFailedException("Failed to activate service client " + serviceClientClass.getName(),
-                    e);
+            return serviceApiProvider.getService(serviceName);
+        } catch (ObjectNotFoundException e) {
+            throw new ServiceClientActivationFailedException("Failed to find service with name " + serviceName, e);
         }
     }
 
     private <C extends ServiceClient<?>> C instantiateServiceClient(Class<C> serviceClientClass)
-            throws ReflectiveOperationException {
-        return serviceClientClass.newInstance();
+            throws ServiceClientActivationFailedException {
+        try {
+            return serviceClientClass.newInstance();
+        } catch (ReflectiveOperationException e) {
+            throw new ServiceClientActivationFailedException("Failed to activate service client " + serviceClientClass.getName(),
+                    e);
+        }
     }
 }
