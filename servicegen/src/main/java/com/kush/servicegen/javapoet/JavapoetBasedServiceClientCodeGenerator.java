@@ -19,9 +19,9 @@ import com.kush.servicegen.CodeGenerator;
 import com.kush.servicegen.MethodInfo;
 import com.kush.servicegen.ParameterInfo;
 import com.kush.servicegen.ServiceInfo;
-import com.kush.utils.async.Response;
-import com.kush.utils.async.RequestFailedException;
 import com.kush.utils.async.Request;
+import com.kush.utils.async.RequestFailedException;
+import com.kush.utils.async.Response;
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.MethodSpec.Builder;
@@ -109,7 +109,7 @@ public class JavapoetBasedServiceClientCodeGenerator implements CodeGenerator {
     }
 
     private Builder createServiceTaskExecuteMethodSpecBuilder(Type returnType, String serviceTaskMethodCallText) {
-        Builder methodBuilder = MethodSpec.methodBuilder("execute")
+        Builder methodBuilder = MethodSpec.methodBuilder("process")
             .returns(returnType);
         if (Void.class.equals(returnType)) {
             methodBuilder.addStatement("getService().$L", serviceTaskMethodCallText)
