@@ -1,8 +1,8 @@
 package com.kush.servicegen.javapoet;
 
-import static com.kush.servicegen.utils.GenericUtilsForTest.assertGenericMethodReturnType;
-import static com.kush.servicegen.utils.GenericUtilsForTest.assertGenericParameterType;
-import static com.kush.servicegen.utils.GenericUtilsForTest.assertMethodReturnType;
+import static com.kush.servicegen.utils.TypeUtilsForTest.assertGenericMethodReturnType;
+import static com.kush.servicegen.utils.TypeUtilsForTest.assertGenericParameterType;
+import static com.kush.servicegen.utils.TypeUtilsForTest.assertMethodReturnType;
 import static java.util.Arrays.asList;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;

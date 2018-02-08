@@ -9,7 +9,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.lang.reflect.Type;
 
-public class GenericUtilsForTest {
+public class TypeUtilsForTest {
 
     public static void assertGenericParameterType(Parameter parameter, Type outerType, Type innerType) {
         String actualTypeName = getGenericParameterType(parameter);
