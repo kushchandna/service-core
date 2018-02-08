@@ -17,8 +17,8 @@ public abstract class ServiceClient<S extends ServiceApi> {
         service = getServiceApiClass().cast(serviceApi);
     }
 
-    protected final <T> Response<T> invoke(Request<T> serviceRequest) {
-        return responder.process(serviceRequest);
+    protected final <T> Response<T> invoke(Request<T> request) {
+        return responder.process(request);
     }
 
     protected final S getService() {
