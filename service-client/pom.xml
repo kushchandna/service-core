@@ -2,10 +2,10 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<artifactId>service</artifactId>
+	<artifactId>service-client</artifactId>
 	<packaging>jar</packaging>
 
-	<name>service</name>
+	<name>service-client</name>
 	<url>http://maven.apache.org</url>
 
 	<properties>
@@ -21,6 +21,11 @@
 		<dependency>
 			<groupId>com.kush</groupId>
 			<artifactId>utils</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>com.kush</groupId>
+			<artifactId>service-remoting</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 	</dependencies>

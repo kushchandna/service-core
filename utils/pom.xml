@@ -5,8 +5,6 @@
 	<artifactId>utils</artifactId>
 	<packaging>jar</packaging>
 
-	<groupId>com.kush</groupId>
-	<version>0.0.1-SNAPSHOT</version>
 	<name>utils</name>
 	<url>http://maven.apache.org</url>
 
@@ -40,4 +38,9 @@
 		</dependency>
 	</dependencies>
 
+	<parent>
+		<groupId>com.kush</groupId>
+		<artifactId>parent</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
 </project>
