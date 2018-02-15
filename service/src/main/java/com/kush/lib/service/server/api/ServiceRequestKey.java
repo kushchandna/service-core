@@ -1,4 +1,4 @@
-package com.kush.lib.service.server.core;
+package com.kush.lib.service.server.api;
 
 final class ServiceRequestKey {
 

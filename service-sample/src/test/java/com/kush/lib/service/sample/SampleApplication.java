@@ -6,13 +6,13 @@ import java.util.concurrent.Executors;
 import com.kush.lib.service.client.api.ApplicationClient;
 import com.kush.lib.service.client.api.ServiceClientProvider;
 import com.kush.lib.service.remoting.api.ConnectionSpecification;
-import com.kush.lib.service.sample.client.SampleConnectionSpecification;
 import com.kush.lib.service.sample.client.SampleHelloServiceClient;
 import com.kush.lib.service.sample.server.SampleHelloService;
 import com.kush.lib.service.sample.server.SampleHelloTextProvider;
 import com.kush.lib.service.server.api.ApplicationServer;
 import com.kush.lib.service.server.api.Context;
 import com.kush.lib.service.server.api.ContextBuilder;
+import com.kush.lib.service.server.remoting.LocalServerBasedConnectionSpecification;
 import com.kush.utils.async.Response;
 import com.kush.utils.async.Response.ResultListener;
 import com.kush.utils.exceptions.ObjectNotFoundException;
@@ -26,8 +26,9 @@ public class SampleApplication {
         Context context = prepareContext();
         server.start(context);
 
+        ConnectionSpecification connSpec = new LocalServerBasedConnectionSpecification(server);
+
         ApplicationClient client = new ApplicationClient();
-        ConnectionSpecification connSpec = new SampleConnectionSpecification(server.getServiceProvider());
         client.connect(connSpec);
         Executor executor = Executors.newSingleThreadExecutor();
         client.activateServiceClient(SampleHelloServiceClient.class, "Sample Service", executor);

@@ -1,10 +1,10 @@
-package com.kush.lib.service.server.core;
+package com.kush.lib.service.server.api;
 
-import com.kush.lib.service.remoting.api.ServiceInvocationRequest;
+import com.kush.lib.service.remoting.api.ServiceRequest;
 import com.kush.lib.service.remoting.api.ServiceRequestFailedException;
 import com.kush.lib.service.remoting.api.ServiceRequestResolver;
 
-public class ServerSideServiceRequestResolver implements ServiceRequestResolver {
+class ServerSideServiceRequestResolver implements ServiceRequestResolver {
 
     private final ServiceInitializer initializer;
 
@@ -13,7 +13,7 @@ public class ServerSideServiceRequestResolver implements ServiceRequestResolver 
     }
 
     @Override
-    public <T> T resolve(ServiceInvocationRequest request, Class<T> returnType) throws ServiceRequestFailedException {
+    public <T> T resolve(ServiceRequest request, Class<T> returnType) throws ServiceRequestFailedException {
         Object result = initializer.handle(request);
         return returnType.cast(result);
     }

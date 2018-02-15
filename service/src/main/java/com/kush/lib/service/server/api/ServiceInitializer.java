@@ -1,4 +1,4 @@
-package com.kush.lib.service.server.core;
+package com.kush.lib.service.server.api;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
@@ -6,16 +6,13 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import com.kush.lib.service.remoting.api.ServiceInvocationRequest;
+import com.kush.lib.service.remoting.api.ServiceRequest;
 import com.kush.lib.service.remoting.api.ServiceRequestFailedException;
-import com.kush.lib.service.server.api.BaseService;
-import com.kush.lib.service.server.api.Context;
-import com.kush.lib.service.server.api.ServiceInitializationFailedException;
 import com.kush.lib.service.server.api.annotations.Service;
 import com.kush.lib.service.server.api.annotations.ServiceMethod;
 import com.kush.utils.exceptions.ObjectNotFoundException;
 
-public class ServiceInitializer {
+class ServiceInitializer {
 
     private final Set<Class<? extends BaseService>> serviceClasses = new HashSet<>();
     private final Map<String, BaseService> services = new HashMap<>();
@@ -26,7 +23,7 @@ public class ServiceInitializer {
         serviceClasses.add(serviceClass);
     }
 
-    public Object handle(ServiceInvocationRequest request) throws ServiceRequestFailedException {
+    public Object handle(ServiceRequest request) throws ServiceRequestFailedException {
         ServiceRequestKey key = new ServiceRequestKey(request.getServiceName(), request.getMethodName());
         ServiceInvoker serviceInvoker = serviceInvokers.get(key);
         return serviceInvoker.invoke(request.getArgs());

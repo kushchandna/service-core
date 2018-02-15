@@ -1,8 +1,6 @@
 package com.kush.lib.service.server.api;
 
 import com.kush.lib.service.remoting.api.ServiceRequestResolver;
-import com.kush.lib.service.server.core.ServerSideServiceRequestResolver;
-import com.kush.lib.service.server.core.ServiceInitializer;
 
 public class ApplicationServer {
 

@@ -2,7 +2,6 @@ package com.kush.servicegen.javapoet;
 
 import static com.kush.servicegen.utils.TypeUtilsForTest.assertGenericMethodReturnType;
 import static com.kush.servicegen.utils.TypeUtilsForTest.assertGenericParameterType;
-import static com.kush.utils.commons.TypeUtils.getGenericTypeName;
 import static java.util.Arrays.asList;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
@@ -55,9 +54,8 @@ public class JavapoetBasedServiceClientCodeGeneratorTest {
 
     @Test
     public void serivceClientType() throws Exception {
-        String expectedSuperClassTypeName = getGenericTypeName(ServiceClient.class, DummyServiceApi.class);
-        Type genericSuperclass = serviceClientClass.getGenericSuperclass();
-        assertThat(genericSuperclass.getTypeName(), is(equalTo(expectedSuperClassTypeName)));
+        Type superclass = serviceClientClass.getSuperclass();
+        assertThat(superclass.getTypeName(), is(equalTo(ServiceClient.class.getName())));
     }
 
     @Test
@@ -110,7 +108,7 @@ public class JavapoetBasedServiceClientCodeGeneratorTest {
     private static JavaFileObject generateDummyClientClass() throws Exception {
         ServiceReader serviceReader = new ServiceReader();
         ServiceInfo serviceInfo = serviceReader.readService(DummyService.class);
-        CodeGenerator generator = new JavapoetBasedServiceClientCodeGenerator(serviceInfo, DummyServiceApi.class);
+        CodeGenerator generator = new JavapoetBasedServiceClientCodeGenerator(serviceInfo);
         return generator.generate(TARGET_PACKAGE_CLIENT, temp);
     }
 

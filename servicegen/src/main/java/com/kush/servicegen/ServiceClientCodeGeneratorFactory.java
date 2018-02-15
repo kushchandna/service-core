@@ -3,7 +3,7 @@ package com.kush.servicegen;
 import java.io.File;
 
 import com.kush.lib.service.server.api.BaseService;
-import com.kush.servicegen.javapoet.JavapoetBasedServiceApiCodeGenerator;
+import com.kush.servicegen.javapoet.JavapoetBasedServiceClientCodeGenerator;
 
 public class ServiceClientCodeGeneratorFactory {
 
@@ -13,15 +13,9 @@ public class ServiceClientCodeGeneratorFactory {
         serviceReader = new ServiceReader();
     }
 
-    public CodeGenerator getServiceApiGenerator(Class<? extends BaseService> serviceClass, String targetPackage,
-            File targetDirectory) {
-        ServiceInfo serviceInfo = serviceReader.readService(serviceClass);
-        return new JavapoetBasedServiceApiCodeGenerator(serviceInfo);
-    }
-
     public CodeGenerator getServiceClientGenerator(Class<? extends BaseService> serviceClass, String targetPackage,
             File targetDirectory) {
         ServiceInfo serviceInfo = serviceReader.readService(serviceClass);
-        return new JavapoetBasedServiceApiCodeGenerator(serviceInfo);
+        return new JavapoetBasedServiceClientCodeGenerator(serviceInfo);
     }
 }

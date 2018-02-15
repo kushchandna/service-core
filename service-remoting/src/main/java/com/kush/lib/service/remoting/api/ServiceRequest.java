@@ -2,7 +2,7 @@ package com.kush.lib.service.remoting.api;
 
 import java.io.Serializable;
 
-public class ServiceInvocationRequest implements Serializable {
+public class ServiceRequest implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -10,7 +10,7 @@ public class ServiceInvocationRequest implements Serializable {
     private final String methodName;
     private final Object[] args;
 
-    public ServiceInvocationRequest(String serviceName, String methodName, Object... args) {
+    public ServiceRequest(String serviceName, String methodName, Object... args) {
         this.serviceName = serviceName;
         this.methodName = methodName;
         this.args = args;
