@@ -4,6 +4,7 @@ import java.io.Closeable;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Iterator;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
@@ -31,11 +32,10 @@ public class FixedSizeConnectionPool implements ConnectionProvider, Closeable {
 
     @Override
     public void close() throws IOException {
-        for (Connection connection : availableConnections) {
-            try {
-                connection.close();
-            } catch (SQLException e) {
-            }
+        for (Iterator<Connection> iterator = availableConnections.iterator(); iterator.hasNext();) {
+            Connection connection = iterator.next();
+            closeQuietly(connection);
+            iterator.remove();
         }
     }
 
@@ -43,6 +43,13 @@ public class FixedSizeConnectionPool implements ConnectionProvider, Closeable {
         for (int i = 0; i < size; i++) {
             Connection connection = connectionFactory.create();
             availableConnections.add(connection);
+        }
+    }
+
+    private void closeQuietly(Connection connection) {
+        try {
+            connection.close();
+        } catch (SQLException e) {
         }
     }
 }
