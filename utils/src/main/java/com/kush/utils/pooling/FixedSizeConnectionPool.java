@@ -1,14 +1,12 @@
 package com.kush.utils.pooling;
 
-import java.io.Closeable;
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Iterator;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
-public class FixedSizeConnectionPool implements ConnectionProvider, Closeable {
+public class FixedSizeConnectionPool implements ConnectionProvider, AutoCloseable {
 
     private final BlockingQueue<Connection> availableConnections;
 
@@ -31,7 +29,7 @@ public class FixedSizeConnectionPool implements ConnectionProvider, Closeable {
     }
 
     @Override
-    public void close() throws IOException {
+    public void close() throws Exception {
         for (Iterator<Connection> iterator = availableConnections.iterator(); iterator.hasNext();) {
             Connection connection = iterator.next();
             closeQuietly(connection);
