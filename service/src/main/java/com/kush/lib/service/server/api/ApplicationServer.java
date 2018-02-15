@@ -1,23 +1,24 @@
 package com.kush.lib.service.server.api;
 
+import com.kush.lib.service.server.core.ServiceInitializer;
+
 public class ApplicationServer {
 
-    private final ServiceProvider serviceProvider;
+    private final ServiceInitializer serviceInitializer;
 
     public ApplicationServer() {
-        ServiceInitializer initializer = new ServiceInitializer();
-        serviceProvider = new ServiceProvider(initializer);
+        serviceInitializer = new ServiceInitializer();
     }
 
     public void registerService(Class<? extends BaseService> serviceClass) {
-        serviceProvider.addService(serviceClass);
+        serviceInitializer.addService(serviceClass);
     }
 
     public void start(Context context) throws ServiceInitializationFailedException {
-        serviceProvider.initialize(context);
+        serviceInitializer.initialize(context);
     }
 
-    public ServiceProvider getServiceProvider() {
-        return serviceProvider;
+    public ServiceInitializer getServiceProvider() {
+        return serviceInitializer;
     }
 }

@@ -11,13 +11,11 @@ import com.kush.lib.service.sample.client.SampleConnectionSpecification;
 import com.kush.lib.service.sample.client.SampleHelloServiceClient;
 import com.kush.lib.service.sample.server.SampleHelloService;
 import com.kush.lib.service.sample.server.SampleHelloTextProvider;
-import com.kush.lib.service.sample.server.SampleServiceNameProvider;
 import com.kush.lib.service.server.api.ApplicationServer;
 import com.kush.lib.service.server.api.Context;
 import com.kush.lib.service.server.api.ContextBuilder;
 import com.kush.lib.service.server.api.ServiceInitializationFailedException;
-import com.kush.lib.service.server.api.ServiceNameProvider;
-import com.kush.lib.service.server.api.ServiceProvider;
+import com.kush.lib.service.server.core.ServiceInitializer;
 import com.kush.utils.async.Response;
 import com.kush.utils.async.Response.ResultListener;
 import com.kush.utils.exceptions.ObjectNotFoundException;
@@ -26,12 +24,10 @@ public class SampleApplication {
 
     public static void main(String[] args) throws Exception {
 
-        ServiceNameProvider serviceNameProvider = new SampleServiceNameProvider();
+        ApplicationServer server = setupServer();
 
-        ApplicationServer server = setupServer(serviceNameProvider);
-
-        ServiceProvider serviceProvider = server.getServiceProvider();
-        ConnectionSpecification connSpec = new SampleConnectionSpecification(serviceProvider, serviceNameProvider);
+        ServiceInitializer serviceProvider = server.getServiceProvider();
+        ConnectionSpecification connSpec = new SampleConnectionSpecification(serviceProvider);
 
         ApplicationClient client = setupClient(connSpec);
 
@@ -47,20 +43,19 @@ public class SampleApplication {
         return client;
     }
 
-    private static ApplicationServer setupServer(ServiceNameProvider serviceNameProvider)
+    private static ApplicationServer setupServer()
             throws ServiceInitializationFailedException {
         ApplicationServer server = new ApplicationServer();
         server.registerService(SampleHelloService.class);
-        Context context = prepareContext(serviceNameProvider);
+        Context context = prepareContext();
         server.start(context);
         return server;
     }
 
-    private static Context prepareContext(ServiceNameProvider serviceNameProvider) {
+    private static Context prepareContext() {
         SampleHelloTextProvider greetingProvider = new SampleHelloTextProvider();
         return ContextBuilder.create()
             .withInstance(SampleHelloTextProvider.class, greetingProvider)
-            .withInstance(ServiceNameProvider.class, serviceNameProvider)
             .build();
     }
 
