@@ -18,7 +18,7 @@ public abstract class ServiceClient<S extends ServiceApi> {
     }
 
     protected final <T> Response<T> invoke(Request<T> request) {
-        return responder.process(request);
+        return responder.respond(request);
     }
 
     protected final S getService() {

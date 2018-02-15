@@ -10,7 +10,7 @@ public class Responder {
         this.executor = executor;
     }
 
-    public <T> Response<T> process(Request<T> request) {
+    public <T> Response<T> respond(Request<T> request) {
         Response<T> response = new Response<>();
         executor.execute(new Runnable() {
 

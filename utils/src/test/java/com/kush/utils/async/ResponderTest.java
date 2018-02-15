@@ -48,7 +48,7 @@ public class ResponderTest {
     public void getResult_WhenResultIsDelayed_WaitsForResult() throws Exception {
         int testSleepTime = 100;
         watch.start();
-        Response<String> response = responder.process(new Request<String>() {
+        Response<String> response = responder.respond(new Request<String>() {
 
             @Override
             public String process() throws RequestFailedException {
@@ -66,7 +66,7 @@ public class ResponderTest {
     public void getResult_WhenResultIsDelayed_ThrowsExceptionIfErrorOccured() throws Exception {
         int testSleepTime = 100;
         RequestFailedException testException = new RequestFailedException();
-        Response<String> response = responder.process(new Request<String>() {
+        Response<String> response = responder.respond(new Request<String>() {
 
             @Override
             public String process() throws RequestFailedException {
@@ -81,7 +81,7 @@ public class ResponderTest {
     @Test
     public void onResult_WhenDelayedResultIsReceived_GetsCallbackWithResult() throws Exception {
         int testSleepTime = 100;
-        Response<String> response = responder.process(new Request<String>() {
+        Response<String> response = responder.respond(new Request<String>() {
 
             @Override
             public String process() throws RequestFailedException {
@@ -104,7 +104,7 @@ public class ResponderTest {
     @Test
     public void onResult_WhenResultListenerAttachedAfterResultReceived_StillGetsCallbackWithResult() throws Exception {
         long testSleepTime = 100;
-        Response<String> response = responder.process(new Request<String>() {
+        Response<String> response = responder.respond(new Request<String>() {
 
             @Override
             public String process() throws RequestFailedException {

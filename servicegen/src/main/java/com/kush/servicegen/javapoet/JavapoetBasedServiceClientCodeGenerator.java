@@ -109,7 +109,7 @@ public class JavapoetBasedServiceClientCodeGenerator implements CodeGenerator {
     }
 
     private Builder createServiceTaskExecuteMethodSpecBuilder(Type returnType, String serviceTaskMethodCallText) {
-        Builder methodBuilder = MethodSpec.methodBuilder("process")
+        Builder methodBuilder = MethodSpec.methodBuilder("respond")
             .returns(returnType);
         if (Void.class.equals(returnType)) {
             methodBuilder.addStatement("getService().$L", serviceTaskMethodCallText)
