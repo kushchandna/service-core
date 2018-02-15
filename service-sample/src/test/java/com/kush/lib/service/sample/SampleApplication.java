@@ -4,7 +4,6 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 import com.kush.lib.service.client.api.ApplicationClient;
-import com.kush.lib.service.client.api.ServiceClientActivationFailedException;
 import com.kush.lib.service.client.api.ServiceClientProvider;
 import com.kush.lib.service.remoting.api.ConnectionSpecification;
 import com.kush.lib.service.sample.client.SampleConnectionSpecification;
@@ -14,8 +13,6 @@ import com.kush.lib.service.sample.server.SampleHelloTextProvider;
 import com.kush.lib.service.server.api.ApplicationServer;
 import com.kush.lib.service.server.api.Context;
 import com.kush.lib.service.server.api.ContextBuilder;
-import com.kush.lib.service.server.api.ServiceInitializationFailedException;
-import com.kush.lib.service.server.core.ServiceInitializer;
 import com.kush.utils.async.Response;
 import com.kush.utils.async.Response.ResultListener;
 import com.kush.utils.exceptions.ObjectNotFoundException;
@@ -24,32 +21,19 @@ public class SampleApplication {
 
     public static void main(String[] args) throws Exception {
 
-        ApplicationServer server = setupServer();
-
-        ServiceInitializer serviceProvider = server.getServiceProvider();
-        ConnectionSpecification connSpec = new SampleConnectionSpecification(serviceProvider);
-
-        ApplicationClient client = setupClient(connSpec);
-
-        ServiceClientProvider serviceClientProvider = client.getServiceClientProvider();
-        invokeGetHelloText(serviceClientProvider);
-    }
-
-    private static ApplicationClient setupClient(ConnectionSpecification connSpec) throws ServiceClientActivationFailedException {
-        Executor executor = Executors.newSingleThreadExecutor();
-        ApplicationClient client = new ApplicationClient();
-        client.connect(connSpec);
-        client.activateServiceClient(SampleHelloServiceClient.class, "Sample Service", executor);
-        return client;
-    }
-
-    private static ApplicationServer setupServer()
-            throws ServiceInitializationFailedException {
         ApplicationServer server = new ApplicationServer();
         server.registerService(SampleHelloService.class);
         Context context = prepareContext();
         server.start(context);
-        return server;
+
+        ApplicationClient client = new ApplicationClient();
+        ConnectionSpecification connSpec = new SampleConnectionSpecification(server.getServiceProvider());
+        client.connect(connSpec);
+        Executor executor = Executors.newSingleThreadExecutor();
+        client.activateServiceClient(SampleHelloServiceClient.class, "Sample Service", executor);
+
+        ServiceClientProvider serviceClientProvider = client.getServiceClientProvider();
+        invokeGetHelloText(serviceClientProvider);
     }
 
     private static Context prepareContext() {

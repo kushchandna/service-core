@@ -1,13 +1,13 @@
 package com.kush.lib.service.sample.remoting.api;
 
-import com.kush.lib.service.remoting.api.RequestResolver;
+import com.kush.lib.service.remoting.api.ServiceRequestResolver;
 import com.kush.lib.service.remoting.api.ServiceInvocationRequest;
 
 public class RemoteSampleHelloServiceApi implements SampleHelloServiceApi {
 
-    private final RequestResolver requestResolver;
+    private final ServiceRequestResolver requestResolver;
 
-    public RemoteSampleHelloServiceApi(RequestResolver requestResolver) {
+    public RemoteSampleHelloServiceApi(ServiceRequestResolver requestResolver) {
         this.requestResolver = requestResolver;
     }
 

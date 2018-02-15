@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.kush.lib.service.remoting.api.ServiceInvocationRequest;
+import com.kush.lib.service.remoting.api.ServiceRequestFailedException;
 import com.kush.lib.service.server.api.BaseService;
 import com.kush.lib.service.server.api.Context;
 import com.kush.lib.service.server.api.ServiceInitializationFailedException;

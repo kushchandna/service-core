@@ -3,6 +3,7 @@ package com.kush.lib.service.server.core;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+import com.kush.lib.service.remoting.api.ServiceRequestFailedException;
 import com.kush.lib.service.server.api.BaseService;
 
 class ServiceInvoker {

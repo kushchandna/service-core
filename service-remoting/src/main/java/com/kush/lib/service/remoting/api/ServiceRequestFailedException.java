@@ -1,6 +1,6 @@
-package com.kush.lib.service.server.core;
+package com.kush.lib.service.remoting.api;
 
-class ServiceRequestFailedException extends Exception {
+public class ServiceRequestFailedException extends Exception {
 
     private static final long serialVersionUID = 1L;
 
