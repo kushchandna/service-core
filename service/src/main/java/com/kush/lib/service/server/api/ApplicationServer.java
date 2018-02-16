@@ -18,7 +18,7 @@ public class ApplicationServer {
         serviceInitializer.initialize(context);
     }
 
-    public ServiceRequestResolver getServiceRequestResolver() {
+    ServiceRequestResolver getServiceRequestResolver() {
         return new ServerSideServiceRequestResolver(serviceInitializer);
     }
 }

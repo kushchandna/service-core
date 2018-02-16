@@ -12,7 +12,7 @@ import com.kush.lib.service.sample.server.SampleHelloTextProvider;
 import com.kush.lib.service.server.api.ApplicationServer;
 import com.kush.lib.service.server.api.Context;
 import com.kush.lib.service.server.api.ContextBuilder;
-import com.kush.lib.service.server.remoting.LocalServerBasedConnectionSpecification;
+import com.kush.lib.service.server.api.LocalServerBasedConnectionSpecification;
 import com.kush.utils.async.Response;
 import com.kush.utils.async.Response.ResultListener;
 import com.kush.utils.exceptions.ObjectNotFoundException;
