@@ -97,7 +97,6 @@ class PooledConnection implements Connection {
 
     @Override
     public boolean isClosed() throws SQLException {
-        throwSQLExceptionIfClosed();
         return connection.isClosed();
     }
 
