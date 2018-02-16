@@ -13,7 +13,7 @@ class ServerSideServiceRequestResolver implements ServiceRequestResolver {
     }
 
     @Override
-    public <T> T resolve(ServiceRequest request, Class<T> returnType) throws ServiceRequestFailedException {
+    public <T> T resolve(ServiceRequest request, ReturnType<T> returnType) throws ServiceRequestFailedException {
         Object result = initializer.handle(request);
         return returnType.cast(result);
     }

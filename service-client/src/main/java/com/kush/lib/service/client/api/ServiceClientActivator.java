@@ -12,10 +12,10 @@ class ServiceClientActivator {
         this.requestResolver = requestResolver;
     }
 
-    public <C extends ServiceClient> C activate(Class<C> serviceClientClass, String serviceName, Executor executor)
+    public <C extends ServiceClient> C activate(Class<C> serviceClientClass, Executor executor)
             throws ServiceClientActivationFailedException {
         C serviceClient = instantiateServiceClient(serviceClientClass);
-        serviceClient.activate(executor, requestResolver, serviceName);
+        serviceClient.activate(executor, requestResolver);
         return serviceClient;
     }
 

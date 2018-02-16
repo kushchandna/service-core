@@ -31,7 +31,7 @@ public class SampleApplication {
         ApplicationClient client = new ApplicationClient();
         client.connect(connSpec);
         Executor executor = Executors.newSingleThreadExecutor();
-        client.activateServiceClient(SampleHelloServiceClient.class, "Sample Service", executor);
+        client.activateServiceClient(SampleHelloServiceClient.class, executor);
 
         ServiceClientProvider serviceClientProvider = client.getServiceClientProvider();
         invokeGetHelloText(serviceClientProvider);

@@ -5,7 +5,11 @@ import com.kush.utils.async.Response;
 
 public class SampleHelloServiceClient extends ServiceClient {
 
+    public SampleHelloServiceClient() {
+        super("Sample Hello Service");
+    }
+
     public Response<String> sayHello(String name) {
-        return invoke("sayHello", String.class, name);
+        return invoke("Say Hello", name);
     }
 }

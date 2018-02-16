@@ -15,9 +15,9 @@ public class ApplicationClient {
         serviceClientProvider = new ServiceClientProvider(activator);
     }
 
-    public void activateServiceClient(Class<? extends ServiceClient> serviceClientClass, String serviceName, Executor executor)
+    public void activateServiceClient(Class<? extends ServiceClient> serviceClientClass, Executor executor)
             throws ServiceClientActivationFailedException {
-        serviceClientProvider.activateServiceClient(serviceClientClass, serviceName, executor);
+        serviceClientProvider.activateServiceClient(serviceClientClass, executor);
     }
 
     public ServiceClientProvider getServiceClientProvider() {

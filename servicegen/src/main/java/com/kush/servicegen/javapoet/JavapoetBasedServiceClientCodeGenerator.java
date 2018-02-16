@@ -61,11 +61,20 @@ public class JavapoetBasedServiceClientCodeGenerator implements CodeGenerator {
 
     private List<MethodSpec> createMethodSpecs(ServiceInfo serviceInfo) throws CodeGenerationFailedException {
         List<MethodSpec> methodSpecs = new ArrayList<>();
+        MethodSpec constructor = createServiceClientConstructor(serviceInfo);
+        methodSpecs.add(constructor);
         for (MethodInfo serviceMethod : serviceInfo.getServiceMethods()) {
             MethodSpec methodSpec = createServiceClientMethodSpec(serviceMethod);
             methodSpecs.add(methodSpec);
         }
         return methodSpecs;
+    }
+
+    private MethodSpec createServiceClientConstructor(ServiceInfo serviceInfo) {
+        return MethodSpec.constructorBuilder()
+            .addStatement("super($S)", serviceInfo.getName())
+            .addModifiers(PUBLIC)
+            .build();
     }
 
     private MethodSpec createServiceClientMethodSpec(MethodInfo serviceMethod) {
@@ -77,7 +86,7 @@ public class JavapoetBasedServiceClientCodeGenerator implements CodeGenerator {
             .returns(responseReturnTypeName)
             .addModifiers(PUBLIC)
             .addParameters(parameterSpecs)
-            .addStatement(createInvokeStatement(parameterSpecs), methodName, returnType.getTypeName())
+            .addStatement(createInvokeStatement(parameterSpecs), methodName)
             .build();
     }
 
@@ -94,7 +103,7 @@ public class JavapoetBasedServiceClientCodeGenerator implements CodeGenerator {
 
     private String createInvokeStatement(List<ParameterSpec> paramSpecs) {
         StringBuilder builder = new StringBuilder("return invoke(");
-        builder.append("$S, $L.class");
+        builder.append("$S");
         for (ParameterSpec paramSpec : paramSpecs) {
             builder.append(',').append(" ").append(paramSpec.name);
         }

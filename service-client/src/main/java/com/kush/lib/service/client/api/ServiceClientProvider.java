@@ -16,9 +16,9 @@ public class ServiceClientProvider {
         this.activator = activator;
     }
 
-    void activateServiceClient(Class<? extends ServiceClient> serviceClientClass, String serviceName, Executor executor)
+    void activateServiceClient(Class<? extends ServiceClient> serviceClientClass, Executor executor)
             throws ServiceClientActivationFailedException {
-        ServiceClient serviceClient = activator.activate(serviceClientClass, serviceName, executor);
+        ServiceClient serviceClient = activator.activate(serviceClientClass, executor);
         serviceClients.put(serviceClientClass, serviceClient);
     }
 
