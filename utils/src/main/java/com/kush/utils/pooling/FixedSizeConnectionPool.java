@@ -22,8 +22,14 @@ public class FixedSizeConnectionPool implements ConnectionProvider, AutoCloseabl
 
             @Override
             public void close() throws SQLException {
-                super.close();
-                availableConnections.add(connection);
+                if (!isClosed()) {
+                    synchronized (this) {
+                        if (!isClosed()) {
+                            super.close();
+                            availableConnections.add(connection);
+                        }
+                    }
+                }
             }
         };
     }
