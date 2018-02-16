@@ -18,10 +18,6 @@ public class ApplicationServer {
         serviceInitializer.initialize(context);
     }
 
-    public ServiceInitializer getServiceProvider() {
-        return serviceInitializer;
-    }
-
     public ServiceRequestResolver getServiceRequestResolver() {
         return new ServerSideServiceRequestResolver(serviceInitializer);
     }
