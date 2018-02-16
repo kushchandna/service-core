@@ -17,13 +17,13 @@ public class SampleComponent {
     public void start() {
         running = true;
         System.out.println("Component started");
-        emitComponentStatusSignal();
+        signalSpace.emit(new SampleComponentStatusSignal(true));
     }
 
     public void stop() {
         running = false;
         System.out.println("Componenet stopped");
-        emitComponentStatusSignal();
+        signalSpace.emit(new SampleComponentStatusSignal(false));
     }
 
     public void print(Object object) {
@@ -31,9 +31,5 @@ public class SampleComponent {
             System.out.println("Printed: " + object);
             signalSpace.emit(new SamplePrintSignal(object));
         }
-    }
-
-    private void emitComponentStatusSignal() {
-        signalSpace.emit(new SampleComponentStatusSignal(running));
     }
 }
