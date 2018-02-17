@@ -1,6 +1,11 @@
 package com.kush.utils.commons;
 
+import static java.lang.String.format;
+
+import java.io.PrintStream;
 import java.util.concurrent.TimeUnit;
+
+import com.google.common.base.Stopwatch;
 
 public class NotifyingTask implements Runnable {
 
@@ -9,7 +14,9 @@ public class NotifyingTask implements Runnable {
     private final TimeUnit timeUnit;
     private final Exception exception;
 
-    private State state = State.NOT_STARTED;
+    private State state;
+    private final Stopwatch watch;
+    private PrintStream stream = System.out;
 
     public static NotifyingTask aSleepingTask(String name, long executionTime, TimeUnit timeUnit) {
         return new NotifyingTask(name, executionTime, timeUnit, null);
@@ -24,6 +31,13 @@ public class NotifyingTask implements Runnable {
         this.executionTime = executionTime;
         this.timeUnit = timeUnit;
         this.exception = exception;
+        watch = Stopwatch.createStarted();
+        setState(State.NOT_STARTED);
+    }
+
+    public void setPrintStream(PrintStream stream) {
+        this.stream = stream;
+        printStateUpdate();
     }
 
     public String getName() {
@@ -34,17 +48,27 @@ public class NotifyingTask implements Runnable {
         return state;
     }
 
+    private void setState(State state) {
+        this.state = state;
+        printStateUpdate();
+    }
+
     @Override
     public void run() {
-        state = State.STARTED;
+        setState(State.STARTED);
         try {
             executeTask();
-            state = State.COMPLETED;
+            setState(State.COMPLETED);
         } catch (InterruptedException e) {
-            state = State.INTERRUPTED;
+            setState(State.INTERRUPTED);
         } catch (Exception e) {
-            state = State.FAILED;
+            setState(State.FAILED);
         }
+        watch.stop();
+    }
+
+    private void printStateUpdate() {
+        stream.println(format("Time: %d ms, Name: %s, State: %s", watch.elapsed(TimeUnit.MILLISECONDS), name, state));
     }
 
     private void executeTask() throws Exception {
