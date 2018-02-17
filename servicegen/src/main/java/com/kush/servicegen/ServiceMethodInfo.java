@@ -6,15 +6,22 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MethodInfo {
+import com.kush.lib.service.server.api.annotations.ServiceMethod;
+
+public class ServiceMethodInfo {
 
     private final Method method;
 
-    public MethodInfo(Method method) {
-        this.method = method;
+    public ServiceMethodInfo(Method serviceMethod) {
+        method = serviceMethod;
     }
 
-    public String getName() {
+    public String getServiceMethodId() {
+        ServiceMethod serviceMethod = method.getAnnotation(ServiceMethod.class);
+        return serviceMethod.name();
+    }
+
+    public String getMethodName() {
         return method.getName();
     }
 

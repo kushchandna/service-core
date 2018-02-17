@@ -62,17 +62,25 @@ class ServiceInitializer {
         }
     }
 
-    private String getServiceName(Class<? extends BaseService> serviceClass) {
+    private String getServiceName(Class<? extends BaseService> serviceClass) throws ServiceInitializationFailedException {
         Service service = serviceClass.getAnnotation(Service.class);
+        if (service == null) {
+            throw new ServiceInitializationFailedException("No @Service annotation found on class " + serviceClass.getName());
+        }
         return service.name();
     }
 
-    private void registerHandlers(Class<? extends BaseService> serviceClass, String serviceName, BaseService service) {
+    private void registerHandlers(Class<? extends BaseService> serviceClass, String serviceName, BaseService service)
+            throws ServiceInitializationFailedException {
         Method[] declaredMethods = serviceClass.getDeclaredMethods();
         for (Method method : declaredMethods) {
             if (method.isAnnotationPresent(ServiceMethod.class)) {
                 ServiceMethod serviceMethod = method.getAnnotation(ServiceMethod.class);
                 ServiceRequestKey key = new ServiceRequestKey(serviceName, serviceMethod.name());
+                if (serviceInvokers.containsKey(key)) {
+                    throw new ServiceInitializationFailedException("A service method with name " + key.getMethodName()
+                            + " already exist in service " + key.getServiceName());
+                }
                 ServiceInvoker invoker = new ServiceInvoker(service, method);
                 serviceInvokers.put(key, invoker);
             }

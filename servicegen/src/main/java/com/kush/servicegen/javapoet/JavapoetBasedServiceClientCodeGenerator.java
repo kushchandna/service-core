@@ -14,9 +14,9 @@ import com.google.common.primitives.Primitives;
 import com.kush.lib.service.client.api.ServiceClient;
 import com.kush.servicegen.CodeGenerationFailedException;
 import com.kush.servicegen.CodeGenerator;
-import com.kush.servicegen.MethodInfo;
 import com.kush.servicegen.ParameterInfo;
 import com.kush.servicegen.ServiceInfo;
+import com.kush.servicegen.ServiceMethodInfo;
 import com.kush.utils.async.Response;
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
@@ -63,7 +63,7 @@ public class JavapoetBasedServiceClientCodeGenerator implements CodeGenerator {
         List<MethodSpec> methodSpecs = new ArrayList<>();
         MethodSpec constructor = createServiceClientConstructor(serviceInfo);
         methodSpecs.add(constructor);
-        for (MethodInfo serviceMethod : serviceInfo.getServiceMethods()) {
+        for (ServiceMethodInfo serviceMethod : serviceInfo.getServiceMethods()) {
             MethodSpec methodSpec = createServiceClientMethodSpec(serviceMethod);
             methodSpecs.add(methodSpec);
         }
@@ -77,8 +77,8 @@ public class JavapoetBasedServiceClientCodeGenerator implements CodeGenerator {
             .build();
     }
 
-    private MethodSpec createServiceClientMethodSpec(MethodInfo serviceMethod) {
-        String methodName = serviceMethod.getName();
+    private MethodSpec createServiceClientMethodSpec(ServiceMethodInfo serviceMethod) {
+        String methodName = serviceMethod.getMethodName();
         Type returnType = wrapType(serviceMethod.getReturnType());
         List<ParameterSpec> parameterSpecs = createParameterSpecs(serviceMethod);
         ParameterizedTypeName responseReturnTypeName = ParameterizedTypeName.get(Response.class, returnType);
@@ -86,11 +86,11 @@ public class JavapoetBasedServiceClientCodeGenerator implements CodeGenerator {
             .returns(responseReturnTypeName)
             .addModifiers(PUBLIC)
             .addParameters(parameterSpecs)
-            .addStatement(createInvokeStatement(parameterSpecs), methodName)
+            .addStatement(createInvokeStatement(parameterSpecs), serviceMethod.getServiceMethodId())
             .build();
     }
 
-    private List<ParameterSpec> createParameterSpecs(MethodInfo serviceMethod) {
+    private List<ParameterSpec> createParameterSpecs(ServiceMethodInfo serviceMethod) {
         List<ParameterInfo> parameterInfos = serviceMethod.getParameters();
         List<ParameterSpec> parameterSpecs = new ArrayList<>();
         for (ParameterInfo parameterInfo : parameterInfos) {

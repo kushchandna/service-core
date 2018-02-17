@@ -1,12 +1,14 @@
 package com.kush.servicegen;
 
-import static java.lang.reflect.Modifier.isPublic;
 import static java.util.Collections.unmodifiableList;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+
+import com.kush.lib.service.server.api.annotations.Service;
+import com.kush.lib.service.server.api.annotations.ServiceMethod;
 
 public class ServiceInfo {
 
@@ -16,28 +18,33 @@ public class ServiceInfo {
         this.serviceClass = serviceClass;
     }
 
+    public String getServiceId() {
+        Service service = serviceClass.getAnnotation(Service.class);
+        return service.name();
+    }
+
     public String getName() {
         return serviceClass.getSimpleName();
     }
 
-    public List<MethodInfo> getServiceMethods() {
+    public List<ServiceMethodInfo> getServiceMethods() {
         Method[] declaredMethods = serviceClass.getDeclaredMethods();
-        List<MethodInfo> serviceMethodInfos = new ArrayList<>();
+        List<ServiceMethodInfo> serviceMethodInfos = new ArrayList<>();
         for (Method method : declaredMethods) {
-            if (isPublic(method.getModifiers())) {
-                serviceMethodInfos.add(new MethodInfo(method));
+            if (method.isAnnotationPresent(ServiceMethod.class)) {
+                serviceMethodInfos.add(new ServiceMethodInfo(method));
             }
         }
         sortMethodsWithName(serviceMethodInfos);
         return unmodifiableList(serviceMethodInfos);
     }
 
-    private void sortMethodsWithName(List<MethodInfo> serviceMethodInfos) {
-        serviceMethodInfos.sort(new Comparator<MethodInfo>() {
+    private void sortMethodsWithName(List<ServiceMethodInfo> serviceMethodInfos) {
+        serviceMethodInfos.sort(new Comparator<ServiceMethodInfo>() {
 
             @Override
-            public int compare(MethodInfo o1, MethodInfo o2) {
-                return o1.getName().compareTo(o2.getName());
+            public int compare(ServiceMethodInfo o1, ServiceMethodInfo o2) {
+                return o1.getMethodName().compareTo(o2.getMethodName());
             }
         });
     }
