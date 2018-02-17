@@ -6,7 +6,7 @@ import java.util.concurrent.TimeUnit;
 
 import com.kush.utils.signaling.SignalEmitterFactory;
 import com.kush.utils.signaling.SignalSpace;
-import com.kush.utils.signaling.SimpleSignalEmitterFactory;
+import com.kush.utils.signaling.DefaultSignalEmitterFactory;
 import com.kush.utils.signaling.sample.handlers.SampleComponentStatusHandler;
 import com.kush.utils.signaling.sample.handlers.SamplePrintHandler;
 import com.kush.utils.signaling.sample.signals.SampleComponentStatusSignal;
@@ -17,7 +17,7 @@ public class SampleSignalingE2E {
     public static void main(String[] args) {
 
         ExecutorService executor = Executors.newSingleThreadExecutor();
-        SignalEmitterFactory emitterFactory = new SimpleSignalEmitterFactory();
+        SignalEmitterFactory emitterFactory = new DefaultSignalEmitterFactory();
         SignalSpace signalSpace = new SignalSpace(executor, emitterFactory);
 
         SampleComponent component = new SampleComponent(signalSpace);

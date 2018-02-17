@@ -53,9 +53,9 @@ public class SignalSpace {
     private void findReceiversAndEmit(Signal<?> signal) {
         Identifier signalId = signal.getId();
         Collection<SignalReceiver> receivers = registeredReceivers.get(signalId);
-        SignalEmitter emitter = signalEmitterFactory.create(signal);
+        SignalEmitter emitter = signalEmitterFactory.create();
         if (receivers != null) {
-            emitter.emit(receivers);
+            emitter.emit(signal, receivers);
         }
     }
 }
