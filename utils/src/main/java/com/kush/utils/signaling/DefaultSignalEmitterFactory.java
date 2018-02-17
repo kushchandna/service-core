@@ -2,8 +2,6 @@ package com.kush.utils.signaling;
 
 import java.util.concurrent.Executor;
 
-import com.kush.utils.signaling.emitters.AsynchronousSignalEmitter;
-
 public class DefaultSignalEmitterFactory implements SignalEmitterFactory {
 
     public static final Executor SAME_THREAD_EXECUTOR = new SameThreadExecutor();
