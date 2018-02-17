@@ -1,4 +1,4 @@
-package com.kush.utils.pooling;
+package com.kush.utils.pooling.connection;
 
 import java.sql.Connection;
 
