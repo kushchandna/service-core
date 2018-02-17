@@ -3,7 +3,7 @@ package com.kush.utils.signaling.sample.signals;
 import com.kush.utils.signaling.Signal;
 import com.kush.utils.signaling.sample.handlers.SampleComponentStatusHandler;
 
-public class SampleComponentStatusSignal extends Signal<SampleComponentStatusHandler> {
+public final class SampleComponentStatusSignal extends Signal<SampleComponentStatusHandler> {
 
     private final boolean running;
 
