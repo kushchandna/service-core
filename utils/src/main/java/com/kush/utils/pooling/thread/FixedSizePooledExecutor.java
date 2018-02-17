@@ -12,10 +12,6 @@ public class FixedSizePooledExecutor implements Executor, AutoCloseable {
     private final List<PooledThread> pooledThreads = new ArrayList<>();
     private final BlockingQueue<Runnable> queuedTasks;
 
-    public FixedSizePooledExecutor(int size) {
-        this(size, Integer.MAX_VALUE);
-    }
-
     public FixedSizePooledExecutor(int size, int maxQueuedTasksCount) {
         queuedTasks = new ArrayBlockingQueue<>(maxQueuedTasksCount);
         initializeThreads(size);
