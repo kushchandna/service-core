@@ -21,4 +21,25 @@ public class Integers {
         Integer int2 = 200;
         assertThat(int1 == int2, is(equalTo(false)));
     }
+
+    @Test
+    public void integer3() throws Exception {
+        Integer int1 = 20;
+        int int2 = 20;
+        assertThat(int1 == int2, is(equalTo(true)));
+    }
+
+    @Test
+    public void integer4() throws Exception {
+        Integer int1 = 2000;
+        int int2 = 2000;
+        assertThat(int1 == int2, is(equalTo(true)));
+    }
+
+    @Test
+    public void integer5() throws Exception {
+        Integer int1 = new Integer(20);
+        Integer int2 = 20;
+        assertThat(int1 == int2, is(equalTo(false)));
+    }
 }
