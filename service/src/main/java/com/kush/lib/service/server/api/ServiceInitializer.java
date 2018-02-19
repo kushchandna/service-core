@@ -13,7 +13,6 @@ import com.kush.lib.service.server.api.annotations.ServiceMethod;
 class ServiceInitializer {
 
     private final Set<Class<? extends BaseService>> serviceClasses = new HashSet<>();
-    private final Map<String, BaseService> services = new HashMap<>();
 
     private ServiceRequestResolver serviceRequestResolver;
 
@@ -24,10 +23,7 @@ class ServiceInitializer {
     public void initialize(Context context) throws ServiceInitializationFailedException {
         Map<ServiceRequestKey, ServiceInvoker> serviceInvokers = new HashMap<>();
         for (Class<? extends BaseService> serviceClass : serviceClasses) {
-            String serviceName = getServiceName(serviceClass);
-            BaseService service = initializeService(serviceClass, context);
-            registerHandlers(serviceClass, serviceName, service, serviceInvokers);
-            services.put(serviceName, service);
+            registerServiceInvokers(serviceClass, context, serviceInvokers);
         }
         serviceRequestResolver = new ServerSideServiceRequestResolver(serviceInvokers);
     }
@@ -60,8 +56,10 @@ class ServiceInitializer {
         return service.name();
     }
 
-    private void registerHandlers(Class<? extends BaseService> serviceClass, String serviceName, BaseService service,
+    private void registerServiceInvokers(Class<? extends BaseService> serviceClass, Context context,
             Map<ServiceRequestKey, ServiceInvoker> serviceInvokers) throws ServiceInitializationFailedException {
+        String serviceName = getServiceName(serviceClass);
+        BaseService service = initializeService(serviceClass, context);
         Method[] declaredMethods = serviceClass.getDeclaredMethods();
         for (Method method : declaredMethods) {
             if (method.isAnnotationPresent(ServiceMethod.class)) {
