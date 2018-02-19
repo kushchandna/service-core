@@ -6,44 +6,34 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import com.kush.lib.service.remoting.api.ServiceRequest;
-import com.kush.lib.service.remoting.api.ServiceRequestFailedException;
+import com.kush.lib.service.remoting.api.ServiceRequestResolver;
 import com.kush.lib.service.server.api.annotations.Service;
 import com.kush.lib.service.server.api.annotations.ServiceMethod;
-import com.kush.utils.exceptions.ObjectNotFoundException;
 
 class ServiceInitializer {
 
     private final Set<Class<? extends BaseService>> serviceClasses = new HashSet<>();
     private final Map<String, BaseService> services = new HashMap<>();
 
-    private final Map<ServiceRequestKey, ServiceInvoker> serviceInvokers = new HashMap<>();
+    private ServiceRequestResolver serviceRequestResolver;
 
     public void addService(Class<? extends BaseService> serviceClass) {
         serviceClasses.add(serviceClass);
     }
 
-    public Object handle(ServiceRequest request) throws ServiceRequestFailedException {
-        ServiceRequestKey key = new ServiceRequestKey(request.getServiceName(), request.getMethodName());
-        ServiceInvoker serviceInvoker = serviceInvokers.get(key);
-        return serviceInvoker.invoke(request.getArgs());
-    }
-
     public void initialize(Context context) throws ServiceInitializationFailedException {
+        Map<ServiceRequestKey, ServiceInvoker> serviceInvokers = new HashMap<>();
         for (Class<? extends BaseService> serviceClass : serviceClasses) {
             String serviceName = getServiceName(serviceClass);
             BaseService service = initializeService(serviceClass, context);
-            registerHandlers(serviceClass, serviceName, service);
+            registerHandlers(serviceClass, serviceName, service, serviceInvokers);
             services.put(serviceName, service);
         }
+        serviceRequestResolver = new ServerSideServiceRequestResolver(serviceInvokers);
     }
 
-    public BaseService getService(String serviceName) throws ObjectNotFoundException {
-        BaseService service = services.get(serviceName);
-        if (service == null) {
-            throw new ObjectNotFoundException("service", serviceName);
-        }
-        return service;
+    public ServiceRequestResolver getServiceRequestResolver() {
+        return serviceRequestResolver;
     }
 
     private <S extends BaseService> S initializeService(Class<S> serviceClass, Context context)
@@ -70,8 +60,8 @@ class ServiceInitializer {
         return service.name();
     }
 
-    private void registerHandlers(Class<? extends BaseService> serviceClass, String serviceName, BaseService service)
-            throws ServiceInitializationFailedException {
+    private void registerHandlers(Class<? extends BaseService> serviceClass, String serviceName, BaseService service,
+            Map<ServiceRequestKey, ServiceInvoker> serviceInvokers) throws ServiceInitializationFailedException {
         Method[] declaredMethods = serviceClass.getDeclaredMethods();
         for (Method method : declaredMethods) {
             if (method.isAnnotationPresent(ServiceMethod.class)) {
