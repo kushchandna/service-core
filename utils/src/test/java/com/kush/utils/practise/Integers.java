@@ -39,6 +39,13 @@ public class Integers {
     @Test
     public void integer5() throws Exception {
         Integer int1 = new Integer(20);
+        int int2 = 20;
+        assertThat(int1 == int2, is(equalTo(true)));
+    }
+
+    @Test
+    public void integer6() throws Exception {
+        Integer int1 = new Integer(20);
         Integer int2 = 20;
         assertThat(int1 == int2, is(equalTo(false)));
     }
