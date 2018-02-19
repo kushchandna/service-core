@@ -31,8 +31,8 @@ public class Integers {
 
     @Test
     public void integer4() throws Exception {
-        Integer int1 = 2000;
-        int int2 = 2000;
+        Integer int1 = 200;
+        int int2 = 200;
         assertThat(int1 == int2, is(equalTo(true)));
     }
 
