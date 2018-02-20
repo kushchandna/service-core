@@ -1,4 +1,4 @@
-package com.kush.utils.practise;
+package com.kush.utils.practice;
 
 import java.util.concurrent.TimeUnit;
 
