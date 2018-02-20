@@ -5,10 +5,10 @@ import java.lang.reflect.Method;
 
 import com.kush.lib.service.remoting.api.ServiceRequestFailedException;
 
-class ServiceInvoker {
+public class ServiceInvoker {
 
-    private final Method method;
-    private final BaseService service;
+    protected final Method method;
+    protected final BaseService service;
 
     public ServiceInvoker(BaseService service, Method method) {
         this.service = service;
