@@ -2,7 +2,7 @@ package com.kush.lib.service.remoting.api;
 
 public interface ServiceRequestResolver {
 
-    <T> T resolve(ServiceRequest request, ReturnType<T> returnType) throws ServiceRequestFailedException;
+    <T> T resolve(ServiceRequest<T> request) throws ServiceRequestFailedException;
 
     public static class ReturnType<T> {
 

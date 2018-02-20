@@ -3,17 +3,21 @@ package com.kush.lib.service.remoting.api;
 import java.io.Serializable;
 import java.util.Arrays;
 
-public class ServiceRequest implements Serializable {
+import com.kush.lib.service.remoting.api.ServiceRequestResolver.ReturnType;
+
+public class ServiceRequest<T> implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     private final String serviceName;
     private final String methodName;
+    private final ReturnType<T> returnType;
     private final Object[] args;
 
-    public ServiceRequest(String serviceName, String methodName, Object... args) {
+    public ServiceRequest(String serviceName, String methodName, ReturnType<T> returnType, Object... args) {
         this.serviceName = serviceName;
         this.methodName = methodName;
+        this.returnType = returnType;
         this.args = args;
     }
 
@@ -27,6 +31,10 @@ public class ServiceRequest implements Serializable {
 
     public Object[] getArgs() {
         return args;
+    }
+
+    public ReturnType<T> getReturnType() {
+        return returnType;
     }
 
     @Override
@@ -50,7 +58,7 @@ public class ServiceRequest implements Serializable {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        ServiceRequest other = (ServiceRequest) obj;
+        ServiceRequest<?> other = (ServiceRequest<?>) obj;
         if (!Arrays.equals(args, other.args)) {
             return false;
         }

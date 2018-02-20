@@ -33,8 +33,8 @@ public abstract class ServiceClient {
             @Override
             public T process() throws RequestFailedException {
                 try {
-                    ServiceRequest request = new ServiceRequest(serviceName, methodName, args);
-                    return requestResolver.resolve(request, ReturnType.type());
+                    ServiceRequest<T> request = new ServiceRequest<>(serviceName, methodName, ReturnType.type(), args);
+                    return requestResolver.resolve(request);
                 } catch (ServiceRequestFailedException e) {
                     throw new RequestFailedException(e);
                 }

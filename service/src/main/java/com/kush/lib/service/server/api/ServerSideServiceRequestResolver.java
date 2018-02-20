@@ -15,10 +15,10 @@ class ServerSideServiceRequestResolver implements ServiceRequestResolver {
     }
 
     @Override
-    public <T> T resolve(ServiceRequest request, ReturnType<T> returnType) throws ServiceRequestFailedException {
+    public <T> T resolve(ServiceRequest<T> request) throws ServiceRequestFailedException {
         ServiceRequestKey key = new ServiceRequestKey(request.getServiceName(), request.getMethodName());
         ServiceInvoker serviceInvoker = serviceInvokers.get(key);
         Object result = serviceInvoker.invoke(request.getArgs());
-        return returnType.cast(result);
+        return request.getReturnType().cast(result);
     }
 }
