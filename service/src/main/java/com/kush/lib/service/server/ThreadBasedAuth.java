@@ -1,9 +1,9 @@
-package com.kush.lib.service.server.authentication;
+package com.kush.lib.service.server;
 
 import com.kush.lib.service.remoting.auth.AuthToken;
 import com.kush.lib.service.remoting.auth.User;
 
-public class ThreadBasedAuthenticator implements Authenticator {
+class ThreadBasedAuth implements Auth {
 
     private final ThreadLocal<AuthToken> CURRENT = new ThreadLocal<>();
 

@@ -6,14 +6,13 @@ import com.kush.lib.service.remoting.ServiceRequest;
 import com.kush.lib.service.remoting.ServiceRequestFailedException;
 import com.kush.lib.service.remoting.ServiceRequestResolver;
 import com.kush.lib.service.remoting.auth.AuthToken;
-import com.kush.lib.service.server.authentication.Authenticator;
 
 class LocalServiceRequestResolver implements ServiceRequestResolver {
 
-    private final Authenticator authenticator;
+    private final Auth authenticator;
     private final Map<ServiceRequestKey, ServiceInvoker> serviceInvokers;
 
-    LocalServiceRequestResolver(Authenticator authenticator,
+    LocalServiceRequestResolver(Auth authenticator,
             Map<ServiceRequestKey, ServiceInvoker> serviceInvokers) {
         this.authenticator = authenticator;
         this.serviceInvokers = serviceInvokers;

@@ -1,7 +1,6 @@
 package com.kush.lib.service.server;
 
 import com.kush.lib.service.remoting.auth.User;
-import com.kush.lib.service.server.authentication.Authenticator;
 
 public abstract class BaseService {
 
@@ -22,7 +21,7 @@ public abstract class BaseService {
     }
 
     protected final User getCurrentUser() {
-        Authenticator authenticator = context.getInstance(Authenticator.class);
+        Auth authenticator = context.getInstance(Auth.class);
         return authenticator.getCurrentUser();
     }
 }
