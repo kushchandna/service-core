@@ -1,11 +1,11 @@
 package com.kush.lib.service.server.api;
 
-final class ServiceRequestKey {
+public final class ServiceRequestKey {
 
     private final String serviceName;
     private final String methodName;
 
-    ServiceRequestKey(String serviceName, String methodName) {
+    public ServiceRequestKey(String serviceName, String methodName) {
         this.serviceName = serviceName;
         this.methodName = methodName;
     }
@@ -22,8 +22,8 @@ final class ServiceRequestKey {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((methodName == null) ? 0 : methodName.hashCode());
-        result = prime * result + ((serviceName == null) ? 0 : serviceName.hashCode());
+        result = prime * result + (methodName == null ? 0 : methodName.hashCode());
+        result = prime * result + (serviceName == null ? 0 : serviceName.hashCode());
         return result;
     }
 

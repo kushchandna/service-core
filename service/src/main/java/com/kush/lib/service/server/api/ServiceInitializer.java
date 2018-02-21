@@ -6,7 +6,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import com.kush.lib.service.remoting.api.ServiceRequestResolver;
 import com.kush.lib.service.server.api.annotations.Service;
 import com.kush.lib.service.server.api.annotations.ServiceMethod;
 
@@ -14,22 +13,16 @@ class ServiceInitializer {
 
     private final Set<Class<? extends BaseService>> serviceClasses = new HashSet<>();
 
-    private ServiceRequestResolver serviceRequestResolver;
-
     void addService(Class<? extends BaseService> serviceClass) {
         serviceClasses.add(serviceClass);
     }
 
-    void initialize(Context context) throws ServiceInitializationFailedException {
+    ServiceInvokerProvider initialize(Context context) throws ServiceInitializationFailedException {
         Map<ServiceRequestKey, ServiceInvoker> serviceInvokers = new HashMap<>();
         for (Class<? extends BaseService> serviceClass : serviceClasses) {
             registerServiceInvokers(serviceClass, context, serviceInvokers);
         }
-        serviceRequestResolver = new ServerSideServiceRequestResolver(serviceInvokers);
-    }
-
-    ServiceRequestResolver getServiceRequestResolver() {
-        return serviceRequestResolver;
+        return new DefaultServiceInvokerProvider(serviceInvokers);
     }
 
     private <S extends BaseService> S initializeService(Class<S> serviceClass, Context context)
@@ -69,7 +62,7 @@ class ServiceInitializer {
                     throw new ServiceInitializationFailedException("A service method with name " + key.getMethodName()
                             + " already exist in service " + key.getServiceName());
                 }
-                ServiceInvoker invoker = new ServiceInvoker(service, method);
+                DefaultServiceInvoker invoker = new DefaultServiceInvoker(service, method);
                 serviceInvokers.put(key, invoker);
             }
         }
