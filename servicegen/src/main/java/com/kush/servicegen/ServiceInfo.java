@@ -7,8 +7,8 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-import com.kush.lib.service.server.api.annotations.Service;
-import com.kush.lib.service.server.api.annotations.ServiceMethod;
+import com.kush.lib.service.server.annotations.Service;
+import com.kush.lib.service.server.annotations.ServiceMethod;
 
 public class ServiceInfo {
 

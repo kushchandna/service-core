@@ -6,7 +6,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.kush.lib.service.server.api.annotations.ServiceMethod;
+import com.kush.lib.service.server.annotations.ServiceMethod;
 
 public class ServiceMethodInfo {
 

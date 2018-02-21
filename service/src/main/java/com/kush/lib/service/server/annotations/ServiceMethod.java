@@ -1,4 +1,4 @@
-package com.kush.lib.service.server.api.annotations;
+package com.kush.lib.service.server.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -6,8 +6,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
-@Target(value = { ElementType.TYPE })
-public @interface Service {
+@Target(value = { ElementType.METHOD })
+public @interface ServiceMethod {
 
     String name();
 }

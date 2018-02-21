@@ -1,4 +1,4 @@
-package com.kush.lib.service.server.api;
+package com.kush.lib.service.server;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
@@ -6,8 +6,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import com.kush.lib.service.server.api.annotations.Service;
-import com.kush.lib.service.server.api.annotations.ServiceMethod;
+import com.kush.lib.service.server.annotations.Service;
+import com.kush.lib.service.server.annotations.ServiceMethod;
 
 class ServiceInitializer {
 

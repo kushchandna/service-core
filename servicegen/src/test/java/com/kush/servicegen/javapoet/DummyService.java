@@ -3,9 +3,9 @@ package com.kush.servicegen.javapoet;
 import java.util.List;
 import java.util.Set;
 
-import com.kush.lib.service.server.api.BaseService;
-import com.kush.lib.service.server.api.annotations.Service;
-import com.kush.lib.service.server.api.annotations.ServiceMethod;
+import com.kush.lib.service.server.BaseService;
+import com.kush.lib.service.server.annotations.Service;
+import com.kush.lib.service.server.annotations.ServiceMethod;
 
 @Service(name = "Dummy Service")
 public class DummyService extends BaseService {

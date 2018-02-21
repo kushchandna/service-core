@@ -1,4 +1,4 @@
-package com.kush.lib.service.server.api;
+package com.kush.lib.service.server;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
