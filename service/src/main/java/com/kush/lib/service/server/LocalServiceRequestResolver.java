@@ -6,6 +6,7 @@ import com.kush.lib.service.remoting.ServiceRequest;
 import com.kush.lib.service.remoting.ServiceRequestFailedException;
 import com.kush.lib.service.remoting.ServiceRequestResolver;
 import com.kush.lib.service.remoting.auth.AuthToken;
+import com.kush.lib.service.server.authentication.Auth;
 
 class LocalServiceRequestResolver implements ServiceRequestResolver {
 

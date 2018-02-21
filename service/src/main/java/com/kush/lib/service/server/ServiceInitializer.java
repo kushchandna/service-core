@@ -1,6 +1,6 @@
 package com.kush.lib.service.server;
 
-import static com.kush.lib.service.server.Auth.DEFAULT;
+import static com.kush.lib.service.server.authentication.Auth.DEFAULT;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
@@ -11,6 +11,7 @@ import java.util.Set;
 import com.kush.lib.service.remoting.ServiceRequestResolver;
 import com.kush.lib.service.server.annotations.Service;
 import com.kush.lib.service.server.annotations.ServiceMethod;
+import com.kush.lib.service.server.authentication.Auth;
 
 class ServiceInitializer {
 

@@ -1,4 +1,4 @@
-package com.kush.lib.service.server;
+package com.kush.lib.service.server.authentication;
 
 import com.kush.lib.service.remoting.auth.AuthToken;
 import com.kush.lib.service.remoting.auth.User;

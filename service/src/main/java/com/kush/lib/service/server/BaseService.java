@@ -1,6 +1,7 @@
 package com.kush.lib.service.server;
 
 import com.kush.lib.service.remoting.auth.User;
+import com.kush.lib.service.server.authentication.Auth;
 
 public abstract class BaseService {
 
