@@ -5,17 +5,17 @@ import java.lang.reflect.Method;
 
 import com.kush.lib.service.remoting.api.ServiceRequestFailedException;
 
-public class ServiceInvoker {
+class ServiceInvoker {
 
     protected final Method method;
     protected final BaseService service;
 
-    public ServiceInvoker(BaseService service, Method method) {
+    ServiceInvoker(BaseService service, Method method) {
         this.service = service;
         this.method = method;
     }
 
-    public Object invoke(Object... args) throws ServiceRequestFailedException {
+    Object invoke(Object... args) throws ServiceRequestFailedException {
         try {
             return method.invoke(service, args);
         } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {

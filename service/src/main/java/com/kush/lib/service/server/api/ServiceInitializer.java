@@ -18,15 +18,15 @@ class ServiceInitializer {
 
     private ServiceRequestResolver serviceRequestResolver;
 
-    public ServiceInitializer(ServiceInvokerFactory serviceInvokerFactory) {
+    ServiceInitializer(ServiceInvokerFactory serviceInvokerFactory) {
         this.serviceInvokerFactory = serviceInvokerFactory;
     }
 
-    public void addService(Class<? extends BaseService> serviceClass) {
+    void addService(Class<? extends BaseService> serviceClass) {
         serviceClasses.add(serviceClass);
     }
 
-    public void initialize(Context context) throws ServiceInitializationFailedException {
+    void initialize(Context context) throws ServiceInitializationFailedException {
         Map<ServiceRequestKey, ServiceInvoker> serviceInvokers = new HashMap<>();
         for (Class<? extends BaseService> serviceClass : serviceClasses) {
             registerServiceInvokers(serviceClass, context, serviceInvokers);
@@ -34,7 +34,7 @@ class ServiceInitializer {
         serviceRequestResolver = new ServerSideServiceRequestResolver(serviceInvokers);
     }
 
-    public ServiceRequestResolver getServiceRequestResolver() {
+    ServiceRequestResolver getServiceRequestResolver() {
         return serviceRequestResolver;
     }
 

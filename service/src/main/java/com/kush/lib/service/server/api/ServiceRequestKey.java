@@ -5,16 +5,16 @@ final class ServiceRequestKey {
     private final String serviceName;
     private final String methodName;
 
-    public ServiceRequestKey(String serviceName, String methodName) {
+    ServiceRequestKey(String serviceName, String methodName) {
         this.serviceName = serviceName;
         this.methodName = methodName;
     }
 
-    public String getServiceName() {
+    String getServiceName() {
         return serviceName;
     }
 
-    public String getMethodName() {
+    String getMethodName() {
         return methodName;
     }
 

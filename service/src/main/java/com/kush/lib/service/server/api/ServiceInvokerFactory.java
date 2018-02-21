@@ -2,13 +2,13 @@ package com.kush.lib.service.server.api;
 
 import java.lang.reflect.Method;
 
-public interface ServiceInvokerFactory {
+interface ServiceInvokerFactory {
 
-    public static final ServiceInvokerFactory DEFAULT = new DefaultServiceInvokerFactory();
+    static final ServiceInvokerFactory DEFAULT = new DefaultServiceInvokerFactory();
 
     ServiceInvoker create(BaseService service, Method method);
 
-    public static class DefaultServiceInvokerFactory implements ServiceInvokerFactory {
+    static class DefaultServiceInvokerFactory implements ServiceInvokerFactory {
 
         @Override
         public ServiceInvoker create(BaseService service, Method method) {
