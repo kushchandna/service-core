@@ -14,13 +14,7 @@ class ServiceInitializer {
 
     private final Set<Class<? extends BaseService>> serviceClasses = new HashSet<>();
 
-    private final ServiceInvokerFactory serviceInvokerFactory;
-
     private ServiceRequestResolver serviceRequestResolver;
-
-    ServiceInitializer(ServiceInvokerFactory serviceInvokerFactory) {
-        this.serviceInvokerFactory = serviceInvokerFactory;
-    }
 
     void addService(Class<? extends BaseService> serviceClass) {
         serviceClasses.add(serviceClass);
@@ -75,7 +69,7 @@ class ServiceInitializer {
                     throw new ServiceInitializationFailedException("A service method with name " + key.getMethodName()
                             + " already exist in service " + key.getServiceName());
                 }
-                ServiceInvoker invoker = serviceInvokerFactory.create(service, method);
+                ServiceInvoker invoker = new ServiceInvoker(service, method);
                 serviceInvokers.put(key, invoker);
             }
         }

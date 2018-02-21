@@ -7,7 +7,7 @@ public class ApplicationServer {
     private final ServiceInitializer serviceInitializer;
 
     public ApplicationServer() {
-        serviceInitializer = new ServiceInitializer(ServiceInvokerFactory.DEFAULT);
+        serviceInitializer = new ServiceInitializer();
     }
 
     public void registerService(Class<? extends BaseService> serviceClass) {
