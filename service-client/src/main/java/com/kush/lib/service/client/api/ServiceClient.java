@@ -2,10 +2,10 @@ package com.kush.lib.service.client.api;
 
 import java.util.concurrent.Executor;
 
-import com.kush.lib.service.remoting.api.ServiceRequest;
-import com.kush.lib.service.remoting.api.ServiceRequestFailedException;
-import com.kush.lib.service.remoting.api.ServiceRequestResolver;
-import com.kush.lib.service.remoting.api.ServiceRequestResolver.ReturnType;
+import com.kush.lib.service.remoting.ServiceRequest;
+import com.kush.lib.service.remoting.ServiceRequestFailedException;
+import com.kush.lib.service.remoting.ServiceRequestResolver;
+import com.kush.lib.service.remoting.ServiceRequestResolver.ReturnType;
 import com.kush.utils.async.Request;
 import com.kush.utils.async.RequestFailedException;
 import com.kush.utils.async.Responder;
@@ -33,7 +33,7 @@ public abstract class ServiceClient {
             @Override
             public T process() throws RequestFailedException {
                 try {
-                    ServiceRequest<T> request = new ServiceRequest<>(serviceName, methodName, ReturnType.type(), args);
+                    ServiceRequest<T> request = new ServiceRequest<>(null, serviceName, methodName, ReturnType.type(), args);
                     return requestResolver.resolve(request);
                 } catch (ServiceRequestFailedException e) {
                     throw new RequestFailedException(e);

@@ -1,4 +1,4 @@
-package com.kush.lib.service.remoting.api;
+package com.kush.lib.service.remoting;
 
 public class ServiceRequestFailedException extends Exception {
 

@@ -5,7 +5,7 @@ import java.util.concurrent.Executors;
 
 import com.kush.lib.service.client.api.ApplicationClient;
 import com.kush.lib.service.client.api.ServiceClientProvider;
-import com.kush.lib.service.remoting.api.ConnectionSpecification;
+import com.kush.lib.service.remoting.ConnectionSpecification;
 import com.kush.lib.service.sample.client.SampleHelloServiceClient;
 import com.kush.lib.service.sample.server.SampleHelloService;
 import com.kush.lib.service.sample.server.SampleHelloTextProvider;

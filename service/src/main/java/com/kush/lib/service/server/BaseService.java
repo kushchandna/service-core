@@ -1,5 +1,8 @@
 package com.kush.lib.service.server;
 
+import com.kush.lib.service.remoting.auth.User;
+import com.kush.lib.service.server.authentication.Authenticator;
+
 public abstract class BaseService {
 
     private Context context;
@@ -16,5 +19,10 @@ public abstract class BaseService {
             throw new IllegalStateException("Service not initialized yet");
         }
         return context;
+    }
+
+    protected final User getCurrentUser() {
+        Authenticator authenticator = context.getInstance(Authenticator.class);
+        return authenticator.getCurrentUser();
     }
 }

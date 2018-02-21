@@ -1,28 +1,39 @@
 package com.kush.lib.service.server;
 
+import static com.kush.lib.service.server.authentication.Authenticator.OPEN;
+
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import com.kush.lib.service.remoting.ServiceRequestResolver;
 import com.kush.lib.service.server.annotations.Service;
 import com.kush.lib.service.server.annotations.ServiceMethod;
+import com.kush.lib.service.server.authentication.Authenticator;
 
 class ServiceInitializer {
 
     private final Set<Class<? extends BaseService>> serviceClasses = new HashSet<>();
 
+    private ServiceRequestResolver requestResolver;
+
     void addService(Class<? extends BaseService> serviceClass) {
         serviceClasses.add(serviceClass);
     }
 
-    ServiceInvokerProvider initialize(Context context) throws ServiceInitializationFailedException {
+    void initialize(Context context) throws ServiceInitializationFailedException {
         Map<ServiceRequestKey, ServiceInvoker> serviceInvokers = new HashMap<>();
         for (Class<? extends BaseService> serviceClass : serviceClasses) {
             registerServiceInvokers(serviceClass, context, serviceInvokers);
         }
-        return new DefaultServiceInvokerProvider(serviceInvokers);
+        Authenticator authenticator = context.getInstance(Authenticator.class, OPEN);
+        requestResolver = new LocalServiceRequestResolver(authenticator, serviceInvokers);
+    }
+
+    ServiceRequestResolver getServiceRequestResolver() {
+        return requestResolver;
     }
 
     private <S extends BaseService> S initializeService(Class<S> serviceClass, Context context)
@@ -62,7 +73,7 @@ class ServiceInitializer {
                     throw new ServiceInitializationFailedException("A service method with name " + key.getMethodName()
                             + " already exist in service " + key.getServiceName());
                 }
-                DefaultServiceInvoker invoker = new DefaultServiceInvoker(service, method);
+                ServiceInvoker invoker = new ServiceInvoker(service, method);
                 serviceInvokers.put(key, invoker);
             }
         }

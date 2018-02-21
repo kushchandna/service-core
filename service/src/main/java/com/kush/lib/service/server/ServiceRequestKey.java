@@ -1,11 +1,11 @@
 package com.kush.lib.service.server;
 
-public final class ServiceRequestKey {
+final class ServiceRequestKey {
 
     private final String serviceName;
     private final String methodName;
 
-    public ServiceRequestKey(String serviceName, String methodName) {
+    ServiceRequestKey(String serviceName, String methodName) {
         this.serviceName = serviceName;
         this.methodName = methodName;
     }

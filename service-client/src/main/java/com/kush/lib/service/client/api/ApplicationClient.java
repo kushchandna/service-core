@@ -2,8 +2,8 @@ package com.kush.lib.service.client.api;
 
 import java.util.concurrent.Executor;
 
-import com.kush.lib.service.remoting.api.ConnectionSpecification;
-import com.kush.lib.service.remoting.api.ServiceRequestResolver;
+import com.kush.lib.service.remoting.ConnectionSpecification;
+import com.kush.lib.service.remoting.ServiceRequestResolver;
 
 public class ApplicationClient {
 
