@@ -6,7 +6,7 @@ import com.kush.lib.service.remoting.ServiceRequest;
 import com.kush.lib.service.remoting.ServiceRequestFailedException;
 import com.kush.lib.service.remoting.ServiceRequestResolver;
 
-public abstract class ServiceRequestReceiver implements Runnable {
+public abstract class ServiceRequestReceiver<T extends ServiceRequestProvider> implements Runnable {
 
     private final ServiceRequestResolver requestResolver;
     private final Executor executor;
@@ -23,7 +23,7 @@ public abstract class ServiceRequestReceiver implements Runnable {
         running = true;
     }
 
-    public final void stop() {
+    public final void stop() throws ShutdownFailedException {
         performStop();
         running = false;
     }
@@ -31,39 +31,40 @@ public abstract class ServiceRequestReceiver implements Runnable {
     @Override
     public final void run() {
         while (running) {
-            ServiceRequest<?> request;
+            T requestProvider;
             try {
-                request = getNextRequest();
-                executor.execute(new Task(request));
+                requestProvider = getNextRequest();
+                executor.execute(new Task(requestProvider));
             } catch (ServiceRequestFailedException e) {
                 sendError(e);
             }
         }
     }
 
-    protected abstract void sendError(ServiceRequestFailedException e);
-
-    protected abstract void sendResult(ServiceRequest<?> request, Object result);
-
-    protected abstract ServiceRequest<?> getNextRequest() throws ServiceRequestFailedException;
-
     protected abstract void performStartup() throws StartupFailedException;
 
-    protected abstract void performStop();
+    protected abstract void performStop() throws ShutdownFailedException;
+
+    protected abstract T getNextRequest() throws ServiceRequestFailedException;
+
+    protected abstract void sendResult(T requestProvider, Object result) throws ServiceRequestFailedException;
+
+    protected abstract void sendError(ServiceRequestFailedException e);
 
     private final class Task implements Runnable {
 
-        private final ServiceRequest<?> request;
+        private final T requestProvider;
 
-        public Task(ServiceRequest<?> request) {
-            this.request = request;
+        public Task(T requestProvider) {
+            this.requestProvider = requestProvider;
         }
 
         @Override
         public void run() {
             try {
+                ServiceRequest<?> request = requestProvider.getServiceRequest();
                 Object result = requestResolver.resolve(request);
-                sendResult(request, result);
+                sendResult(requestProvider, result);
             } catch (ServiceRequestFailedException e) {
                 sendError(e);
             }

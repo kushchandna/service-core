@@ -13,9 +13,10 @@ import com.kush.lib.service.remoting.ServiceRequest;
 import com.kush.lib.service.remoting.ServiceRequestFailedException;
 import com.kush.lib.service.remoting.ServiceRequestResolver;
 import com.kush.lib.service.server.request.ServiceRequestReceiver;
+import com.kush.lib.service.server.request.ShutdownFailedException;
 import com.kush.lib.service.server.request.StartupFailedException;
 
-public class ServerSocketServiceRequestReceiver extends ServiceRequestReceiver {
+public class ServerSocketServiceRequestReceiver extends ServiceRequestReceiver<SocketServiceRequestProvider> {
 
     private final int port;
 
@@ -36,17 +37,23 @@ public class ServerSocketServiceRequestReceiver extends ServiceRequestReceiver {
     }
 
     @Override
-    protected ServiceRequest<?> getNextRequest() throws ServiceRequestFailedException {
+    protected SocketServiceRequestProvider getNextRequest() throws ServiceRequestFailedException {
         try {
             Socket socket = serverSocket.accept();
-            return readRequest(socket);
+            ServiceRequest<?> request = readRequest(socket);
+            return new SocketServiceRequestProvider(request, socket);
         } catch (IOException | ClassNotFoundException e) {
             throw new ServiceRequestFailedException(e.getMessage(), e);
         }
     }
 
     @Override
-    protected void sendResult(ServiceRequest<?> request, Object result) {
+    protected void sendResult(SocketServiceRequestProvider requestProvider, Object result) throws ServiceRequestFailedException {
+        try {
+            writeResult(requestProvider.getSocket(), result);
+        } catch (IOException e) {
+            throw new ServiceRequestFailedException(e.getMessage(), e);
+        }
     }
 
     @Override
@@ -55,12 +62,16 @@ public class ServerSocketServiceRequestReceiver extends ServiceRequestReceiver {
     }
 
     @Override
-    protected void performStop() {
-        // TODO Auto-generated method stub
-
+    protected void performStop() throws ShutdownFailedException {
+        try {
+            serverSocket.close();
+        } catch (IOException e) {
+            throw new ShutdownFailedException(e.getMessage(), e);
+        }
     }
 
-    void writeResult(OutputStream os, Object result) throws IOException {
+    private void writeResult(Socket socket, Object result) throws IOException {
+        OutputStream os = socket.getOutputStream();
         ObjectOutputStream oos = new ObjectOutputStream(os);
         oos.writeObject(result);
     }
