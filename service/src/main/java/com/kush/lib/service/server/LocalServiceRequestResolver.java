@@ -13,8 +13,7 @@ class LocalServiceRequestResolver implements ServiceRequestResolver {
     private final Auth authenticator;
     private final Map<ServiceRequestKey, ServiceInvoker> serviceInvokers;
 
-    LocalServiceRequestResolver(Auth authenticator,
-            Map<ServiceRequestKey, ServiceInvoker> serviceInvokers) {
+    LocalServiceRequestResolver(Auth authenticator, Map<ServiceRequestKey, ServiceInvoker> serviceInvokers) {
         this.authenticator = authenticator;
         this.serviceInvokers = serviceInvokers;
     }
