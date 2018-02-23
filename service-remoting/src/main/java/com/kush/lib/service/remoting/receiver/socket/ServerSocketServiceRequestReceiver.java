@@ -1,4 +1,4 @@
-package com.kush.lib.service.server.request.socket;
+package com.kush.lib.service.remoting.receiver.socket;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -12,9 +12,9 @@ import java.util.concurrent.Executor;
 import com.kush.lib.service.remoting.ServiceRequest;
 import com.kush.lib.service.remoting.ServiceRequestFailedException;
 import com.kush.lib.service.remoting.ServiceRequestResolver;
-import com.kush.lib.service.server.request.ServiceRequestReceiver;
-import com.kush.lib.service.server.request.ShutdownFailedException;
-import com.kush.lib.service.server.request.StartupFailedException;
+import com.kush.lib.service.remoting.ShutdownFailedException;
+import com.kush.lib.service.remoting.StartupFailedException;
+import com.kush.lib.service.remoting.receiver.ServiceRequestReceiver;
 
 public class ServerSocketServiceRequestReceiver extends ServiceRequestReceiver<SocketServiceRequestProvider> {
 
