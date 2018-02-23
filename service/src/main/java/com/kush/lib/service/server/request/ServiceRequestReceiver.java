@@ -6,7 +6,7 @@ import com.kush.lib.service.remoting.ServiceRequest;
 import com.kush.lib.service.remoting.ServiceRequestFailedException;
 import com.kush.lib.service.remoting.ServiceRequestResolver;
 
-public abstract class ServiceRequestReceiver<T extends ServiceRequestProvider> implements Runnable {
+public abstract class ServiceRequestReceiver<T extends ServiceRequestProvider> {
 
     private final ServiceRequestResolver requestResolver;
     private final Executor executor;
@@ -21,6 +21,7 @@ public abstract class ServiceRequestReceiver<T extends ServiceRequestProvider> i
     public final void start() throws StartupFailedException {
         performStartup();
         running = true;
+        startProcessingRequests();
     }
 
     public final void stop() throws ShutdownFailedException {
@@ -28,8 +29,7 @@ public abstract class ServiceRequestReceiver<T extends ServiceRequestProvider> i
         running = false;
     }
 
-    @Override
-    public final void run() {
+    private void startProcessingRequests() {
         while (running) {
             T requestProvider;
             try {
