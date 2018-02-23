@@ -1,11 +1,11 @@
-package com.kush.lib.service.remoting.connection;
+package com.kush.lib.service.remoting.sender;
 
 import com.kush.lib.service.remoting.ServiceRequest;
 import com.kush.lib.service.remoting.ServiceRequestFailedException;
 import com.kush.lib.service.remoting.ShutdownFailedException;
 import com.kush.lib.service.remoting.StartupFailedException;
 
-public interface Connection {
+public interface ServiceRequestSender {
 
     void start() throws StartupFailedException;
 

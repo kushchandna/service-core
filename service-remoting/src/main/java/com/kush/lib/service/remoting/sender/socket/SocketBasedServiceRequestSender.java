@@ -1,4 +1,4 @@
-package com.kush.lib.service.remoting.connection.socket;
+package com.kush.lib.service.remoting.sender.socket;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -11,9 +11,9 @@ import com.kush.lib.service.remoting.ServiceRequest;
 import com.kush.lib.service.remoting.ServiceRequestFailedException;
 import com.kush.lib.service.remoting.ShutdownFailedException;
 import com.kush.lib.service.remoting.StartupFailedException;
-import com.kush.lib.service.remoting.connection.Connection;
+import com.kush.lib.service.remoting.sender.ServiceRequestSender;
 
-public class SocketBasedServiceRequestSender implements Connection {
+public class SocketBasedServiceRequestSender implements ServiceRequestSender {
 
     private final String host;
     private final int port;
