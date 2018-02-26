@@ -19,7 +19,7 @@ class LocalServiceRequestResolver implements ServiceRequestResolver {
     }
 
     @Override
-    public <T> T resolve(ServiceRequest<T> request) throws ServiceRequestFailedException {
+    public Object resolve(ServiceRequest request) throws ServiceRequestFailedException {
         AuthToken token = request.getAuthToken();
         authenticator.login(token);
         try {
@@ -29,10 +29,9 @@ class LocalServiceRequestResolver implements ServiceRequestResolver {
         }
     }
 
-    private <T> T resolveRequest(ServiceRequest<T> request) throws ServiceRequestFailedException {
+    private Object resolveRequest(ServiceRequest request) throws ServiceRequestFailedException {
         ServiceRequestKey key = new ServiceRequestKey(request.getServiceName(), request.getMethodName());
         ServiceInvoker invoker = serviceInvokers.get(key);
-        Object result = invoker.invoke(request.getArgs());
-        return request.getReturnType().cast(result);
+        return invoker.invoke(request.getArgs());
     }
 }

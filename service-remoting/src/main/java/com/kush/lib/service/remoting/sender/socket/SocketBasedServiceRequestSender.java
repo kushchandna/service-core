@@ -44,7 +44,7 @@ public class SocketBasedServiceRequestSender implements ServiceRequestSender {
     }
 
     @Override
-    public void sendRequest(ServiceRequest<?> request) throws ServiceRequestFailedException {
+    public void sendRequest(ServiceRequest request) throws ServiceRequestFailedException {
         try {
             sendRequest(request, socket);
         } catch (IOException e) {
@@ -67,7 +67,7 @@ public class SocketBasedServiceRequestSender implements ServiceRequestSender {
         return ois.readObject();
     }
 
-    private static <T> void sendRequest(ServiceRequest<T> request, Socket socket) throws IOException {
+    private static <T> void sendRequest(ServiceRequest request, Socket socket) throws IOException {
         OutputStream os = socket.getOutputStream();
         ObjectOutputStream oos = new ObjectOutputStream(os);
         oos.writeObject(request);

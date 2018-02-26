@@ -11,7 +11,7 @@ public interface ServiceRequestSender {
 
     void stop() throws ShutdownFailedException;
 
-    void sendRequest(ServiceRequest<?> request) throws ServiceRequestFailedException;
+    void sendRequest(ServiceRequest request) throws ServiceRequestFailedException;
 
     Object getResult() throws ServiceRequestFailedException;
 }

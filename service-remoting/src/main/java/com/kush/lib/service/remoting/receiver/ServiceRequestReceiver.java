@@ -64,7 +64,7 @@ public abstract class ServiceRequestReceiver<T extends ServiceRequestProvider> {
         @Override
         public void run() {
             try {
-                ServiceRequest<?> request = requestProvider.getServiceRequest();
+                ServiceRequest request = requestProvider.getServiceRequest();
                 Object result = requestResolver.resolve(request);
                 sendResult(requestProvider, result);
             } catch (ServiceRequestFailedException e) {

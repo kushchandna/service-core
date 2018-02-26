@@ -9,7 +9,7 @@ public class SocketServiceRequestProvider extends ServiceRequestProvider {
 
     private final Socket socket;
 
-    public SocketServiceRequestProvider(ServiceRequest<?> request, Socket socket) {
+    public SocketServiceRequestProvider(ServiceRequest request, Socket socket) {
         super(request);
         this.socket = socket;
     }

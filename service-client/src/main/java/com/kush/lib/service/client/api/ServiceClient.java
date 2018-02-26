@@ -5,7 +5,6 @@ import java.util.concurrent.Executor;
 import com.kush.lib.service.remoting.ServiceRequest;
 import com.kush.lib.service.remoting.ServiceRequestFailedException;
 import com.kush.lib.service.remoting.ServiceRequestResolver;
-import com.kush.lib.service.remoting.ServiceRequestResolver.ReturnType;
 import com.kush.utils.async.Request;
 import com.kush.utils.async.RequestFailedException;
 import com.kush.utils.async.Responder;
@@ -31,10 +30,12 @@ public abstract class ServiceClient {
         return responder.respond(new Request<T>() {
 
             @Override
+            @SuppressWarnings("unchecked")
             public T process() throws RequestFailedException {
                 try {
-                    ServiceRequest<T> request = new ServiceRequest<>(null, serviceName, methodName, ReturnType.type(), args);
-                    return requestResolver.resolve(request);
+                    ServiceRequest request = new ServiceRequest(null, serviceName, methodName, args);
+                    Object result = requestResolver.resolve(request);
+                    return (T) result;
                 } catch (ServiceRequestFailedException e) {
                     throw new RequestFailedException(e);
                 }

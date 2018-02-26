@@ -2,24 +2,21 @@ package com.kush.lib.service.remoting;
 
 import java.io.Serializable;
 
-import com.kush.lib.service.remoting.ServiceRequestResolver.ReturnType;
 import com.kush.lib.service.remoting.auth.AuthToken;
 
-public class ServiceRequest<T> implements Serializable {
+public class ServiceRequest implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     private final AuthToken authToken;
     private final String serviceName;
     private final String methodName;
-    private final ReturnType<T> returnType;
     private final Object[] args;
 
-    public ServiceRequest(AuthToken authToken, String serviceName, String methodName, ReturnType<T> returnType, Object... args) {
+    public ServiceRequest(AuthToken authToken, String serviceName, String methodName, Object... args) {
         this.authToken = authToken;
         this.serviceName = serviceName;
         this.methodName = methodName;
-        this.returnType = returnType;
         this.args = args;
     }
 
@@ -37,9 +34,5 @@ public class ServiceRequest<T> implements Serializable {
 
     public Object[] getArgs() {
         return args;
-    }
-
-    public ReturnType<T> getReturnType() {
-        return returnType;
     }
 }

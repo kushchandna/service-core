@@ -40,7 +40,7 @@ public class ServerSocketServiceRequestReceiver extends ServiceRequestReceiver<S
     protected SocketServiceRequestProvider getNextRequest() throws ServiceRequestFailedException {
         try {
             Socket socket = serverSocket.accept();
-            ServiceRequest<?> request = readRequest(socket);
+            ServiceRequest request = readRequest(socket);
             return new SocketServiceRequestProvider(request, socket);
         } catch (IOException | ClassNotFoundException e) {
             throw new ServiceRequestFailedException(e.getMessage(), e);
@@ -76,9 +76,9 @@ public class ServerSocketServiceRequestReceiver extends ServiceRequestReceiver<S
         oos.writeObject(result);
     }
 
-    private ServiceRequest<?> readRequest(Socket socket) throws IOException, ClassNotFoundException {
+    private ServiceRequest readRequest(Socket socket) throws IOException, ClassNotFoundException {
         InputStream is = socket.getInputStream();
         ObjectInputStream ois = new ObjectInputStream(is);
-        return (ServiceRequest<?>) ois.readObject();
+        return (ServiceRequest) ois.readObject();
     }
 }
