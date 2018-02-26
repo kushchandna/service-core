@@ -4,7 +4,6 @@ import static com.kush.lib.service.server.authentication.Auth.DEFAULT;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -15,15 +14,15 @@ import com.kush.lib.service.server.authentication.Auth;
 
 class ServiceInitializer {
 
-    private final Set<Class<? extends BaseService>> serviceClasses = new HashSet<>();
+    private final Context context;
 
     private ServiceRequestResolver requestResolver;
 
-    void addService(Class<? extends BaseService> serviceClass) {
-        serviceClasses.add(serviceClass);
+    public ServiceInitializer(Context context) {
+        this.context = context;
     }
 
-    void initialize(Context context) throws ServiceInitializationFailedException {
+    void initialize(Set<Class<? extends BaseService>> serviceClasses) throws ServiceInitializationFailedException {
         Map<ServiceRequestKey, ServiceInvoker> serviceInvokers = new HashMap<>();
         for (Class<? extends BaseService> serviceClass : serviceClasses) {
             registerServiceInvokers(serviceClass, context, serviceInvokers);

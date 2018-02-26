@@ -1,21 +1,24 @@
 package com.kush.lib.service.server;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import com.kush.lib.service.remoting.ServiceRequestResolver;
 
 public class ApplicationServer {
 
-    private final ServiceInitializer serviceInitializer;
+    private final Set<Class<? extends BaseService>> serviceClasses = new HashSet<>();
 
-    public ApplicationServer() {
-        serviceInitializer = new ServiceInitializer();
-    }
+    private ServiceInitializer serviceInitializer;
 
     public void registerService(Class<? extends BaseService> serviceClass) {
-        serviceInitializer.addService(serviceClass);
+        serviceClasses.add(serviceClass);
     }
 
     public void start(Context context) throws ServiceInitializationFailedException {
-        serviceInitializer.initialize(context);
+        serviceInitializer = new ServiceInitializer(context);
+        serviceInitializer.initialize(serviceClasses);
+        serviceClasses.clear();
     }
 
     ServiceRequestResolver getServiceRequestResolver() {
