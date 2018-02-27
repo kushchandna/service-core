@@ -1,4 +1,4 @@
-package com.kush.lib.service.remoting.local;
+package com.kush.lib.service.remoting.connect.local;
 
 import java.util.concurrent.atomic.AtomicReference;
 

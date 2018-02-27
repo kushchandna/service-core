@@ -5,8 +5,8 @@ import java.util.concurrent.Executors;
 
 import com.kush.lib.service.client.api.ApplicationClient;
 import com.kush.lib.service.client.api.ServiceClientProvider;
-import com.kush.lib.service.remoting.ConnectionSpecification;
-import com.kush.lib.service.remoting.local.LocalServerBasedConnectionSpecification;
+import com.kush.lib.service.remoting.connect.ServiceConnectionFactory;
+import com.kush.lib.service.remoting.connect.local.LocalServiceConnectionFactory;
 import com.kush.lib.service.sample.client.SampleHelloServiceClient;
 import com.kush.lib.service.sample.server.SampleHelloService;
 import com.kush.lib.service.sample.server.SampleHelloTextProvider;
@@ -22,8 +22,8 @@ public class SampleApplication {
 
     public static void main(String[] args) throws Exception {
         setupServer();
-        ConnectionSpecification connSpec = new LocalServerBasedConnectionSpecification();
-        ApplicationClient client = setupClient(connSpec);
+        ServiceConnectionFactory connFactory = new LocalServiceConnectionFactory();
+        ApplicationClient client = setupClient(connFactory);
         ServiceClientProvider serviceClientProvider = client.getServiceClientProvider();
         invokeGetHelloText(serviceClientProvider);
     }
@@ -38,9 +38,9 @@ public class SampleApplication {
         server.start(context);
     }
 
-    private static ApplicationClient setupClient(ConnectionSpecification connSpec) throws Exception {
+    private static ApplicationClient setupClient(ServiceConnectionFactory connFactory) throws Exception {
         ApplicationClient client = new ApplicationClient();
-        client.connect(connSpec);
+        client.start(connFactory);
         Executor executor = Executors.newSingleThreadExecutor();
         client.activateServiceClient(SampleHelloServiceClient.class, executor);
         return client;

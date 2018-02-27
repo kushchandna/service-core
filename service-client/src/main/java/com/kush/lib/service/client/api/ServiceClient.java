@@ -1,10 +1,13 @@
 package com.kush.lib.service.client.api;
 
+import java.io.IOException;
 import java.util.concurrent.Executor;
 
 import com.kush.lib.service.remoting.ServiceRequest;
 import com.kush.lib.service.remoting.ServiceRequestFailedException;
-import com.kush.lib.service.remoting.ServiceRequestResolver;
+import com.kush.lib.service.remoting.connect.ServiceConnection;
+import com.kush.lib.service.remoting.connect.ServiceConnectionFactory;
+import com.kush.lib.service.remoting.connect.ServiceConnectionFailedException;
 import com.kush.utils.async.Request;
 import com.kush.utils.async.RequestFailedException;
 import com.kush.utils.async.Responder;
@@ -15,14 +18,14 @@ public abstract class ServiceClient {
     private final String serviceName;
 
     private Responder responder;
-    private ServiceRequestResolver requestResolver;
+    private ServiceConnectionFactory connectionFactory;
 
     public ServiceClient(String serviceName) {
         this.serviceName = serviceName;
     }
 
-    public void activate(Executor executor, ServiceRequestResolver requestResolver) {
-        this.requestResolver = requestResolver;
+    public void activate(Executor executor, ServiceConnectionFactory connectionFactory) {
+        this.connectionFactory = connectionFactory;
         responder = new Responder(executor);
     }
 
@@ -32,11 +35,10 @@ public abstract class ServiceClient {
             @Override
             @SuppressWarnings("unchecked")
             public T process() throws RequestFailedException {
-                try {
-                    ServiceRequest request = new ServiceRequest(null, serviceName, methodName, args);
-                    Object result = requestResolver.resolve(request);
-                    return (T) result;
-                } catch (ServiceRequestFailedException e) {
+                ServiceRequest request = new ServiceRequest(null, serviceName, methodName, args);
+                try (ServiceConnection connection = connectionFactory.createConnection()) {
+                    return (T) connection.resolve(request);
+                } catch (IOException | ServiceRequestFailedException | ServiceConnectionFailedException e) {
                     throw new RequestFailedException(e);
                 }
             }

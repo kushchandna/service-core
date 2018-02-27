@@ -10,21 +10,22 @@ import java.net.Socket;
 import com.kush.lib.service.remoting.ServiceRequest;
 import com.kush.lib.service.remoting.ServiceRequestFailedException;
 import com.kush.lib.service.remoting.connect.ServiceConnection;
+import com.kush.lib.service.remoting.connect.ServiceConnectionFailedException;
 
 public class SocketServiceConnection implements ServiceConnection {
 
     private final Socket socket;
 
-    public SocketServiceConnection(String host, int port) throws ServiceRequestFailedException {
+    public SocketServiceConnection(String host, int port) throws ServiceConnectionFailedException {
         try {
             socket = new Socket(host, port);
         } catch (IOException e) {
-            throw new ServiceRequestFailedException(e.getMessage(), e);
+            throw new ServiceConnectionFailedException(e.getMessage(), e);
         }
     }
 
     @Override
-    public Object resolveRequest(ServiceRequest request) throws ServiceRequestFailedException {
+    public Object resolve(ServiceRequest request) throws ServiceRequestFailedException {
         try {
             sendRequest(request, socket);
             return readResult(socket);
@@ -34,7 +35,7 @@ public class SocketServiceConnection implements ServiceConnection {
     }
 
     @Override
-    public void close() throws Exception {
+    public void close() throws IOException {
         socket.close();
     }
 

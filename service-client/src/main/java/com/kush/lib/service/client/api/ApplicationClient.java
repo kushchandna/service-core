@@ -2,16 +2,14 @@ package com.kush.lib.service.client.api;
 
 import java.util.concurrent.Executor;
 
-import com.kush.lib.service.remoting.ConnectionSpecification;
-import com.kush.lib.service.remoting.ServiceRequestResolver;
+import com.kush.lib.service.remoting.connect.ServiceConnectionFactory;
 
 public class ApplicationClient {
 
     private ServiceClientProvider serviceClientProvider;
 
-    public void connect(ConnectionSpecification connSpec) {
-        ServiceRequestResolver requestResolver = connSpec.getResolver();
-        ServiceClientActivator activator = new ServiceClientActivator(requestResolver);
+    public void start(ServiceConnectionFactory connectionFactory) {
+        ServiceClientActivator activator = new ServiceClientActivator(connectionFactory);
         serviceClientProvider = new ServiceClientProvider(activator);
     }
 

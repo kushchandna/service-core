@@ -2,20 +2,20 @@ package com.kush.lib.service.client.api;
 
 import java.util.concurrent.Executor;
 
-import com.kush.lib.service.remoting.ServiceRequestResolver;
+import com.kush.lib.service.remoting.connect.ServiceConnectionFactory;
 
 class ServiceClientActivator {
 
-    private final ServiceRequestResolver requestResolver;
+    private final ServiceConnectionFactory connectionFactory;
 
-    public ServiceClientActivator(ServiceRequestResolver requestResolver) {
-        this.requestResolver = requestResolver;
+    public ServiceClientActivator(ServiceConnectionFactory connectionFactory) {
+        this.connectionFactory = connectionFactory;
     }
 
     public <C extends ServiceClient> C activate(Class<C> serviceClientClass, Executor executor)
             throws ServiceClientActivationFailedException {
         C serviceClient = instantiateServiceClient(serviceClientClass);
-        serviceClient.activate(executor, requestResolver);
+        serviceClient.activate(executor, connectionFactory);
         return serviceClient;
     }
 
