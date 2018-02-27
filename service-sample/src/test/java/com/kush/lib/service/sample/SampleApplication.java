@@ -21,38 +21,28 @@ import com.kush.utils.async.Response.ResultListener;
 public class SampleApplication {
 
     public static void main(String[] args) throws Exception {
-
         setupServer();
-
         ConnectionSpecification connSpec = new LocalServerBasedConnectionSpecification();
-
         ApplicationClient client = setupClient(connSpec);
-
         ServiceClientProvider serviceClientProvider = client.getServiceClientProvider();
         invokeGetHelloText(serviceClientProvider);
     }
 
     private static void setupServer() throws ServiceInitializationFailedException {
-
         ApplicationServer server = new LocalApplicationServer();
         server.registerService(SampleHelloService.class);
-
         SampleHelloTextProvider greetingProvider = new SampleHelloTextProvider();
         Context context = ContextBuilder.create()
             .withInstance(SampleHelloTextProvider.class, greetingProvider)
             .build();
-
         server.start(context);
     }
 
     private static ApplicationClient setupClient(ConnectionSpecification connSpec) throws Exception {
-
         ApplicationClient client = new ApplicationClient();
         client.connect(connSpec);
-
         Executor executor = Executors.newSingleThreadExecutor();
         client.activateServiceClient(SampleHelloServiceClient.class, executor);
-
         return client;
     }
 
@@ -61,7 +51,6 @@ public class SampleApplication {
         Response<String> response = sampleServiceClient.sayHello("TestUser");
         System.out.println(response.getResult());
         response.setResultListener(new ResultListener<String>() {
-
             @Override
             public void onResult(String result) {
                 System.out.println(result);
