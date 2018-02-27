@@ -21,7 +21,7 @@ public class ApplicationServer {
         serviceClasses.clear();
     }
 
-    ServiceRequestResolver getServiceRequestResolver() {
+    protected ServiceRequestResolver getServiceRequestResolver() {
         return serviceInitializer.getServiceRequestResolver();
     }
 }
