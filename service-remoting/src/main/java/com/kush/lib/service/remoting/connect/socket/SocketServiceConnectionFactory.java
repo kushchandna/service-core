@@ -6,16 +6,16 @@ import com.kush.lib.service.remoting.connect.ServiceConnectionFailedException;
 
 public class SocketServiceConnectionFactory implements ServiceConnectionFactory {
 
-    private final SocketServiceConnectionSpecification connSpec;
+    private final String host;
+    private final int port;
 
-    public SocketServiceConnectionFactory(SocketServiceConnectionSpecification connSpec) {
-        this.connSpec = connSpec;
+    public SocketServiceConnectionFactory(String host, int port) {
+        this.host = host;
+        this.port = port;
     }
 
     @Override
     public ServiceConnection createConnection() throws ServiceConnectionFailedException {
-        String host = connSpec.getHost();
-        int port = connSpec.getPort();
         return new SocketServiceConnection(host, port);
     }
 }
