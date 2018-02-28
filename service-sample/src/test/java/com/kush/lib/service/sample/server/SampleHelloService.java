@@ -10,6 +10,8 @@ public class SampleHelloService extends BaseService {
     @ServiceMethod(name = "Say Hello")
     public String sayHello(String name) {
         SampleHelloTextProvider helloTextProvider = getContext().getInstance(SampleHelloTextProvider.class);
-        return helloTextProvider.getHelloText() + " " + name;
+        String textToReturn = helloTextProvider.getHelloText() + " " + name;
+        System.out.println(textToReturn);
+        return textToReturn;
     }
 }
