@@ -2,28 +2,25 @@ package com.kush.lib.service.remoting.receiver;
 
 import java.util.concurrent.Executor;
 
-import com.kush.lib.service.remoting.ServiceRequest;
 import com.kush.lib.service.remoting.ServiceRequestFailedException;
 import com.kush.lib.service.remoting.ServiceRequestResolver;
 import com.kush.lib.service.remoting.ShutdownFailedException;
 import com.kush.lib.service.remoting.StartupFailedException;
 
-public abstract class ServiceRequestReceiver<T extends ServiceRequestProvider> {
+public abstract class ServiceRequestReceiver {
 
-    private final ServiceRequestResolver requestResolver;
     private final Executor executor;
 
     private volatile boolean running = false;
 
-    public ServiceRequestReceiver(ServiceRequestResolver requestResolver, Executor executor) {
-        this.requestResolver = requestResolver;
+    public ServiceRequestReceiver(Executor executor) {
         this.executor = executor;
     }
 
-    public final void start() throws StartupFailedException {
+    public final void start(ServiceRequestResolver requestResolver) throws StartupFailedException {
         performStartup();
         running = true;
-        startProcessingRequests();
+        startProcessingRequests(requestResolver);
     }
 
     public final void stop() throws ShutdownFailedException {
@@ -31,15 +28,16 @@ public abstract class ServiceRequestReceiver<T extends ServiceRequestProvider> {
         running = false;
     }
 
-    private void startProcessingRequests() {
+    private void startProcessingRequests(ServiceRequestResolver requestResolver) {
         while (running) {
-            T requestProvider;
+            ResolvableServiceRequest resolvableRequest;
             try {
-                requestProvider = getNextRequest();
-                executor.execute(new Task(requestProvider));
+                resolvableRequest = getNextRequest();
             } catch (ServiceRequestFailedException e) {
-                sendError(e);
+                // TODO add error handling
+                continue;
             }
+            executor.execute(new Task(requestResolver, resolvableRequest));
         }
     }
 
@@ -47,29 +45,33 @@ public abstract class ServiceRequestReceiver<T extends ServiceRequestProvider> {
 
     protected abstract void performStop() throws ShutdownFailedException;
 
-    protected abstract T getNextRequest() throws ServiceRequestFailedException;
+    protected abstract ResolvableServiceRequest getNextRequest() throws ServiceRequestFailedException;
 
-    protected abstract void sendResult(T requestProvider, Object result) throws ServiceRequestFailedException;
+    private static final class Task implements Runnable {
 
-    protected abstract void sendError(ServiceRequestFailedException e);
+        private final ServiceRequestResolver requestResolver;
+        private final ResolvableServiceRequest resolvableRequest;
 
-    private final class Task implements Runnable {
-
-        private final T requestProvider;
-
-        public Task(T requestProvider) {
-            this.requestProvider = requestProvider;
+        public Task(ServiceRequestResolver requestResolver, ResolvableServiceRequest resolvableRequest) {
+            this.requestResolver = requestResolver;
+            this.resolvableRequest = resolvableRequest;
         }
 
         @Override
         public void run() {
             try {
-                ServiceRequest request = requestProvider.getServiceRequest();
-                Object result = requestResolver.resolve(request);
-                sendResult(requestProvider, result);
+                Object result = requestResolver.resolve(resolvableRequest.getRequest());
+                resolvableRequest.getListener().onResult(result);
             } catch (ServiceRequestFailedException e) {
-                sendError(e);
+                resolvableRequest.getListener().onError(e);
             }
         }
+    }
+
+    protected static interface ResponseListener {
+
+        void onResult(Object result);
+
+        void onError(ServiceRequestFailedException e);
     }
 }

@@ -11,19 +11,19 @@ import java.util.concurrent.Executor;
 
 import com.kush.lib.service.remoting.ServiceRequest;
 import com.kush.lib.service.remoting.ServiceRequestFailedException;
-import com.kush.lib.service.remoting.ServiceRequestResolver;
 import com.kush.lib.service.remoting.ShutdownFailedException;
 import com.kush.lib.service.remoting.StartupFailedException;
+import com.kush.lib.service.remoting.receiver.ResolvableServiceRequest;
 import com.kush.lib.service.remoting.receiver.ServiceRequestReceiver;
 
-public class ServerSocketServiceRequestReceiver extends ServiceRequestReceiver<SocketServiceRequestProvider> {
+public class ServerSocketServiceRequestReceiver extends ServiceRequestReceiver {
 
     private final int port;
 
     private ServerSocket serverSocket;
 
-    public ServerSocketServiceRequestReceiver(ServiceRequestResolver requestResolver, Executor executor, int port) {
-        super(requestResolver, executor);
+    public ServerSocketServiceRequestReceiver(Executor executor, int port) {
+        super(executor);
         this.port = port;
     }
 
@@ -37,28 +37,14 @@ public class ServerSocketServiceRequestReceiver extends ServiceRequestReceiver<S
     }
 
     @Override
-    protected SocketServiceRequestProvider getNextRequest() throws ServiceRequestFailedException {
+    protected ResolvableServiceRequest getNextRequest() throws ServiceRequestFailedException {
         try {
             Socket socket = serverSocket.accept();
             ServiceRequest request = readRequest(socket);
-            return new SocketServiceRequestProvider(request, socket);
+            return new ResolvableServiceRequest(request, new SocketBasedResponseListener(socket));
         } catch (IOException | ClassNotFoundException e) {
             throw new ServiceRequestFailedException(e.getMessage(), e);
         }
-    }
-
-    @Override
-    protected void sendResult(SocketServiceRequestProvider requestProvider, Object result) throws ServiceRequestFailedException {
-        try {
-            writeResult(requestProvider.getSocket(), result);
-        } catch (IOException e) {
-            throw new ServiceRequestFailedException(e.getMessage(), e);
-        }
-    }
-
-    @Override
-    protected void sendError(ServiceRequestFailedException e) {
-        // TODO
     }
 
     @Override
@@ -70,15 +56,38 @@ public class ServerSocketServiceRequestReceiver extends ServiceRequestReceiver<S
         }
     }
 
-    private void writeResult(Socket socket, Object result) throws IOException {
+    private static void writeResult(Socket socket, Object result) throws IOException {
         OutputStream os = socket.getOutputStream();
         ObjectOutputStream oos = new ObjectOutputStream(os);
         oos.writeObject(result);
     }
 
-    private ServiceRequest readRequest(Socket socket) throws IOException, ClassNotFoundException {
+    private static ServiceRequest readRequest(Socket socket) throws IOException, ClassNotFoundException {
         InputStream is = socket.getInputStream();
         ObjectInputStream ois = new ObjectInputStream(is);
         return (ServiceRequest) ois.readObject();
+    }
+
+    private final class SocketBasedResponseListener implements ResponseListener {
+
+        private final Socket socket;
+
+        public SocketBasedResponseListener(Socket socket) {
+            this.socket = socket;
+        }
+
+        @Override
+        public void onResult(Object result) {
+            try {
+                writeResult(socket, result);
+            } catch (IOException e) {
+                onError(new ServiceRequestFailedException(e.getMessage(), e));
+            }
+        }
+
+        @Override
+        public void onError(ServiceRequestFailedException e) {
+            // TODO handle error
+        }
     }
 }

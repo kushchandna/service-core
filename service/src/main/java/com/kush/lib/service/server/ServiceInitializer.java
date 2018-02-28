@@ -22,13 +22,15 @@ class ServiceInitializer {
         this.context = context;
     }
 
-    void initialize(Set<Class<? extends BaseService>> serviceClasses) throws ServiceInitializationFailedException {
+    ServiceRequestResolver initialize(Set<Class<? extends BaseService>> serviceClasses)
+            throws ServiceInitializationFailedException {
         Map<ServiceRequestKey, ServiceInvoker> serviceInvokers = new HashMap<>();
         for (Class<? extends BaseService> serviceClass : serviceClasses) {
             registerServiceInvokers(serviceClass, context, serviceInvokers);
         }
         Auth authenticator = context.getInstance(Auth.class, DEFAULT);
         requestResolver = new LocalServiceRequestResolver(authenticator, serviceInvokers);
+        return requestResolver;
     }
 
     ServiceRequestResolver getServiceRequestResolver() {
