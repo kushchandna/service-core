@@ -1,4 +1,4 @@
-package com.kush.lib.service.server.authentication.credential.password;
+package com.kush.lib.service.remoting.auth.password;
 
 import java.util.Arrays;
 

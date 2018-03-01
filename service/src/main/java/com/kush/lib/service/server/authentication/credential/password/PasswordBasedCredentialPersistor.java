@@ -6,6 +6,7 @@ import com.kush.lib.persistence.api.Persistor;
 import com.kush.lib.persistence.api.PersistorOperationFailedException;
 import com.kush.lib.persistence.helpers.PersistableObject;
 import com.kush.lib.persistence.validation.ValidatingPersistor;
+import com.kush.lib.service.remoting.auth.password.PasswordBasedCredential;
 
 public class PasswordBasedCredentialPersistor extends ValidatingPersistor<PersistableObject<PasswordBasedCredential>> {
 

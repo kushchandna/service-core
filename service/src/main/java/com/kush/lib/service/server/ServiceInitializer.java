@@ -11,6 +11,7 @@ import com.kush.lib.service.remoting.ServiceRequestResolver;
 import com.kush.lib.service.server.annotations.Service;
 import com.kush.lib.service.server.annotations.ServiceMethod;
 import com.kush.lib.service.server.authentication.Auth;
+import com.kush.lib.service.server.authentication.LoginService;
 
 class ServiceInitializer {
 
@@ -28,9 +29,15 @@ class ServiceInitializer {
         for (Class<? extends BaseService> serviceClass : serviceClasses) {
             registerServiceInvokers(serviceClass, context, serviceInvokers);
         }
+        initializeLoginService(serviceInvokers);
         Auth authenticator = context.getInstance(Auth.class, DEFAULT);
         requestResolver = new LocalServiceRequestResolver(authenticator, serviceInvokers);
         return requestResolver;
+    }
+
+    private void initializeLoginService(Map<ServiceRequestKey, ServiceInvoker> serviceInvokers)
+            throws ServiceInitializationFailedException {
+        registerServiceInvokers(LoginService.class, context, serviceInvokers);
     }
 
     ServiceRequestResolver getServiceRequestResolver() {

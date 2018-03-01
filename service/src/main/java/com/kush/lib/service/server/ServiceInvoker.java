@@ -18,8 +18,11 @@ class ServiceInvoker {
     Object invoke(Object... args) throws ServiceRequestFailedException {
         try {
             return method.invoke(service, args);
-        } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+        } catch (IllegalAccessException | IllegalArgumentException e) {
             throw new ServiceRequestFailedException(e.getMessage(), e);
+        } catch (InvocationTargetException e) {
+            Throwable cause = e.getCause();
+            throw new ServiceRequestFailedException(cause.getMessage(), cause);
         }
     }
 }

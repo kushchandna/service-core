@@ -31,7 +31,7 @@ public class Responder {
         response.setResult(result);
     }
 
-    private <T> void sendError(Response<T> response, Exception e) {
+    private <T> void sendError(Response<T> response, RequestFailedException e) {
         response.setError(e);
     }
 }

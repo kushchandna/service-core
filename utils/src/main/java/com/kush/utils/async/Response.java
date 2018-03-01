@@ -7,8 +7,9 @@ public class Response<T> {
     private final CountDownLatch latch;
 
     private T result;
-    private Exception error;
+    private RequestFailedException error;
     private ResultListener<T> resultListener;
+    private ErrorListener errorListener;
 
     public Response() {
         latch = new CountDownLatch(1);
@@ -33,6 +34,13 @@ public class Response<T> {
         }
     }
 
+    public void setErrorListener(ErrorListener errorListener) {
+        this.errorListener = errorListener;
+        if (error != null) {
+            errorListener.onError(error);
+        }
+    }
+
     void setResult(T result) {
         if (latch.getCount() == 0) {
             return;
@@ -44,12 +52,15 @@ public class Response<T> {
         }
     }
 
-    void setError(Exception error) {
+    void setError(RequestFailedException error) {
         if (latch.getCount() == 0) {
             return;
         }
         this.error = error;
         latch.countDown();
+        if (errorListener != null) {
+            errorListener.onError(error);
+        }
     }
 
     public static interface ResultListener<R> {
@@ -57,8 +68,8 @@ public class Response<T> {
         void onResult(R result);
     }
 
-    public static interface ErrorListener<E extends Exception> {
+    public static interface ErrorListener {
 
-        void onError(E error);
+        void onError(RequestFailedException error);
     }
 }

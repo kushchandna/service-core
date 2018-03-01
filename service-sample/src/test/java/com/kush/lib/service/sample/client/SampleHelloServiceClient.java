@@ -12,4 +12,8 @@ public class SampleHelloServiceClient extends ServiceClient {
     public Response<String> sayHello(String name) {
         return invoke("Say Hello", name);
     }
+
+    public Response<String> sayHelloToMe() {
+        return authInvoke("Say Hello To Me");
+    }
 }

@@ -1,6 +1,6 @@
 package com.kush.lib.service.server.authentication;
 
-public class AuthenticationFailedException extends Exception {
+public class AuthenticationFailedException extends RuntimeException {
 
     private static final long serialVersionUID = 1L;
 

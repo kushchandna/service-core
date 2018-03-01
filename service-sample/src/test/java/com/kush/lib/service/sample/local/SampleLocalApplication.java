@@ -5,7 +5,10 @@ import java.util.concurrent.Executors;
 
 import com.kush.lib.service.client.api.ApplicationClient;
 import com.kush.lib.service.client.api.ServiceClientProvider;
+import com.kush.lib.service.client.api.session.LoginServiceClient;
 import com.kush.lib.service.remoting.StartupFailedException;
+import com.kush.lib.service.remoting.auth.AuthToken;
+import com.kush.lib.service.remoting.auth.password.PasswordBasedCredential;
 import com.kush.lib.service.remoting.connect.ServiceConnectionFactory;
 import com.kush.lib.service.remoting.connect.local.LocalServiceConnectionFactory;
 import com.kush.lib.service.sample.client.SampleHelloServiceClient;
@@ -14,8 +17,11 @@ import com.kush.lib.service.sample.server.SampleHelloTextProvider;
 import com.kush.lib.service.server.ApplicationServer;
 import com.kush.lib.service.server.Context;
 import com.kush.lib.service.server.ContextBuilder;
+import com.kush.lib.service.server.authentication.Auth;
 import com.kush.lib.service.server.local.LocalApplicationServer;
+import com.kush.utils.async.RequestFailedException;
 import com.kush.utils.async.Response;
+import com.kush.utils.async.Response.ErrorListener;
 import com.kush.utils.async.Response.ResultListener;
 
 public class SampleLocalApplication {
@@ -25,7 +31,9 @@ public class SampleLocalApplication {
         ServiceConnectionFactory connFactory = createLocalServerBasedConnectionFactory();
         ApplicationClient client = setupClient(connFactory);
         ServiceClientProvider serviceClientProvider = client.getServiceClientProvider();
-        invokeGetHelloText(serviceClientProvider);
+        invokeSayHello(serviceClientProvider);
+        doLogin(serviceClientProvider);
+        invokeSayHelloToMe(serviceClientProvider);
     }
 
     private static void setupServer() throws StartupFailedException {
@@ -34,6 +42,7 @@ public class SampleLocalApplication {
         SampleHelloTextProvider greetingProvider = new SampleHelloTextProvider();
         Context context = ContextBuilder.create()
             .withInstance(SampleHelloTextProvider.class, greetingProvider)
+            .withInstance(Auth.class, Auth.DEFAULT)
             .build();
         server.start(context);
     }
@@ -47,17 +56,38 @@ public class SampleLocalApplication {
         client.start(connFactory);
         Executor executor = Executors.newSingleThreadExecutor();
         client.activateServiceClient(SampleHelloServiceClient.class, executor);
+        client.activateLoginServiceClient(executor);
         return client;
     }
 
-    private static void invokeGetHelloText(ServiceClientProvider serviceClientProvider) throws Exception {
+    private static void invokeSayHello(ServiceClientProvider serviceClientProvider) throws Exception {
         SampleHelloServiceClient sampleServiceClient = serviceClientProvider.getServiceClient(SampleHelloServiceClient.class);
         Response<String> response = sampleServiceClient.sayHello("TestUser");
+        System.out.println("[APP] sayHello Result received: " + response.getResult());
+    }
+
+    private static void invokeSayHelloToMe(ServiceClientProvider serviceClientProvider) throws Exception {
+        SampleHelloServiceClient sampleServiceClient = serviceClientProvider.getServiceClient(SampleHelloServiceClient.class);
+        Response<String> response = sampleServiceClient.sayHelloToMe();
         response.setResultListener(new ResultListener<String>() {
             @Override
             public void onResult(String result) {
-                System.out.println(result);
+                System.out.println("[APP] sayHelloToMe Result received: " + result);
             }
         });
+        response.setErrorListener(new ErrorListener() {
+
+            @Override
+            public void onError(RequestFailedException error) {
+                System.err.println("[APP] Error occured: " + error.getMessage());
+            }
+        });
+    }
+
+    private static void doLogin(ServiceClientProvider serviceClientProvider) throws Exception {
+        LoginServiceClient loginServiceClient = serviceClientProvider.getServiceClient(LoginServiceClient.class);
+        PasswordBasedCredential credential = new PasswordBasedCredential("testusr", "testpwd".toCharArray());
+        Response<AuthToken> response = loginServiceClient.login(credential);
+        response.waitForResult();
     }
 }

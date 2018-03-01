@@ -20,9 +20,6 @@ class ThreadBasedAuth implements Auth {
     @Override
     public User getCurrentUser() {
         AuthToken token = CURRENT.get();
-        if (token == null) {
-            throw new IllegalArgumentException();
-        }
-        return token.getUser();
+        return token == null ? null : token.getUser();
     }
 }

@@ -2,6 +2,7 @@ package com.kush.lib.service.server;
 
 import com.kush.lib.service.remoting.auth.User;
 import com.kush.lib.service.server.authentication.Auth;
+import com.kush.lib.service.server.authentication.AuthenticationFailedException;
 
 public abstract class BaseService {
 
@@ -21,8 +22,12 @@ public abstract class BaseService {
         return context;
     }
 
-    protected final User getCurrentUser() {
+    protected final User getCurrentUser() throws AuthenticationFailedException {
         Auth authenticator = context.getInstance(Auth.class);
-        return authenticator.getCurrentUser();
+        User currentUser = authenticator.getCurrentUser();
+        if (currentUser == null) {
+            throw new AuthenticationFailedException("No login");
+        }
+        return currentUser;
     }
 }

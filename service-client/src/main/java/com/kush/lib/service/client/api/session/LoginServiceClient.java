@@ -17,7 +17,7 @@ public class LoginServiceClient extends ServiceClient {
     }
 
     public Response<AuthToken> login(Credential credential) {
-        return invoke("register", credential);
+        return invoke("login", credential);
     }
 
     public Response<Void> logout() {
