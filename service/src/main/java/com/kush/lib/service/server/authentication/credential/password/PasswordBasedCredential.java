@@ -2,7 +2,7 @@ package com.kush.lib.service.server.authentication.credential.password;
 
 import java.util.Arrays;
 
-import com.kush.lib.service.server.authentication.credential.Credential;
+import com.kush.lib.service.remoting.auth.Credential;
 
 public class PasswordBasedCredential implements Credential {
 

@@ -2,6 +2,7 @@ package com.kush.lib.service.client.api;
 
 import java.util.concurrent.Executor;
 
+import com.kush.lib.service.client.api.session.SessionManager;
 import com.kush.lib.service.remoting.connect.ServiceConnectionFactory;
 
 public class ApplicationClient {
@@ -9,7 +10,8 @@ public class ApplicationClient {
     private ServiceClientProvider serviceClientProvider;
 
     public void start(ServiceConnectionFactory connectionFactory) {
-        ServiceClientActivator activator = new ServiceClientActivator(connectionFactory);
+        SessionManager sessionManager = new SessionManager();
+        ServiceClientActivator activator = new ServiceClientActivator(sessionManager, connectionFactory);
         serviceClientProvider = new ServiceClientProvider(activator);
     }
 
