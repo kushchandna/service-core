@@ -86,7 +86,8 @@ public class JavapoetBasedServiceClientCodeGenerator implements CodeGenerator {
             .returns(responseReturnTypeName)
             .addModifiers(PUBLIC)
             .addParameters(parameterSpecs)
-            .addStatement(createInvokeStatement(parameterSpecs), serviceMethod.getServiceMethodId())
+            .addStatement(createInvokeStatement(parameterSpecs, serviceMethod.isAuthenticationRequired()),
+                    serviceMethod.getServiceMethodId())
             .build();
     }
 
@@ -101,9 +102,10 @@ public class JavapoetBasedServiceClientCodeGenerator implements CodeGenerator {
         return parameterSpecs;
     }
 
-    private String createInvokeStatement(List<ParameterSpec> paramSpecs) {
-        StringBuilder builder = new StringBuilder("return invoke(");
-        builder.append("$S");
+    private String createInvokeStatement(List<ParameterSpec> paramSpecs, boolean authenticationRequired) {
+        String invokeText = authenticationRequired ? "authInvoke" : "invoke";
+        StringBuilder builder = new StringBuilder("return");
+        builder.append(" ").append(invokeText).append("(").append("$S");
         for (ParameterSpec paramSpec : paramSpecs) {
             builder.append(',').append(" ").append(paramSpec.name);
         }

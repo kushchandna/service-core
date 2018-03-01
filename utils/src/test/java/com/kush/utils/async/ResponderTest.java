@@ -88,7 +88,7 @@ public class ResponderTest {
             }
         });
         AtomicReference<String> resultHolder = new AtomicReference<>(null);
-        response.setResultListener(new ResultListener<String>() {
+        response.addResultListener(new ResultListener<String>() {
 
             @Override
             public void onResult(String result) {
@@ -111,7 +111,7 @@ public class ResponderTest {
         });
         MILLISECONDS.sleep(testSleepTime);
         AtomicReference<String> resultHolder = new AtomicReference<>(null);
-        response.setResultListener(new ResultListener<String>() {
+        response.addResultListener(new ResultListener<String>() {
 
             @Override
             public void onResult(String result) {

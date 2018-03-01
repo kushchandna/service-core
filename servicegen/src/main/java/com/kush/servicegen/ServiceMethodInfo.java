@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.kush.lib.service.server.annotations.ServiceMethod;
+import com.kush.lib.service.server.authentication.AuthenticationRequired;
 
 public class ServiceMethodInfo {
 
@@ -33,6 +34,10 @@ public class ServiceMethodInfo {
             paramInfos.add(paramInfo);
         }
         return paramInfos;
+    }
+
+    public boolean isAuthenticationRequired() {
+        return method.getAnnotation(AuthenticationRequired.class) != null;
     }
 
     public Type getReturnType() {

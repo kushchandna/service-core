@@ -1,5 +1,7 @@
 package com.kush.utils.async;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
 public class Response<T> {
@@ -8,8 +10,8 @@ public class Response<T> {
 
     private T result;
     private RequestFailedException error;
-    private ResultListener<T> resultListener;
-    private ErrorListener errorListener;
+    private final List<ResultListener<T>> resultListeners = new ArrayList<>();
+    private final List<ErrorListener> errorListeners = new ArrayList<>();
 
     public Response() {
         latch = new CountDownLatch(1);
@@ -27,15 +29,15 @@ public class Response<T> {
         return result;
     }
 
-    public void setResultListener(ResultListener<T> resultListener) {
-        this.resultListener = resultListener;
+    public void addResultListener(ResultListener<T> resultListener) {
+        resultListeners.add(resultListener);
         if (result != null) {
             resultListener.onResult(result);
         }
     }
 
-    public void setErrorListener(ErrorListener errorListener) {
-        this.errorListener = errorListener;
+    public void addErrorListener(ErrorListener errorListener) {
+        errorListeners.add(errorListener);
         if (error != null) {
             errorListener.onError(error);
         }
@@ -46,10 +48,8 @@ public class Response<T> {
             return;
         }
         this.result = result;
+        notifyResult(result);
         latch.countDown();
-        if (resultListener != null) {
-            resultListener.onResult(result);
-        }
     }
 
     void setError(RequestFailedException error) {
@@ -57,9 +57,19 @@ public class Response<T> {
             return;
         }
         this.error = error;
+        notifyError(error);
         latch.countDown();
-        if (errorListener != null) {
-            errorListener.onError(error);
+    }
+
+    private void notifyResult(T result) {
+        for (ResultListener<T> listener : resultListeners) {
+            listener.onResult(result);
+        }
+    }
+
+    private void notifyError(RequestFailedException error) {
+        for (ErrorListener listener : errorListeners) {
+            listener.onError(error);
         }
     }
 

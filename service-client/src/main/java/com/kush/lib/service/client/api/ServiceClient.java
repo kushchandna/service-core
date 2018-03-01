@@ -34,13 +34,17 @@ public abstract class ServiceClient {
         responder = new Responder(executor);
     }
 
+    protected final SessionManager getSessionManager() {
+        return sessionManager;
+    }
+
     protected final <T> Response<T> invoke(String methodName, Object... args) {
         return createResponse(methodName, null, args);
     }
 
     protected final <T> Response<T> authInvoke(String methodName, Object... args) {
         Session currentSession = sessionManager.getCurrentSession();
-        AuthToken token = currentSession.getToken();
+        AuthToken token = currentSession == null ? null : currentSession.getToken();
         return createResponse(methodName, token, args);
     }
 

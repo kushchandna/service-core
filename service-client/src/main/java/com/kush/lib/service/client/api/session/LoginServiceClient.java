@@ -5,8 +5,12 @@ import com.kush.lib.service.remoting.auth.AuthToken;
 import com.kush.lib.service.remoting.auth.Credential;
 import com.kush.lib.service.remoting.auth.User;
 import com.kush.utils.async.Response;
+import com.kush.utils.async.Response.ResultListener;
 
 public class LoginServiceClient extends ServiceClient {
+
+    private static final com.kush.logger.Logger LOGGER =
+            com.kush.logger.LoggerFactory.INSTANCE.getLogger(LoginServiceClient.class);
 
     public LoginServiceClient() {
         super("Login");
@@ -17,7 +21,17 @@ public class LoginServiceClient extends ServiceClient {
     }
 
     public Response<AuthToken> login(Credential credential) {
-        return invoke("login", credential);
+        Response<AuthToken> response = invoke("login", credential);
+        response.addResultListener(new ResultListener<AuthToken>() {
+
+            @Override
+            public void onResult(AuthToken result) {
+                LOGGER.info("Received token for user id %s", result.getUser().getId());
+                SessionManager sessionManager = getSessionManager();
+                sessionManager.startSession(result);
+            }
+        });
+        return response;
     }
 
     public Response<Void> logout() {

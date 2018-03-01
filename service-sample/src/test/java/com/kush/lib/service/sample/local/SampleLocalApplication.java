@@ -26,6 +26,9 @@ import com.kush.utils.async.Response.ResultListener;
 
 public class SampleLocalApplication {
 
+    private static final com.kush.logger.Logger LOGGER =
+            com.kush.logger.LoggerFactory.INSTANCE.getLogger(SampleLocalApplication.class);
+
     public static void main(String[] args) throws Exception {
         setupServer();
         ServiceConnectionFactory connFactory = createLocalServerBasedConnectionFactory();
@@ -63,23 +66,22 @@ public class SampleLocalApplication {
     private static void invokeSayHello(ServiceClientProvider serviceClientProvider) throws Exception {
         SampleHelloServiceClient sampleServiceClient = serviceClientProvider.getServiceClient(SampleHelloServiceClient.class);
         Response<String> response = sampleServiceClient.sayHello("TestUser");
-        System.out.println("[APP] sayHello Result received: " + response.getResult());
+        LOGGER.info("[APP] sayHello Result received: %s", response.getResult());
     }
 
     private static void invokeSayHelloToMe(ServiceClientProvider serviceClientProvider) throws Exception {
         SampleHelloServiceClient sampleServiceClient = serviceClientProvider.getServiceClient(SampleHelloServiceClient.class);
         Response<String> response = sampleServiceClient.sayHelloToMe();
-        response.setResultListener(new ResultListener<String>() {
+        response.addResultListener(new ResultListener<String>() {
             @Override
             public void onResult(String result) {
-                System.out.println("[APP] sayHelloToMe Result received: " + result);
+                LOGGER.info("[APP] sayHelloToMe Result received: %s", result);
             }
         });
-        response.setErrorListener(new ErrorListener() {
-
+        response.addErrorListener(new ErrorListener() {
             @Override
             public void onError(RequestFailedException error) {
-                System.err.println("[APP] Error occured: " + error.getMessage());
+                LOGGER.info("[APP] Error occured: %s", error.getMessage());
             }
         });
     }

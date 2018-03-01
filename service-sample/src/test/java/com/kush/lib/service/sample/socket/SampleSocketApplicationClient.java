@@ -33,7 +33,7 @@ public class SampleSocketApplicationClient {
     private static void invokeGetHelloText(ServiceClientProvider serviceClientProvider) throws Exception {
         SampleHelloServiceClient sampleServiceClient = serviceClientProvider.getServiceClient(SampleHelloServiceClient.class);
         Response<String> response = sampleServiceClient.sayHello("TestUser");
-        response.setResultListener(new ResultListener<String>() {
+        response.addResultListener(new ResultListener<String>() {
             @Override
             public void onResult(String result) {
                 System.out.println(result);

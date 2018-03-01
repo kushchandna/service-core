@@ -6,6 +6,7 @@ import java.util.Set;
 import com.kush.lib.service.server.BaseService;
 import com.kush.lib.service.server.annotations.Service;
 import com.kush.lib.service.server.annotations.ServiceMethod;
+import com.kush.lib.service.server.authentication.AuthenticationRequired;
 
 @Service(name = "Dummy Service")
 public class DummyService extends BaseService {
@@ -32,5 +33,16 @@ public class DummyService extends BaseService {
     @ServiceMethod(name = "E String List Method With Two Generic Params")
     public List<String> eStringListMethodWithTwoGenericParams(List<Integer> param1, Set<Double> param2) {
         return null;
+    }
+
+    @AuthenticationRequired
+    @ServiceMethod(name = "F Void Method With Authentication")
+    public void fVoidMethodWithAuthentication() {
+    }
+
+    @AuthenticationRequired
+    @ServiceMethod(name = "G Int Method With Authentication")
+    public int gIntMethodWithAuthentication(int param1, double param2) {
+        return 0;
     }
 }

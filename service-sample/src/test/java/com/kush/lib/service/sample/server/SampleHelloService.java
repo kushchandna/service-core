@@ -9,10 +9,13 @@ import com.kush.lib.service.server.authentication.AuthenticationRequired;
 @Service(name = "Sample Hello Service")
 public class SampleHelloService extends BaseService {
 
+    private static final com.kush.logger.Logger LOGGER =
+            com.kush.logger.LoggerFactory.INSTANCE.getLogger(SampleHelloService.class);
+
     @ServiceMethod(name = "Say Hello")
     public String sayHello(String name) {
         String text = sayHelloInternal(name);
-        System.out.println("[Server] returning result for sayHello: " + text);
+        LOGGER.info("[Server] returning result for sayHello: %s", text);
         return text;
     }
 
@@ -22,7 +25,7 @@ public class SampleHelloService extends BaseService {
         User currentUser = getCurrentUser();
         String name = fetchName(currentUser);
         String text = sayHelloInternal(name);
-        System.out.println("[Server] returning result for sayHelloToMe: " + text);
+        LOGGER.info("[Server] returning result for sayHelloToMe: %s", text);
         return text;
     }
 
@@ -32,6 +35,6 @@ public class SampleHelloService extends BaseService {
     }
 
     private String fetchName(User user) {
-        return null;
+        return user.getId().toString();
     }
 }
