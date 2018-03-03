@@ -55,4 +55,9 @@ final class ServiceRequestKey {
         }
         return true;
     }
+
+    @Override
+    public String toString() {
+        return "ServiceRequestKey [serviceName=" + serviceName + ", methodName=" + methodName + "]";
+    }
 }

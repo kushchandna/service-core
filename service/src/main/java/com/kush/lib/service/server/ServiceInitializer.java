@@ -15,6 +15,9 @@ import com.kush.lib.service.server.authentication.LoginService;
 
 class ServiceInitializer {
 
+    private static final com.kush.logger.Logger LOGGER =
+            com.kush.logger.LoggerFactory.INSTANCE.getLogger(ServiceInitializer.class);
+
     private final Context context;
 
     private ServiceRequestResolver requestResolver;
@@ -25,6 +28,7 @@ class ServiceInitializer {
 
     ServiceRequestResolver initialize(Set<Class<? extends BaseService>> serviceClasses)
             throws ServiceInitializationFailedException {
+        LOGGER.info("Initializing %d services", serviceClasses.size());
         Map<ServiceRequestKey, ServiceInvoker> serviceInvokers = new HashMap<>();
         for (Class<? extends BaseService> serviceClass : serviceClasses) {
             registerServiceInvokers(serviceClass, context, serviceInvokers);
@@ -71,6 +75,7 @@ class ServiceInitializer {
     private void registerServiceInvokers(Class<? extends BaseService> serviceClass, Context context,
             Map<ServiceRequestKey, ServiceInvoker> serviceInvokers) throws ServiceInitializationFailedException {
         String serviceName = getServiceName(serviceClass);
+        LOGGER.info("Registering %s service with name %s", serviceClass.getName(), serviceName);
         BaseService service = initializeService(serviceClass, context);
         Method[] declaredMethods = serviceClass.getDeclaredMethods();
         for (Method method : declaredMethods) {
@@ -83,7 +88,11 @@ class ServiceInitializer {
                 }
                 ServiceInvoker invoker = new ServiceInvoker(service, method);
                 serviceInvokers.put(key, invoker);
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.debug("Added invoker for key %s", key);
+                }
             }
         }
+        LOGGER.info("Registered %s service", serviceClass.getName());
     }
 }

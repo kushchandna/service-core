@@ -15,4 +15,9 @@ public class AuthToken implements Serializable {
     public User getUser() {
         return user;
     }
+
+    @Override
+    public String toString() {
+        return String.format("Token [user: %s]", user.getId());
+    }
 }

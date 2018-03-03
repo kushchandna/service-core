@@ -1,6 +1,7 @@
 package com.kush.lib.service.remoting;
 
 import java.io.Serializable;
+import java.util.Arrays;
 
 import com.kush.lib.service.remoting.auth.AuthToken;
 
@@ -34,5 +35,11 @@ public class ServiceRequest implements Serializable {
 
     public Object[] getArgs() {
         return args;
+    }
+
+    @Override
+    public String toString() {
+        return "ServiceRequest [authToken=" + authToken + ", serviceName=" + serviceName + ", methodName=" + methodName
+                + ", args=" + Arrays.toString(args) + "]";
     }
 }

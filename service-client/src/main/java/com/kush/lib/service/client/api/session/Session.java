@@ -13,4 +13,9 @@ public class Session {
     public AuthToken getToken() {
         return token;
     }
+
+    @Override
+    public String toString() {
+        return String.format("Session [userId: %s]", token.getUser().getId());
+    }
 }

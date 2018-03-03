@@ -18,6 +18,8 @@ import com.kush.utils.async.Response;
 
 public abstract class ServiceClient {
 
+    private static final com.kush.logger.Logger LOGGER = com.kush.logger.LoggerFactory.INSTANCE.getLogger(ServiceClient.class);
+
     private final String serviceName;
 
     private Responder responder;
@@ -50,14 +52,25 @@ public abstract class ServiceClient {
 
     private <T> Response<T> createResponse(String methodName, AuthToken token, Object... args) {
         ServiceRequest request = new ServiceRequest(token, serviceName, methodName, args);
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Creating request %s", request);
+        }
+        LOGGER.info("Sending %s request to %s", methodName, serviceName);
         return responder.respond(new Request<T>() {
 
             @Override
             @SuppressWarnings("unchecked")
             public T process() throws RequestFailedException {
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.debug("Creating connection for request %s", request);
+                }
                 try (ServiceConnection connection = connectionFactory.createConnection()) {
-                    return (T) connection.resolve(request);
+                    LOGGER.info("Resolving %s request from %s", methodName, serviceName);
+                    T result = (T) connection.resolve(request);
+                    LOGGER.info("Resolved %s request from %s", methodName, serviceName);
+                    return result;
                 } catch (IOException | ServiceRequestFailedException | ServiceConnectionFailedException e) {
+                    LOGGER.error(e);
                     throw new RequestFailedException(e);
                 }
             }

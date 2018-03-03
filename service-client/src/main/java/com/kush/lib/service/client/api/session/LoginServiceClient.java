@@ -35,6 +35,16 @@ public class LoginServiceClient extends ServiceClient {
     }
 
     public Response<Void> logout() {
-        return invoke("logout");
+        Response<Void> response = invoke("logout");
+        response.addResultListener(new ResultListener<Void>() {
+
+            @Override
+            public void onResult(Void result) {
+                SessionManager sessionManager = getSessionManager();
+                sessionManager.endSession();
+                LOGGER.info("Logged out");
+            }
+        });
+        return response;
     }
 }

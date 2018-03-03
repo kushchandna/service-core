@@ -8,6 +8,7 @@ class JavaUtilLogger implements Logger {
 
     public JavaUtilLogger(Class<?> klass) {
         underlyingLogger = java.util.logging.Logger.getLogger(klass.getName());
+        underlyingLogger.setLevel(Level.FINEST);
     }
 
     @Override

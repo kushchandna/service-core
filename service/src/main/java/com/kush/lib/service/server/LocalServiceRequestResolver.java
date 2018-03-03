@@ -10,6 +10,9 @@ import com.kush.lib.service.server.authentication.Auth;
 
 class LocalServiceRequestResolver implements ServiceRequestResolver {
 
+    private static final com.kush.logger.Logger LOGGER =
+            com.kush.logger.LoggerFactory.INSTANCE.getLogger(LocalServiceRequestResolver.class);
+
     private final Auth authenticator;
     private final Map<ServiceRequestKey, ServiceInvoker> serviceInvokers;
 
@@ -20,6 +23,7 @@ class LocalServiceRequestResolver implements ServiceRequestResolver {
 
     @Override
     public Object resolve(ServiceRequest request) throws ServiceRequestFailedException {
+        LOGGER.debug("Received service request %s", request);
         AuthToken token = request.getAuthToken();
         authenticator.login(token);
         try {

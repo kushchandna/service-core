@@ -6,6 +6,8 @@ import com.kush.lib.service.server.authentication.AuthenticationFailedException;
 
 public abstract class BaseService {
 
+    private static final com.kush.logger.Logger LOGGER = com.kush.logger.LoggerFactory.INSTANCE.getLogger(BaseService.class);
+
     private Context context;
 
     public synchronized final void initialize(Context context) {
@@ -13,6 +15,7 @@ public abstract class BaseService {
             throw new IllegalStateException("Service already initialized");
         }
         this.context = context;
+        LOGGER.info("Initialized service %s", getClass().getName());
     }
 
     protected final Context getContext() {
