@@ -3,6 +3,7 @@ package com.kush.lib.service.server;
 import com.kush.lib.service.remoting.auth.User;
 import com.kush.lib.service.server.authentication.Auth;
 import com.kush.lib.service.server.authentication.AuthenticationFailedException;
+import com.kush.lib.service.server.authentication.SessionManager;
 
 public abstract class BaseService {
 
@@ -29,7 +30,11 @@ public abstract class BaseService {
         Auth authenticator = context.getInstance(Auth.class);
         User currentUser = authenticator.getCurrentUser();
         if (currentUser == null) {
-            throw new AuthenticationFailedException("No login");
+            throw new AuthenticationFailedException("Authentication required to perform this action");
+        }
+        SessionManager sessionManager = context.getInstance(SessionManager.class, SessionManager.DEFAULT);
+        if (sessionManager.checkSessionExists(currentUser)) {
+            throw new AuthenticationFailedException("No active session found for user with id " + currentUser.getId());
         }
         return currentUser;
     }
