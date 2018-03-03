@@ -3,13 +3,28 @@ package com.kush.lib.service.server.authentication;
 import com.kush.lib.service.remoting.auth.AuthToken;
 import com.kush.lib.service.remoting.auth.User;
 
-public interface Auth {
+public class Auth {
 
-    public static final Auth DEFAULT = new ThreadBasedAuth();
+    private static final com.kush.logger.Logger LOGGER = com.kush.logger.LoggerFactory.INSTANCE.getLogger(Auth.class);
 
-    void login(AuthToken token);
+    private final ThreadLocal<AuthToken> CURRENT = new ThreadLocal<>();
 
-    void logout();
+    public void login(AuthToken token) {
+        CURRENT.set(token);
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Added authentication context with token %s for thread %s", token, Thread.currentThread().getName());
+        }
+    }
 
-    User getCurrentUser();
+    public void logout() {
+        CURRENT.remove();
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Cleared authentication context for thread %s", Thread.currentThread().getName());
+        }
+    }
+
+    public User getCurrentUser() {
+        AuthToken token = CURRENT.get();
+        return token == null ? null : token.getUser();
+    }
 }

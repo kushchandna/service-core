@@ -3,11 +3,14 @@ package com.kush.lib.service.sample.local;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
+import com.kush.lib.persistence.api.Persistor;
+import com.kush.lib.persistence.helpers.InMemoryPersistor;
 import com.kush.lib.service.client.api.ApplicationClient;
 import com.kush.lib.service.client.api.ServiceClientProvider;
 import com.kush.lib.service.client.api.session.LoginServiceClient;
 import com.kush.lib.service.remoting.StartupFailedException;
 import com.kush.lib.service.remoting.auth.AuthToken;
+import com.kush.lib.service.remoting.auth.User;
 import com.kush.lib.service.remoting.auth.password.PasswordBasedCredential;
 import com.kush.lib.service.remoting.connect.ServiceConnectionFactory;
 import com.kush.lib.service.remoting.connect.local.LocalServiceConnectionFactory;
@@ -17,12 +20,17 @@ import com.kush.lib.service.sample.server.SampleHelloTextProvider;
 import com.kush.lib.service.server.ApplicationServer;
 import com.kush.lib.service.server.Context;
 import com.kush.lib.service.server.ContextBuilder;
-import com.kush.lib.service.server.authentication.Auth;
+import com.kush.lib.service.server.authentication.credential.password.PasswordBasedCredentialPersistor;
+import com.kush.lib.service.server.authentication.credential.password.PersistablePasswordBasedCredential;
 import com.kush.lib.service.server.local.LocalApplicationServer;
 import com.kush.utils.async.RequestFailedException;
 import com.kush.utils.async.Response;
 import com.kush.utils.async.Response.ErrorListener;
 import com.kush.utils.async.Response.ResultListener;
+import com.kush.utils.exceptions.ObjectNotFoundException;
+import com.kush.utils.id.IdGenerator;
+import com.kush.utils.id.Identifier;
+import com.kush.utils.id.SequentialIdGenerator;
 
 public class SampleLocalApplication {
 
@@ -35,17 +43,21 @@ public class SampleLocalApplication {
         ApplicationClient client = setupClient(connFactory);
         ServiceClientProvider serviceClientProvider = client.getServiceClientProvider();
         invokeSayHello(serviceClientProvider);
-        doLogin(serviceClientProvider);
+        PasswordBasedCredential credential = new PasswordBasedCredential("testusr", "testpwd".toCharArray());
+        registerUser(serviceClientProvider, credential);
+        doLogin(serviceClientProvider, credential);
         invokeSayHelloToMe(serviceClientProvider);
+        doLogout(serviceClientProvider);
     }
 
     private static void setupServer() throws StartupFailedException {
         ApplicationServer server = new LocalApplicationServer();
         server.registerService(SampleHelloService.class);
+        PasswordBasedCredentialPersistor passwordBasedCredentialPersistor = createPasswordBasedCredentialPersistor();
         SampleHelloTextProvider greetingProvider = new SampleHelloTextProvider();
         Context context = ContextBuilder.create()
             .withInstance(SampleHelloTextProvider.class, greetingProvider)
-            .withInstance(Auth.class, Auth.DEFAULT)
+            .withInstance(PasswordBasedCredentialPersistor.class, passwordBasedCredentialPersistor)
             .build();
         server.start(context);
     }
@@ -86,10 +98,38 @@ public class SampleLocalApplication {
         });
     }
 
-    private static void doLogin(ServiceClientProvider serviceClientProvider) throws Exception {
+    private static PasswordBasedCredentialPersistor createPasswordBasedCredentialPersistor() {
+        IdGenerator idGenerator = new SequentialIdGenerator();
+        Persistor<PersistablePasswordBasedCredential> delegate =
+                new InMemoryPersistor<PersistablePasswordBasedCredential>(idGenerator) {
+
+                    @Override
+                    protected PersistablePasswordBasedCredential createPersistableObject(Identifier id,
+                            PersistablePasswordBasedCredential reference) {
+                        return new PersistablePasswordBasedCredential(id, reference.get());
+                    }
+                };
+        return new PasswordBasedCredentialPersistor(delegate);
+    }
+
+    private static void doLogin(ServiceClientProvider serviceClientProvider, PasswordBasedCredential credential)
+            throws Exception {
         LoginServiceClient loginServiceClient = serviceClientProvider.getServiceClient(LoginServiceClient.class);
-        PasswordBasedCredential credential = new PasswordBasedCredential("testusr", "testpwd".toCharArray());
         Response<AuthToken> response = loginServiceClient.login(credential);
+        response.waitForResult();
+    }
+
+    private static void doLogout(ServiceClientProvider serviceClientProvider)
+            throws ObjectNotFoundException, InterruptedException, RequestFailedException {
+        LoginServiceClient loginServiceClient = serviceClientProvider.getServiceClient(LoginServiceClient.class);
+        Response<Void> response = loginServiceClient.logout();
+        response.waitForResult();
+    }
+
+    private static void registerUser(ServiceClientProvider serviceClientProvider, PasswordBasedCredential credential)
+            throws ObjectNotFoundException, InterruptedException, RequestFailedException {
+        LoginServiceClient loginServiceClient = serviceClientProvider.getServiceClient(LoginServiceClient.class);
+        Response<User> response = loginServiceClient.register(credential);
         response.waitForResult();
     }
 }

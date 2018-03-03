@@ -1,7 +1,5 @@
 package com.kush.lib.service.server;
 
-import static com.kush.lib.service.server.authentication.Auth.DEFAULT;
-
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
@@ -34,7 +32,7 @@ class ServiceInitializer {
             registerServiceInvokers(serviceClass, context, serviceInvokers);
         }
         initializeLoginService(serviceInvokers);
-        Auth authenticator = context.getInstance(Auth.class, DEFAULT);
+        Auth authenticator = context.getInstance(Auth.class);
         requestResolver = new LocalServiceRequestResolver(authenticator, serviceInvokers);
         return requestResolver;
     }

@@ -9,14 +9,9 @@ import com.kush.utils.id.Identifier;
 
 public class SessionManager {
 
-    public static final SessionManager DEFAULT = new SessionManager();
-
     private static final Object DUMMY = new Object();
 
     private final Map<Identifier, Object> activeUsers = new ConcurrentHashMap<>();
-
-    protected SessionManager() {
-    }
 
     public AuthToken startSession(User user) {
         activeUsers.put(user.getId(), DUMMY);

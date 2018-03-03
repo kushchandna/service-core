@@ -6,7 +6,11 @@ import com.kush.lib.service.server.authentication.credential.CredentialStore;
 
 public class PasswordBasedCredentialStore implements CredentialStore {
 
-    public PasswordBasedCredentialStore(PasswordBasedCredentialPersistor pwdPersistor) {
+    private final PasswordBasedCredentialPersistor pwdCredPersistor;
+
+    public PasswordBasedCredentialStore(PasswordBasedCredentialPersistor pwdCredPersistor) {
+        this.pwdCredPersistor = pwdCredPersistor;
+        this.pwdCredPersistor.toString();
     }
 
     @Override

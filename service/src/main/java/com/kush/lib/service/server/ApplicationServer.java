@@ -6,6 +6,11 @@ import java.util.Set;
 import com.kush.lib.service.remoting.ServiceRequestResolver;
 import com.kush.lib.service.remoting.StartupFailedException;
 import com.kush.lib.service.remoting.receiver.ServiceRequestReceiver;
+import com.kush.lib.service.server.authentication.Auth;
+import com.kush.lib.service.server.authentication.SessionManager;
+import com.kush.lib.service.server.authentication.credential.CredentialStore;
+import com.kush.lib.service.server.authentication.credential.password.PasswordBasedCredentialPersistor;
+import com.kush.lib.service.server.authentication.credential.password.PasswordBasedCredentialStore;
 
 public class ApplicationServer {
 
@@ -27,6 +32,7 @@ public class ApplicationServer {
 
     public final void start(Context context) throws StartupFailedException {
         LOGGER.info("Starting Application Server");
+        enrichContext(context);
         preStartup(context);
         ServiceInitializer serviceInitializer = new ServiceInitializer(context);
         ServiceRequestResolver requestResolver = initializeServicesAndGetRequestResolver(serviceInitializer);
@@ -39,6 +45,13 @@ public class ApplicationServer {
     }
 
     protected void postStartup(Context context, ServiceRequestResolver serviceRequestResolver) {
+    }
+
+    private void enrichContext(Context context) {
+        PasswordBasedCredentialPersistor delegate = context.getInstance(PasswordBasedCredentialPersistor.class);
+        context.addInstance(CredentialStore.class, new PasswordBasedCredentialStore(delegate));
+        context.addInstance(Auth.class, new Auth());
+        context.addInstance(SessionManager.class, new SessionManager());
     }
 
     private void startServiceRequestReceivers(ServiceRequestResolver requestResolver) throws StartupFailedException {

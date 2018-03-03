@@ -54,6 +54,6 @@ public class LoginService extends BaseService {
     }
 
     private SessionManager getSessionManager() {
-        return getContext().getInstance(SessionManager.class, SessionManager.DEFAULT);
+        return getContext().getInstance(SessionManager.class);
     }
 }

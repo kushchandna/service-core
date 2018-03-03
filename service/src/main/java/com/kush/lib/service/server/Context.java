@@ -10,6 +10,10 @@ public class Context {
         this.instances = instances;
     }
 
+    void addInstance(Object key, Object value) {
+        instances.put(key, value);
+    }
+
     public <T> T getInstance(Object key, Class<T> returnType, T defaultValue) {
         if (!instances.containsKey(key)) {
             return defaultValue;
