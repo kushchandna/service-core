@@ -24,11 +24,10 @@ public class LoginService extends BaseService {
     public User register(Credential credential) throws UserRegistrationFailedException {
         CredentialStore credentialStore = getCredentialStore();
         User user = credentialStore.getUserWithCredential(credential);
-        if (user == null) {
-            IdGenerator idGenerator = getContext().getInstance(IdGenerator.class, defaultIdGenerator);
-            Identifier userId = idGenerator.next();
-            user = new DefaultUser(userId);
+        if (user != null) {
+            throw new UserRegistrationFailedException("User with specified credential already exists");
         }
+        user = createUser();
         credentialStore.addCredential(user, credential);
         return user;
     }
@@ -55,5 +54,11 @@ public class LoginService extends BaseService {
 
     private SessionManager getSessionManager() {
         return getContext().getInstance(SessionManager.class);
+    }
+
+    private User createUser() {
+        IdGenerator idGenerator = getContext().getInstance(IdGenerator.class, defaultIdGenerator);
+        Identifier userId = idGenerator.next();
+        return new DefaultUser(userId);
     }
 }
