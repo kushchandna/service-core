@@ -1,5 +1,6 @@
 package com.kush.lib.service.server;
 
+import com.kush.lib.service.remoting.auth.AuthToken;
 import com.kush.lib.service.remoting.auth.User;
 import com.kush.lib.service.server.authentication.Auth;
 import com.kush.lib.service.server.authentication.AuthenticationFailedException;
@@ -28,7 +29,8 @@ public abstract class BaseService {
 
     protected final User getCurrentUser() throws AuthenticationFailedException {
         Auth authenticator = context.getInstance(Auth.class);
-        User currentUser = authenticator.getCurrentUser();
+        AuthToken token = authenticator.getToken();
+        User currentUser = token.getUser();
         if (currentUser == null) {
             throw new AuthenticationFailedException("Authentication required to perform this action");
         }

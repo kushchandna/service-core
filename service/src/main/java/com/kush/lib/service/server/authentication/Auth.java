@@ -1,7 +1,6 @@
 package com.kush.lib.service.server.authentication;
 
 import com.kush.lib.service.remoting.auth.AuthToken;
-import com.kush.lib.service.remoting.auth.User;
 
 public class Auth {
 
@@ -23,8 +22,7 @@ public class Auth {
         }
     }
 
-    public User getCurrentUser() {
-        AuthToken token = CURRENT.get();
-        return token == null ? null : token.getUser();
+    public AuthToken getToken() {
+        return CURRENT.get();
     }
 }
