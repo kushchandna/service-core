@@ -30,10 +30,10 @@ public abstract class BaseService {
     protected final User getCurrentUser() throws AuthenticationFailedException {
         Auth authenticator = context.getInstance(Auth.class);
         AuthToken token = authenticator.getToken();
-        User currentUser = token.getUser();
-        if (currentUser == null) {
+        if (token == null) {
             throw new AuthenticationFailedException("Authentication required to perform this action");
         }
+        User currentUser = token.getUser();
         SessionManager sessionManager = context.getInstance(SessionManager.class);
         if (!sessionManager.checkSessionExists(currentUser)) {
             throw new AuthenticationFailedException("No active session found for user with id " + currentUser.getId());
