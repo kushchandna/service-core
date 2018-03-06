@@ -33,7 +33,6 @@ public abstract class SampleApplication {
     private static final com.kush.logger.Logger LOGGER =
             com.kush.logger.LoggerFactory.INSTANCE.getLogger(SampleApplication.class);
 
-
     public void setupServer() throws StartupFailedException {
         ApplicationServer server = createServerInstance();
         registerReceivers(server);
