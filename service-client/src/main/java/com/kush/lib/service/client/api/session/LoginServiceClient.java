@@ -35,7 +35,7 @@ public class LoginServiceClient extends ServiceClient {
     }
 
     public Response<Void> logout() {
-        Response<Void> response = invoke("logout");
+        Response<Void> response = authInvoke("logout");
         response.addResultListener(new ResultListener<Void>() {
 
             @Override

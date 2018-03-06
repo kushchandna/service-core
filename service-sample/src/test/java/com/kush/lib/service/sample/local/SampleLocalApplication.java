@@ -20,6 +20,7 @@ import com.kush.lib.service.sample.server.SampleHelloTextProvider;
 import com.kush.lib.service.server.ApplicationServer;
 import com.kush.lib.service.server.Context;
 import com.kush.lib.service.server.ContextBuilder;
+import com.kush.lib.service.server.authentication.credential.UserCredential;
 import com.kush.lib.service.server.authentication.credential.password.PasswordBasedCredentialPersistor;
 import com.kush.lib.service.server.authentication.credential.password.PersistablePasswordBasedCredential;
 import com.kush.lib.service.server.local.LocalApplicationServer;
@@ -58,6 +59,7 @@ public class SampleLocalApplication {
         Context context = ContextBuilder.create()
             .withInstance(SampleHelloTextProvider.class, greetingProvider)
             .withInstance(PasswordBasedCredentialPersistor.class, passwordBasedCredentialPersistor)
+            .withPersistor(UserCredential.class, new InMemoryUserCredentialPersistor())
             .build();
         server.start(context);
     }
@@ -131,5 +133,17 @@ public class SampleLocalApplication {
         LoginServiceClient loginServiceClient = serviceClientProvider.getServiceClient(LoginServiceClient.class);
         Response<User> response = loginServiceClient.register(credential);
         response.waitForResult();
+    }
+
+    private static final class InMemoryUserCredentialPersistor extends InMemoryPersistor<UserCredential> {
+
+        private InMemoryUserCredentialPersistor() {
+            super(new SequentialIdGenerator());
+        }
+
+        @Override
+        protected UserCredential createPersistableObject(Identifier id, UserCredential reference) {
+            return new UserCredential(id, reference.getUser(), reference.getCredential());
+        }
     }
 }

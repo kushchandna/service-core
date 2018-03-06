@@ -15,7 +15,12 @@ public class ContextBuilder {
     }
 
     public ContextBuilder withInstance(Object key, Object instance) {
-        instances.put(key, instance);
+        Context.addInstance(instances, key, instance);
+        return this;
+    }
+
+    public ContextBuilder withPersistor(Object key, Object instance) {
+        Context.addPersistor(instances, key, instance);
         return this;
     }
 

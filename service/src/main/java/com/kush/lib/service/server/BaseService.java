@@ -33,7 +33,7 @@ public abstract class BaseService {
             throw new AuthenticationFailedException("Authentication required to perform this action");
         }
         SessionManager sessionManager = context.getInstance(SessionManager.class);
-        if (sessionManager.checkSessionExists(currentUser)) {
+        if (!sessionManager.checkSessionExists(currentUser)) {
             throw new AuthenticationFailedException("No active session found for user with id " + currentUser.getId());
         }
         return currentUser;

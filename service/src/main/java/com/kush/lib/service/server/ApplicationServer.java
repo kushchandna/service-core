@@ -3,15 +3,16 @@ package com.kush.lib.service.server;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.kush.lib.persistence.api.Persistor;
 import com.kush.lib.service.remoting.ServiceRequestResolver;
 import com.kush.lib.service.remoting.StartupFailedException;
 import com.kush.lib.service.remoting.receiver.ServiceRequestReceiver;
 import com.kush.lib.service.server.authentication.Auth;
 import com.kush.lib.service.server.authentication.LoginService;
 import com.kush.lib.service.server.authentication.SessionManager;
-import com.kush.lib.service.server.authentication.credential.CredentialStore;
-import com.kush.lib.service.server.authentication.credential.password.PasswordBasedCredentialPersistor;
-import com.kush.lib.service.server.authentication.credential.password.PasswordBasedCredentialStore;
+import com.kush.lib.service.server.authentication.credential.DefaultUserCredentialPersistor;
+import com.kush.lib.service.server.authentication.credential.UserCredential;
+import com.kush.lib.service.server.authentication.credential.UserCredentialPersistor;
 import com.kush.utils.id.SequentialIdGenerator;
 
 public class ApplicationServer {
@@ -49,14 +50,9 @@ public class ApplicationServer {
     protected void postStartup(Context context, ServiceRequestResolver serviceRequestResolver) {
     }
 
-    private void enrichContext(Context context) {
-        if (context.containsKey(LoginService.KEY_USER_ID_GEN)) {
-            context.addInstance(LoginService.KEY_USER_ID_GEN, new SequentialIdGenerator());
-        }
-        PasswordBasedCredentialPersistor delegate = context.getInstance(PasswordBasedCredentialPersistor.class);
-        context.addInstance(CredentialStore.class, new PasswordBasedCredentialStore(delegate));
-        context.addInstance(Auth.class, new Auth());
-        context.addInstance(SessionManager.class, new SessionManager());
+    private void enrichContext(Context context) throws StartupFailedException {
+        enrichUserCredentialPersistor(context);
+        enrichSessionRelatedInformation(context);
     }
 
     private void startServiceRequestReceivers(ServiceRequestResolver requestResolver) throws StartupFailedException {
@@ -73,5 +69,23 @@ public class ApplicationServer {
             LOGGER.error(e);
             throw new StartupFailedException(e.getMessage(), e);
         }
+    }
+
+    private void enrichUserCredentialPersistor(Context context) throws StartupFailedException {
+        if (!context.containsKey(UserCredentialPersistor.class)) {
+            if (!context.containsPersistor(UserCredential.class)) {
+                throw new StartupFailedException("No user credential persistor specified");
+            }
+            Persistor<UserCredential> delegate = context.getPersistor(UserCredential.class);
+            context.addInstance(UserCredentialPersistor.class, new DefaultUserCredentialPersistor(delegate));
+        }
+    }
+
+    private void enrichSessionRelatedInformation(Context context) {
+        if (!context.containsKey(LoginService.KEY_USER_ID_GEN)) {
+            context.addInstance(LoginService.KEY_USER_ID_GEN, new SequentialIdGenerator());
+        }
+        context.addInstance(Auth.class, new Auth());
+        context.addInstance(SessionManager.class, new SessionManager());
     }
 }
