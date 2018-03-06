@@ -14,6 +14,10 @@ public class Context {
         instances.put(key, value);
     }
 
+    public boolean containsKey(Object key) {
+        return instances.containsKey(key);
+    }
+
     public <T> T getInstance(Object key, Class<T> returnType, T defaultValue) {
         if (!instances.containsKey(key)) {
             return defaultValue;

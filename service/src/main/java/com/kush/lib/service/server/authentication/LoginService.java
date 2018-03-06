@@ -9,16 +9,11 @@ import com.kush.lib.service.server.annotations.ServiceMethod;
 import com.kush.lib.service.server.authentication.credential.CredentialStore;
 import com.kush.utils.id.IdGenerator;
 import com.kush.utils.id.Identifier;
-import com.kush.utils.id.SequentialIdGenerator;
 
 @Service(name = "Login")
 public class LoginService extends BaseService {
 
-    private final SequentialIdGenerator defaultIdGenerator;
-
-    public LoginService() {
-        defaultIdGenerator = new SequentialIdGenerator();
-    }
+    public static final String KEY_USER_ID_GEN = "USER_ID_GEN";
 
     @ServiceMethod(name = "register")
     public User register(Credential credential) throws UserRegistrationFailedException {
@@ -57,7 +52,7 @@ public class LoginService extends BaseService {
     }
 
     private User createUser() {
-        IdGenerator idGenerator = getContext().getInstance(IdGenerator.class, defaultIdGenerator);
+        IdGenerator idGenerator = getContext().getInstance(KEY_USER_ID_GEN, IdGenerator.class);
         Identifier userId = idGenerator.next();
         return new DefaultUser(userId);
     }

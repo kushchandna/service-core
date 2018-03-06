@@ -7,10 +7,12 @@ import com.kush.lib.service.remoting.ServiceRequestResolver;
 import com.kush.lib.service.remoting.StartupFailedException;
 import com.kush.lib.service.remoting.receiver.ServiceRequestReceiver;
 import com.kush.lib.service.server.authentication.Auth;
+import com.kush.lib.service.server.authentication.LoginService;
 import com.kush.lib.service.server.authentication.SessionManager;
 import com.kush.lib.service.server.authentication.credential.CredentialStore;
 import com.kush.lib.service.server.authentication.credential.password.PasswordBasedCredentialPersistor;
 import com.kush.lib.service.server.authentication.credential.password.PasswordBasedCredentialStore;
+import com.kush.utils.id.SequentialIdGenerator;
 
 public class ApplicationServer {
 
@@ -48,6 +50,9 @@ public class ApplicationServer {
     }
 
     private void enrichContext(Context context) {
+        if (context.containsKey(LoginService.KEY_USER_ID_GEN)) {
+            context.addInstance(LoginService.KEY_USER_ID_GEN, new SequentialIdGenerator());
+        }
         PasswordBasedCredentialPersistor delegate = context.getInstance(PasswordBasedCredentialPersistor.class);
         context.addInstance(CredentialStore.class, new PasswordBasedCredentialStore(delegate));
         context.addInstance(Auth.class, new Auth());
