@@ -1,10 +1,11 @@
-package com.kush.lib.service.sample.local;
+package com.kush.lib.service.sample.application;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 import com.kush.lib.persistence.helpers.InMemoryPersistor;
 import com.kush.lib.service.client.api.ApplicationClient;
+import com.kush.lib.service.client.api.ServiceClientActivationFailedException;
 import com.kush.lib.service.client.api.ServiceClientProvider;
 import com.kush.lib.service.client.api.session.LoginServiceClient;
 import com.kush.lib.service.remoting.StartupFailedException;
@@ -12,7 +13,6 @@ import com.kush.lib.service.remoting.auth.AuthToken;
 import com.kush.lib.service.remoting.auth.User;
 import com.kush.lib.service.remoting.auth.password.PasswordBasedCredential;
 import com.kush.lib.service.remoting.connect.ServiceConnectionFactory;
-import com.kush.lib.service.remoting.connect.local.LocalServiceConnectionFactory;
 import com.kush.lib.service.sample.client.SampleHelloServiceClient;
 import com.kush.lib.service.sample.server.SampleHelloService;
 import com.kush.lib.service.sample.server.SampleHelloTextProvider;
@@ -20,7 +20,6 @@ import com.kush.lib.service.server.ApplicationServer;
 import com.kush.lib.service.server.Context;
 import com.kush.lib.service.server.ContextBuilder;
 import com.kush.lib.service.server.authentication.credential.UserCredential;
-import com.kush.lib.service.server.local.LocalApplicationServer;
 import com.kush.utils.async.RequestFailedException;
 import com.kush.utils.async.Response;
 import com.kush.utils.async.Response.ErrorListener;
@@ -29,26 +28,15 @@ import com.kush.utils.exceptions.ObjectNotFoundException;
 import com.kush.utils.id.Identifier;
 import com.kush.utils.id.SequentialIdGenerator;
 
-public class SampleLocalApplication {
+public abstract class SampleApplication {
 
     private static final com.kush.logger.Logger LOGGER =
-            com.kush.logger.LoggerFactory.INSTANCE.getLogger(SampleLocalApplication.class);
+            com.kush.logger.LoggerFactory.INSTANCE.getLogger(SampleApplication.class);
 
-    public static void main(String[] args) throws Exception {
-        setupServer();
-        ServiceConnectionFactory connFactory = createLocalServerBasedConnectionFactory();
-        ApplicationClient client = setupClient(connFactory);
-        ServiceClientProvider serviceClientProvider = client.getServiceClientProvider();
-        invokeSayHello(serviceClientProvider);
-        PasswordBasedCredential credential = new PasswordBasedCredential("testusr", "testpwd".toCharArray());
-        registerUser(serviceClientProvider, credential);
-        doLogin(serviceClientProvider, credential);
-        invokeSayHelloToMe(serviceClientProvider);
-        doLogout(serviceClientProvider);
-    }
 
-    private static void setupServer() throws StartupFailedException {
-        ApplicationServer server = new LocalApplicationServer();
+    public void setupServer() throws StartupFailedException {
+        ApplicationServer server = createServerInstance();
+        registerReceivers(server);
         server.registerService(SampleHelloService.class);
         SampleHelloTextProvider greetingProvider = new SampleHelloTextProvider();
         Context context = ContextBuilder.create()
@@ -58,18 +46,35 @@ public class SampleLocalApplication {
         server.start(context);
     }
 
-    private static ServiceConnectionFactory createLocalServerBasedConnectionFactory() {
-        return new LocalServiceConnectionFactory();
-    }
-
-    private static ApplicationClient setupClient(ServiceConnectionFactory connFactory) throws Exception {
+    public ApplicationClient setupClient() throws ServiceClientActivationFailedException {
+        ServiceConnectionFactory connectionFactory = createServiceConnectionFactory();
         ApplicationClient client = new ApplicationClient();
-        client.start(connFactory);
+        client.start(connectionFactory);
         Executor executor = Executors.newSingleThreadExecutor();
         client.activateServiceClient(SampleHelloServiceClient.class, executor);
         client.activateLoginServiceClient(executor);
         return client;
     }
+
+    public void performClientOperations(ApplicationClient client) throws Exception {
+        ServiceClientProvider serviceClientProvider = client.getServiceClientProvider();
+        invokeSayHello(serviceClientProvider);
+        PasswordBasedCredential credential = new PasswordBasedCredential("testusr", "testpwd".toCharArray());
+        registerUser(serviceClientProvider, credential);
+        doLogin(serviceClientProvider, credential);
+        invokeSayHelloToMe(serviceClientProvider);
+        doLogout(serviceClientProvider);
+    }
+
+    protected ApplicationServer createServerInstance() {
+        return new ApplicationServer();
+    }
+
+    protected void registerReceivers(ApplicationServer server) {
+    }
+
+    protected abstract ServiceConnectionFactory createServiceConnectionFactory();
+
 
     private static void invokeSayHello(ServiceClientProvider serviceClientProvider) throws Exception {
         SampleHelloServiceClient sampleServiceClient = serviceClientProvider.getServiceClient(SampleHelloServiceClient.class);

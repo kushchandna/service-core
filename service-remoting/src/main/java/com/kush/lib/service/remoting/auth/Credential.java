@@ -1,4 +1,6 @@
 package com.kush.lib.service.remoting.auth;
 
-public interface Credential {
+import java.io.Serializable;
+
+public interface Credential extends Serializable {
 }

@@ -6,6 +6,8 @@ import com.kush.lib.service.remoting.auth.Credential;
 
 public class PasswordBasedCredential implements Credential {
 
+    private static final long serialVersionUID = 1L;
+
     private final String username;
     private final char[] password;
 

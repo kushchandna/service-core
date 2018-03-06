@@ -1,6 +1,10 @@
 package com.kush.utils.id;
 
-public class Identifier {
+import java.io.Serializable;
+
+public class Identifier implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     public static final Identifier NULL = new Identifier(null);
 
