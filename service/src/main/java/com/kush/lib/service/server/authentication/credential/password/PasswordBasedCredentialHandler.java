@@ -1,5 +1,7 @@
 package com.kush.lib.service.server.authentication.credential.password;
 
+import java.util.Arrays;
+
 import com.kush.lib.service.remoting.auth.Credential;
 import com.kush.lib.service.remoting.auth.password.PasswordBasedCredential;
 import com.kush.lib.service.server.authentication.credential.CredentialHandler;
@@ -30,7 +32,7 @@ public class PasswordBasedCredentialHandler implements CredentialHandler {
         PasswordBasedCredential pwdCredToCheck = (PasswordBasedCredential) credentialToCheck;
         PasswordBasedCredential referencePwdCred = (PasswordBasedCredential) referenceCredential;
         if (pwdCredToCheck.getUsername().equals(referencePwdCred.getUsername())
-                && pwdCredToCheck.getPassword().equals(referencePwdCred.getPassword())) {
+                && Arrays.equals(pwdCredToCheck.getPassword(), referencePwdCred.getPassword())) {
             return true;
         }
         return false;
