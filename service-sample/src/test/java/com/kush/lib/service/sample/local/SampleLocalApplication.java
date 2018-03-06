@@ -3,7 +3,6 @@ package com.kush.lib.service.sample.local;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
-import com.kush.lib.persistence.api.Persistor;
 import com.kush.lib.persistence.helpers.InMemoryPersistor;
 import com.kush.lib.service.client.api.ApplicationClient;
 import com.kush.lib.service.client.api.ServiceClientProvider;
@@ -21,15 +20,12 @@ import com.kush.lib.service.server.ApplicationServer;
 import com.kush.lib.service.server.Context;
 import com.kush.lib.service.server.ContextBuilder;
 import com.kush.lib.service.server.authentication.credential.UserCredential;
-import com.kush.lib.service.server.authentication.credential.password.PasswordBasedCredentialPersistor;
-import com.kush.lib.service.server.authentication.credential.password.PersistablePasswordBasedCredential;
 import com.kush.lib.service.server.local.LocalApplicationServer;
 import com.kush.utils.async.RequestFailedException;
 import com.kush.utils.async.Response;
 import com.kush.utils.async.Response.ErrorListener;
 import com.kush.utils.async.Response.ResultListener;
 import com.kush.utils.exceptions.ObjectNotFoundException;
-import com.kush.utils.id.IdGenerator;
 import com.kush.utils.id.Identifier;
 import com.kush.utils.id.SequentialIdGenerator;
 
@@ -54,11 +50,9 @@ public class SampleLocalApplication {
     private static void setupServer() throws StartupFailedException {
         ApplicationServer server = new LocalApplicationServer();
         server.registerService(SampleHelloService.class);
-        PasswordBasedCredentialPersistor passwordBasedCredentialPersistor = createPasswordBasedCredentialPersistor();
         SampleHelloTextProvider greetingProvider = new SampleHelloTextProvider();
         Context context = ContextBuilder.create()
             .withInstance(SampleHelloTextProvider.class, greetingProvider)
-            .withInstance(PasswordBasedCredentialPersistor.class, passwordBasedCredentialPersistor)
             .withPersistor(UserCredential.class, new InMemoryUserCredentialPersistor())
             .build();
         server.start(context);
@@ -98,20 +92,6 @@ public class SampleLocalApplication {
                 LOGGER.info("[APP] Error occured: %s", error.getMessage());
             }
         });
-    }
-
-    private static PasswordBasedCredentialPersistor createPasswordBasedCredentialPersistor() {
-        IdGenerator idGenerator = new SequentialIdGenerator();
-        Persistor<PersistablePasswordBasedCredential> delegate =
-                new InMemoryPersistor<PersistablePasswordBasedCredential>(idGenerator) {
-
-                    @Override
-                    protected PersistablePasswordBasedCredential createPersistableObject(Identifier id,
-                            PersistablePasswordBasedCredential reference) {
-                        return new PersistablePasswordBasedCredential(id, reference.get());
-                    }
-                };
-        return new PasswordBasedCredentialPersistor(delegate);
     }
 
     private static void doLogin(ServiceClientProvider serviceClientProvider, PasswordBasedCredential credential)
