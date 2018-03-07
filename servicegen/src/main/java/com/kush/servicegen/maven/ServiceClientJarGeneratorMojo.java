@@ -26,8 +26,6 @@ import com.kush.servicegen.javapoet.JavapoetBasedServiceClientCodeGenerator;
 @Mojo(name = "service-client-generator")
 public class ServiceClientJarGeneratorMojo extends AbstractMojo {
 
-    private boolean cleanupSourceFiles;
-
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
         String serviceClassName = null;
@@ -44,17 +42,17 @@ public class ServiceClientJarGeneratorMojo extends AbstractMojo {
         ServiceReader serviceReader = new ServiceReader();
         ServiceInfo serviceInfo = serviceReader.readService(serviceClass);
         CodeGenerator codeGenerator = new JavapoetBasedServiceClientCodeGenerator(serviceInfo);
-        JavaFileObject generatedJavaFileObject = codeGenerator.generate(targetPackage, targetDirectory);
+        codeGenerator.generate(targetPackage, targetDirectory);
     }
 
-    private static void compileGeneratedFile(JavaFileObject generatedFileObject, String targetDirectory) {
+    static void compileGeneratedFile(JavaFileObject generatedFileObject, String targetDirectory) {
         JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
         List<String> options = asList("-d", targetDirectory);
         CompilationTask task = compiler.getTask(null, null, null, options, null, asList(generatedFileObject));
         task.call();
     }
 
-    private static void loadCompiledClass(File generatedFile, String targetClientPackage, String generatedServiceClientName)
+    static void loadCompiledClass(File generatedFile, String targetClientPackage, String generatedServiceClientName)
             throws Exception {
         URL generatedFileUrl = generatedFile.toURI().toURL();
         try (URLClassLoader urlClassLoader = new URLClassLoader(new URL[] { generatedFileUrl })) {
