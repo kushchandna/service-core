@@ -23,6 +23,7 @@ import javax.tools.ToolProvider;
 
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
@@ -32,6 +33,7 @@ import com.kush.servicegen.ServiceInfo;
 import com.kush.servicegen.ServiceReader;
 import com.kush.utils.async.Response;
 
+@Ignore
 public class JavapoetBasedServiceClientCodeGeneratorTest {
 
     private static final String TARGET_PACKAGE_CLIENT = "com.kush.service.client.gen";
