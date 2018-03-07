@@ -14,7 +14,7 @@ public class ServiceInfo {
 
     private final Class<?> serviceClass;
 
-    public ServiceInfo(Class<?> serviceClass) {
+    ServiceInfo(Class<?> serviceClass) {
         this.serviceClass = serviceClass;
     }
 
