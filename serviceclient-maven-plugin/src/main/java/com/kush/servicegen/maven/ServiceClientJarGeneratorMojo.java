@@ -15,7 +15,7 @@ import com.kush.servicegen.CodeGenerationFailedException;
 import com.kush.servicegen.clients.ServiceClientInfo;
 import com.kush.servicegen.clients.ServiceClientJarGenerator;
 
-@Mojo(name = "service-client-generator")
+@Mojo(name = "generate-service-clients")
 public class ServiceClientJarGeneratorMojo extends AbstractMojo {
 
     @Parameter
