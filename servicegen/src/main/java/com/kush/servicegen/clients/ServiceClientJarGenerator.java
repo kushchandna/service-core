@@ -60,14 +60,17 @@ public class ServiceClientJarGenerator {
         task.call();
     }
 
-    private JarFile generateJar(File tempDir) throws FileNotFoundException, IOException {
+    private JarFile generateJar(File parentDir) throws FileNotFoundException, IOException {
         targetDirectory.mkdirs();
         File targetJarFile = new File(targetDirectory, targetJarName);
         OutputStream fos = new FileOutputStream(targetJarFile);
         Manifest manifest = new Manifest();
         manifest.getMainAttributes().put(Attributes.Name.MANIFEST_VERSION, "1.0");
         try (JarOutputStream jarOs = new JarOutputStream(fos, manifest)) {
-            JarUtils.addToJar(tempDir, jarOs);
+            File[] files = parentDir.listFiles();
+            for (File file : files) {
+                JarUtils.addToJar(file, jarOs);
+            }
         }
         return new JarFile(targetJarFile);
     }
