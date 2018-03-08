@@ -7,8 +7,11 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.nio.charset.Charset;
+import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
 import java.util.jar.Attributes;
 import java.util.jar.JarFile;
 import java.util.jar.JarOutputStream;
@@ -41,8 +44,12 @@ public class ServiceClientJarGenerator {
 
     public JarFile generate(Collection<ServiceClientInfo> serviceClientInfos)
             throws ClassNotFoundException, CodeGenerationFailedException, IOException {
-        File sourceDir = Files.createTempDir();
-        File binDir = Files.createTempDir();
+        File generatedFilesDir = new File(targetDirectory, "generated");
+        generatedFilesDir.mkdirs();
+        File sourceDir = new File(generatedFilesDir, "sources");
+        sourceDir.mkdirs();
+        File binDir = new File(generatedFilesDir, "bin");
+        binDir.mkdirs();
         for (ServiceClientInfo serviceClientInfo : serviceClientInfos) {
             String targetPackage = serviceClientInfo.getTargetPackage();
             Class<?> serviceClass = getServiceClass(serviceClientInfo);
@@ -53,11 +60,22 @@ public class ServiceClientJarGenerator {
         return generateJar(binDir);
     }
 
-    private void compileGeneratedFile(JavaFileObject generatedFileObject, String targetDirectory) {
+    private void compileGeneratedFile(JavaFileObject generatedFileObject, String targetDirectory) throws IOException {
         JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
-        List<String> options = asList("-d", targetDirectory);
+        String classPath = Arrays.toString(getClassPath()).replace(", ", ";").replace('\\', '/');
+        String classPathText = "\"" + classPath.substring(1, classPath.length() - 1) + "\"";
+        Files.write(classPathText, new File("test.txt"), Charset.defaultCharset());
+        Iterable<String> options = Arrays.asList(
+                "-d", targetDirectory,
+                "-cp", classPathText);
         CompilationTask task = compiler.getTask(null, null, null, options, null, asList(generatedFileObject));
         task.call();
+    }
+
+    private File[] getClassPath() {
+        URLClassLoader classLoader = (URLClassLoader) getClass().getClassLoader();
+        URL[] urls = classLoader.getURLs();
+        return Arrays.stream(urls).map(url -> new File(url.getFile())).toArray(File[]::new);
     }
 
     private JarFile generateJar(File parentDir) throws FileNotFoundException, IOException {
@@ -82,6 +100,6 @@ public class ServiceClientJarGenerator {
 
     private Class<?> getServiceClass(ServiceClientInfo serviceClientInfo) throws ClassNotFoundException {
         String serviceClassName = serviceClientInfo.getServiceClassName();
-        return Class.forName(serviceClassName);
+        return Class.forName(serviceClassName, true, getClass().getClassLoader());
     }
 }
