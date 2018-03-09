@@ -56,6 +56,7 @@ public class JavapoetBasedServiceClientCodeGenerator implements CodeGenerator {
             .addModifiers(PUBLIC)
             .addMethods(methodSpecs)
             .superclass(ServiceClient.class)
+            .addJavadoc("@generated\n")
             .build();
     }
 

@@ -9,7 +9,7 @@ import java.util.jar.JarOutputStream;
 
 public class JarUtils {
 
-    public static void addToJar(File source, JarOutputStream target) throws IOException {
+    public static void addToJar(File parent, File source, JarOutputStream target) throws IOException {
         BufferedInputStream in = null;
         try {
             if (source.isDirectory()) {
@@ -18,17 +18,17 @@ public class JarUtils {
                     if (!name.endsWith("/")) {
                         name += "/";
                     }
-                    addNextEntry(source, target, name);
+                    addNextEntry(parent, source, target, name);
                     target.closeEntry();
                 }
                 for (File nestedFile : source.listFiles()) {
-                    addToJar(nestedFile, target);
+                    addToJar(parent, nestedFile, target);
                 }
                 return;
             }
 
             String name = normaliseName(source);
-            addNextEntry(source, target, name);
+            addNextEntry(parent, source, target, name);
             FileInputStream fis = new FileInputStream(source);
             in = new BufferedInputStream(fis);
             byte[] buffer = new byte[1024];
@@ -47,7 +47,8 @@ public class JarUtils {
         }
     }
 
-    private static void addNextEntry(File source, JarOutputStream target, String name) throws IOException {
+    private static void addNextEntry(File parent, File source, JarOutputStream target, String name) throws IOException {
+        name = name.substring(parent.getAbsolutePath().length() + 1);
         JarEntry entry = new JarEntry(name);
         entry.setTime(source.lastModified());
         target.putNextEntry(entry);

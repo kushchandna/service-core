@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.jar.Attributes;
@@ -22,7 +21,6 @@ import javax.tools.JavaCompiler.CompilationTask;
 import javax.tools.JavaFileObject;
 import javax.tools.ToolProvider;
 
-import com.google.common.io.Files;
 import com.kush.servicegen.CodeGenerationFailedException;
 import com.kush.servicegen.CodeGenerator;
 import com.kush.servicegen.ServiceInfo;
@@ -64,7 +62,6 @@ public class ServiceClientJarGenerator {
         JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
         String classPath = Arrays.toString(getClassPath()).replace(", ", ";").replace('\\', '/');
         String classPathText = "\"" + classPath.substring(1, classPath.length() - 1) + "\"";
-        Files.write(classPathText, new File("test.txt"), Charset.defaultCharset());
         Iterable<String> options = Arrays.asList(
                 "-d", targetDirectory,
                 "-cp", classPathText);
@@ -87,7 +84,7 @@ public class ServiceClientJarGenerator {
         try (JarOutputStream jarOs = new JarOutputStream(fos, manifest)) {
             File[] files = parentDir.listFiles();
             for (File file : files) {
-                JarUtils.addToJar(file, jarOs);
+                JarUtils.addToJar(parentDir, file, jarOs);
             }
         }
         return new JarFile(targetJarFile);
