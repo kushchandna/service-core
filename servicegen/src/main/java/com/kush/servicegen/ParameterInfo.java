@@ -3,6 +3,8 @@ package com.kush.servicegen;
 import java.lang.reflect.Parameter;
 import java.lang.reflect.Type;
 
+import com.kush.lib.service.server.annotations.Exportable;
+
 public class ParameterInfo {
 
     private final Parameter parameter;
@@ -15,7 +17,15 @@ public class ParameterInfo {
         return parameter.getName();
     }
 
-    public Type getType() {
+    public Type getParameterizedType() {
         return parameter.getParameterizedType();
+    }
+
+    public Class<?> getType() {
+        return parameter.getType();
+    }
+
+    public boolean isExportable() {
+        return getType().isAnnotationPresent(Exportable.class);
     }
 }
