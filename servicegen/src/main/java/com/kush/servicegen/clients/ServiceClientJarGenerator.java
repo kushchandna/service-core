@@ -11,6 +11,8 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.jar.Attributes;
 import java.util.jar.JarFile;
 import java.util.jar.JarOutputStream;
@@ -21,8 +23,8 @@ import javax.tools.JavaCompiler.CompilationTask;
 import javax.tools.JavaFileObject;
 import javax.tools.ToolProvider;
 
+import com.google.common.io.Files;
 import com.kush.servicegen.CodeGenerationFailedException;
-import com.kush.servicegen.CodeGenerator;
 import com.kush.servicegen.ServiceInfo;
 import com.kush.servicegen.ServiceReader;
 import com.kush.servicegen.javapoet.JavapoetBasedServiceClientCodeGenerator;
@@ -48,12 +50,23 @@ public class ServiceClientJarGenerator {
         sourceDir.mkdirs();
         File binDir = new File(generatedFilesDir, "bin");
         binDir.mkdirs();
+        Set<Class<?>> classesToExport = new HashSet<>();
         for (ServiceClientInfo serviceClientInfo : serviceClientInfos) {
             String targetPackage = serviceClientInfo.getTargetPackage();
             Class<?> serviceClass = getServiceClass(serviceClientInfo);
-            CodeGenerator codeGenerator = createCodeGenerator(serviceClass);
+            JavapoetBasedServiceClientCodeGenerator codeGenerator = createCodeGenerator(serviceClass);
             JavaFileObject javaFileObject = codeGenerator.generate(targetPackage, sourceDir);
             compileGeneratedFile(javaFileObject, binDir.getAbsolutePath());
+            classesToExport.addAll(codeGenerator.getClassesToExport());
+        }
+        for (Class<?> classToExport : classesToExport) {
+            File classFile = JarUtils.getClassFile(classToExport);
+            String targetClassName = classToExport.getName();
+            String targetClassRelativePath = targetClassName.replace('.', '/') + ".class";
+            File targetClassFile = new File(binDir, targetClassRelativePath);
+            targetClassFile.getParentFile().mkdirs();
+            targetClassFile.createNewFile();
+            Files.copy(classFile, targetClassFile);
         }
         return generateJar(binDir);
     }
@@ -81,16 +94,16 @@ public class ServiceClientJarGenerator {
         OutputStream fos = new FileOutputStream(targetJarFile);
         Manifest manifest = new Manifest();
         manifest.getMainAttributes().put(Attributes.Name.MANIFEST_VERSION, "1.0");
-        try (JarOutputStream jarOs = new JarOutputStream(fos, manifest)) {
+        try (JarOutputStream jarOS = new JarOutputStream(fos, manifest)) {
             File[] files = parentDir.listFiles();
             for (File file : files) {
-                JarUtils.addToJar(parentDir, file, jarOs);
+                JarUtils.addToJar(parentDir, file, jarOS);
             }
         }
         return new JarFile(targetJarFile);
     }
 
-    private CodeGenerator createCodeGenerator(Class<?> serviceClass) {
+    private JavapoetBasedServiceClientCodeGenerator createCodeGenerator(Class<?> serviceClass) {
         ServiceInfo serviceInfo = serviceReader.readService(serviceClass);
         return new JavapoetBasedServiceClientCodeGenerator(serviceInfo);
     }

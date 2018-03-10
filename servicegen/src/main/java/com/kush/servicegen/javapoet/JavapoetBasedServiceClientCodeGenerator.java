@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -45,6 +46,11 @@ public class JavapoetBasedServiceClientCodeGenerator implements CodeGenerator {
         } catch (IOException e) {
             throw new CodeGenerationFailedException(e.getMessage(), e);
         }
+    }
+
+    // TODO improve this method (it should not be here)
+    public Set<Class<?>> getClassesToExport() {
+        return Collections.unmodifiableSet(classesToExport);
     }
 
     private JavaFile createJavaFile(String targetPackage, ServiceInfo serviceInfo) throws CodeGenerationFailedException {
