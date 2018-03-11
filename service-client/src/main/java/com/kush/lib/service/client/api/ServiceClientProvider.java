@@ -4,8 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Executor;
 
-import com.kush.utils.exceptions.ObjectNotFoundException;
-
 public class ServiceClientProvider {
 
     private static final com.kush.logger.Logger LOGGER =
@@ -27,10 +25,10 @@ public class ServiceClientProvider {
         LOGGER.info("Activated service client %s", serviceClientClass.getName());
     }
 
-    public <S extends ServiceClient> S getServiceClient(Class<S> serviceClientClass) throws ObjectNotFoundException {
+    public <S extends ServiceClient> S getServiceClient(Class<S> serviceClientClass) {
         ServiceClient serviceClient = serviceClients.get(serviceClientClass);
         if (serviceClient == null) {
-            throw new ObjectNotFoundException("service client", serviceClientClass);
+            throw new IllegalArgumentException("Service client not found for class " + serviceClientClass);
         }
         return serviceClientClass.cast(serviceClient);
     }

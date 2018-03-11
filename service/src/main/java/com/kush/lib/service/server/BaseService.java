@@ -1,10 +1,12 @@
 package com.kush.lib.service.server;
 
+import com.kush.lib.persistence.api.Persistor;
 import com.kush.lib.service.remoting.auth.AuthToken;
 import com.kush.lib.service.remoting.auth.User;
 import com.kush.lib.service.server.authentication.Auth;
 import com.kush.lib.service.server.authentication.AuthenticationFailedException;
 import com.kush.lib.service.server.authentication.SessionManager;
+import com.kush.utils.id.Identifiable;
 
 public abstract class BaseService {
 
@@ -39,5 +41,13 @@ public abstract class BaseService {
             throw new AuthenticationFailedException("No active session found for user with id " + currentUser.getId());
         }
         return currentUser;
+    }
+
+    protected final <T extends Identifiable> Persistor<T> getPersistor(Class<T> type) {
+        return getContext().getPersistor(type);
+    }
+
+    protected final <T> T getInstance(Class<T> type) {
+        return getContext().getInstance(type);
     }
 }

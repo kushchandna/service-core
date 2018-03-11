@@ -30,7 +30,7 @@ public abstract class ServiceClient {
         this.serviceName = serviceName;
     }
 
-    public void activate(Executor executor, ServiceConnectionFactory connectionFactory, SessionManager sessionManager) {
+    void activate(Executor executor, ServiceConnectionFactory connectionFactory, SessionManager sessionManager) {
         this.connectionFactory = connectionFactory;
         this.sessionManager = sessionManager;
         responder = new Responder(executor);
