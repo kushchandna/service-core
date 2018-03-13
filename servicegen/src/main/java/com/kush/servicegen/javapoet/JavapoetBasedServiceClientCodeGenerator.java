@@ -83,7 +83,7 @@ public class JavapoetBasedServiceClientCodeGenerator implements CodeGenerator {
 
     private MethodSpec createServiceClientConstructor(ServiceInfo serviceInfo) {
         return MethodSpec.constructorBuilder()
-            .addStatement("super($S)", serviceInfo.getName())
+            .addStatement("super($S)", serviceInfo.getServiceId())
             .addModifiers(PUBLIC)
             .build();
     }
