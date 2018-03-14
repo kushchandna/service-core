@@ -26,7 +26,7 @@ class ServiceInitializer {
 
     ServiceRequestResolver initialize(Set<Class<? extends BaseService>> serviceClasses)
             throws ServiceInitializationFailedException {
-        LOGGER.info("Initializing %d services", serviceClasses.size());
+        LOGGER.info("Initializing %d service(s)", serviceClasses.size());
         Map<ServiceRequestKey, ServiceInvoker> serviceInvokers = new HashMap<>();
         for (Class<? extends BaseService> serviceClass : serviceClasses) {
             registerServiceInvokers(serviceClass, context, serviceInvokers);
@@ -73,7 +73,7 @@ class ServiceInitializer {
     private void registerServiceInvokers(Class<? extends BaseService> serviceClass, Context context,
             Map<ServiceRequestKey, ServiceInvoker> serviceInvokers) throws ServiceInitializationFailedException {
         String serviceName = getServiceName(serviceClass);
-        LOGGER.info("Registering %s service with name %s", serviceClass.getName(), serviceName);
+        LOGGER.info("Registering '%s' service with name '%s'", serviceClass.getName(), serviceName);
         BaseService service = initializeService(serviceClass, context);
         Method[] declaredMethods = serviceClass.getDeclaredMethods();
         for (Method method : declaredMethods) {
@@ -81,16 +81,16 @@ class ServiceInitializer {
                 ServiceMethod serviceMethod = method.getAnnotation(ServiceMethod.class);
                 ServiceRequestKey key = new ServiceRequestKey(serviceName, serviceMethod.name());
                 if (serviceInvokers.containsKey(key)) {
-                    throw new ServiceInitializationFailedException("A service method with name " + key.getMethodName()
-                            + " already exist in service " + key.getServiceName());
+                    throw new ServiceInitializationFailedException("A service method with name '" + key.getMethodName()
+                            + "' already exist in service " + key.getServiceName());
                 }
                 ServiceInvoker invoker = new ServiceInvoker(service, method);
                 serviceInvokers.put(key, invoker);
                 if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("Added invoker for key %s", key);
+                    LOGGER.debug("Added invoker for key '%s'", key);
                 }
             }
         }
-        LOGGER.info("Registered %s service", serviceClass.getName());
+        LOGGER.info("Registered '%s' service", serviceClass.getName());
     }
 }

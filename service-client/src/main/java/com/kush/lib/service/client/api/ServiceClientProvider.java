@@ -19,10 +19,10 @@ public class ServiceClientProvider {
 
     void activateServiceClient(Class<? extends ServiceClient> serviceClientClass, Executor executor)
             throws ServiceClientActivationFailedException {
-        LOGGER.info("Activating service client %s", serviceClientClass.getName());
+        LOGGER.info("Activating service client '%s'", serviceClientClass.getName());
         ServiceClient serviceClient = activator.activate(serviceClientClass, executor);
         serviceClients.put(serviceClientClass, serviceClient);
-        LOGGER.info("Activated service client %s", serviceClientClass.getName());
+        LOGGER.info("Activated service client '%s'", serviceClientClass.getName());
     }
 
     public <S extends ServiceClient> S getServiceClient(Class<S> serviceClientClass) {
