@@ -30,13 +30,16 @@ public class ServiceClientJarGeneratorMojo extends AbstractMojo {
     private String generatedServiceClientJarPath;
     @Parameter
     private List<String> services;
+    @Parameter
+    private List<String> additionalClasses;
 
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
         String serviceClientJarName = prepareServiceClientJarName();
         ServiceClientJarGenerator jarGenerator = new ServiceClientJarGenerator(targetDirectory, serviceClientJarName);
         try {
-            File jarFile = jarGenerator.generate(services == null ? Collections.emptyList() : services);
+            File jarFile = jarGenerator.generate(services == null ? Collections.emptyList() : services,
+                    additionalClasses == null ? Collections.emptyList() : additionalClasses);
             Properties properties = mavenProject.getProperties();
             properties.setProperty(generatedServiceClientJarPath, jarFile.getAbsolutePath());
         } catch (ClassNotFoundException | CodeGenerationFailedException | IOException e) {
