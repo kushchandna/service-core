@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
+import java.util.Properties;
 
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -25,6 +26,8 @@ public class ServiceClientJarGeneratorMojo extends AbstractMojo {
 
     @Parameter(defaultValue = "${project.build.directory}", readonly = true)
     private File targetDirectory;
+    @Parameter(defaultValue = "generated.service.client.jar.path", readonly = true)
+    private String generatedServiceClientJarPath;
     @Parameter
     private List<String> services;
 
@@ -33,7 +36,9 @@ public class ServiceClientJarGeneratorMojo extends AbstractMojo {
         String serviceClientJarName = prepareServiceClientJarName();
         ServiceClientJarGenerator jarGenerator = new ServiceClientJarGenerator(targetDirectory, serviceClientJarName);
         try {
-            jarGenerator.generate(services == null ? Collections.emptyList() : services);
+            File jarFile = jarGenerator.generate(services == null ? Collections.emptyList() : services);
+            Properties properties = mavenProject.getProperties();
+            properties.setProperty(generatedServiceClientJarPath, jarFile.getAbsolutePath());
         } catch (ClassNotFoundException | CodeGenerationFailedException | IOException e) {
             throw new MojoExecutionException(e.getMessage(), e);
         }

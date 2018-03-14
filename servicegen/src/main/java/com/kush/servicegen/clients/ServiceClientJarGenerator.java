@@ -14,7 +14,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.jar.Attributes;
-import java.util.jar.JarFile;
 import java.util.jar.JarOutputStream;
 import java.util.jar.Manifest;
 
@@ -42,7 +41,7 @@ public class ServiceClientJarGenerator {
         serviceReader = new ServiceReader();
     }
 
-    public JarFile generate(List<String> services) throws ClassNotFoundException, CodeGenerationFailedException, IOException {
+    public File generate(List<String> services) throws ClassNotFoundException, CodeGenerationFailedException, IOException {
         File generatedFilesDir = new File(targetDirectory, "generated");
         generatedFilesDir.mkdirs();
         File sourceDir = new File(generatedFilesDir, "sources");
@@ -91,7 +90,7 @@ public class ServiceClientJarGenerator {
         return Arrays.stream(urls).map(url -> new File(url.getFile())).toArray(File[]::new);
     }
 
-    private JarFile generateJar(File parentDir) throws FileNotFoundException, IOException {
+    private File generateJar(File parentDir) throws FileNotFoundException, IOException {
         targetDirectory.mkdirs();
         File targetJarFile = new File(targetDirectory, targetJarName);
         OutputStream fos = new FileOutputStream(targetJarFile);
@@ -103,7 +102,7 @@ public class ServiceClientJarGenerator {
                 JarUtils.addToJar(parentDir, file, jarOS);
             }
         }
-        return new JarFile(targetJarFile);
+        return targetJarFile;
     }
 
     private JavapoetBasedServiceClientCodeGenerator createCodeGenerator(Class<?> serviceClass) {
