@@ -2,6 +2,7 @@ package com.kush.servicegen.maven;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.maven.plugin.AbstractMojo;
@@ -32,7 +33,7 @@ public class ServiceClientJarGeneratorMojo extends AbstractMojo {
         String serviceClientJarName = prepareServiceClientJarName();
         ServiceClientJarGenerator jarGenerator = new ServiceClientJarGenerator(targetDirectory, serviceClientJarName);
         try {
-            jarGenerator.generate(services);
+            jarGenerator.generate(services == null ? Collections.emptyList() : services);
         } catch (ClassNotFoundException | CodeGenerationFailedException | IOException e) {
             throw new MojoExecutionException(e.getMessage(), e);
         }
