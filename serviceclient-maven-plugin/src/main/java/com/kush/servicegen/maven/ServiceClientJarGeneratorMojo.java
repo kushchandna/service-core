@@ -1,8 +1,8 @@
 package com.kush.servicegen.maven;
 
+import static com.kush.utils.commons.CollectionUtils.nonNull;
+
 import java.io.File;
-import java.io.IOException;
-import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
 
@@ -38,11 +38,10 @@ public class ServiceClientJarGeneratorMojo extends AbstractMojo {
         String serviceClientJarName = prepareServiceClientJarName();
         ServiceClientJarGenerator jarGenerator = new ServiceClientJarGenerator(targetDirectory, serviceClientJarName);
         try {
-            File jarFile = jarGenerator.generate(services == null ? Collections.emptyList() : services,
-                    additionalClasses == null ? Collections.emptyList() : additionalClasses);
+            File jarFile = jarGenerator.generate(nonNull(services), nonNull(additionalClasses));
             Properties properties = mavenProject.getProperties();
             properties.setProperty(generatedServiceClientJarPath, jarFile.getAbsolutePath());
-        } catch (ClassNotFoundException | CodeGenerationFailedException | IOException e) {
+        } catch (CodeGenerationFailedException e) {
             throw new MojoExecutionException(e.getMessage(), e);
         }
     }

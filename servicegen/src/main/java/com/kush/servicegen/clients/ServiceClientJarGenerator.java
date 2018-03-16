@@ -42,13 +42,20 @@ public class ServiceClientJarGenerator {
         serviceReader = new ServiceReader();
     }
 
-    public File generate(List<String> services)
-            throws ClassNotFoundException, CodeGenerationFailedException, IOException {
+    public File generate(List<String> services) throws CodeGenerationFailedException {
         return this.generate(services, Collections.emptyList());
     }
 
-    public File generate(List<String> services, List<String> additionalClasses)
-            throws ClassNotFoundException, CodeGenerationFailedException, IOException {
+    public File generate(List<String> services, List<String> additionalClasses) throws CodeGenerationFailedException {
+        try {
+            return generateJarAndReturnFile(services, additionalClasses);
+        } catch (ClassNotFoundException | IOException e) {
+            throw new CodeGenerationFailedException(e.getMessage(), e);
+        }
+    }
+
+    private File generateJarAndReturnFile(List<String> services, List<String> typesToExport)
+            throws ClassNotFoundException, CodeGenerationFailedException, IOException, FileNotFoundException {
         File generatedFilesDir = new File(targetDirectory, "generated");
         generatedFilesDir.mkdirs();
         File sourceDir = new File(generatedFilesDir, "sources");
@@ -64,8 +71,8 @@ public class ServiceClientJarGenerator {
             compileGeneratedFile(javaFileObject, binDir.getAbsolutePath());
             classesToExport.addAll(codeGenerator.getClassesToExport());
         }
-        for (String additionalClass : additionalClasses) {
-            classesToExport.add(loadClass(additionalClass));
+        for (String typeToExport : typesToExport) {
+            classesToExport.add(loadClass(typeToExport));
         }
         for (Class<?> classToExport : classesToExport) {
             File classFile = JarUtils.getClassFile(classToExport);
