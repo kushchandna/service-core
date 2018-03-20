@@ -11,7 +11,7 @@ public class Responder {
     }
 
     public <T> Response<T> respond(Request<T> request) {
-        Response<T> response = new Response<>();
+        LocalResponse<T> response = new LocalResponse<>();
         executor.execute(new Runnable() {
 
             @Override
@@ -27,11 +27,11 @@ public class Responder {
         return response;
     }
 
-    private <T> void sendResult(Response<T> response, T result) {
+    private <T> void sendResult(LocalResponse<T> response, T result) {
         response.setResult(result);
     }
 
-    private <T> void sendError(Response<T> response, RequestFailedException e) {
+    private <T> void sendError(LocalResponse<T> response, RequestFailedException e) {
         response.setError(e);
     }
 }
