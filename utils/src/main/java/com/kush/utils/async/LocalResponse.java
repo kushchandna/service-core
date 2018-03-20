@@ -4,9 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
-import com.kush.utils.async.RequestFailedException;
-
-public class LocalResponse<T> implements Response<T> {
+class LocalResponse<T> implements Response<T> {
 
     private final CountDownLatch latch;
 
@@ -15,7 +13,7 @@ public class LocalResponse<T> implements Response<T> {
     private final List<ResultListener<T>> resultListeners = new ArrayList<>();
     private final List<ErrorListener> errorListeners = new ArrayList<>();
 
-    public LocalResponse() {
+    LocalResponse() {
         latch = new CountDownLatch(1);
     }
 
