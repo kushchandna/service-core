@@ -9,6 +9,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.Executor;
 
+import com.kush.lib.service.remoting.ResultCode;
 import com.kush.lib.service.remoting.ServiceRequest;
 import com.kush.lib.service.remoting.ServiceRequestFailedException;
 import com.kush.lib.service.remoting.ShutdownFailedException;
@@ -59,7 +60,15 @@ public class ServerSocketServiceRequestReceiver extends ServiceRequestReceiver {
     private static void writeResult(Socket socket, Object result) throws IOException {
         OutputStream os = socket.getOutputStream();
         ObjectOutputStream oos = new ObjectOutputStream(os);
+        oos.writeInt(ResultCode.CODE_SUCCESS);
         oos.writeObject(result);
+    }
+
+    private static void writeError(Socket socket, ServiceRequestFailedException e) throws IOException {
+        OutputStream os = socket.getOutputStream();
+        ObjectOutputStream oos = new ObjectOutputStream(os);
+        oos.writeInt(ResultCode.CODE_ERROR);
+        oos.writeObject(e);
     }
 
     private static ServiceRequest readRequest(Socket socket) throws IOException, ClassNotFoundException {
@@ -82,12 +91,25 @@ public class ServerSocketServiceRequestReceiver extends ServiceRequestReceiver {
                 writeResult(socket, result);
             } catch (IOException e) {
                 onError(new ServiceRequestFailedException(e.getMessage(), e));
+            } finally {
+                closeSocket();
             }
         }
 
         @Override
         public void onError(ServiceRequestFailedException e) {
-            // TODO handle error
+            try {
+                writeError(socket, e);
+            } catch (IOException exception) {
+                // could not send error
+            } finally {
+                closeSocket();
+            }
+        }
+
+        private void closeSocket() {
+            // TODO Auto-generated method stub
+
         }
     }
 }

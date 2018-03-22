@@ -7,6 +7,7 @@ import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 
+import com.kush.lib.service.remoting.ResultCode;
 import com.kush.lib.service.remoting.ServiceRequest;
 import com.kush.lib.service.remoting.ServiceRequestFailedException;
 import com.kush.lib.service.remoting.connect.ServiceConnection;
@@ -45,9 +46,15 @@ public class SocketServiceConnection implements ServiceConnection {
         oos.writeObject(request);
     }
 
-    private static Object readResult(Socket socket) throws IOException, ClassNotFoundException {
+    private static Object readResult(Socket socket) throws IOException, ClassNotFoundException, ServiceRequestFailedException {
         InputStream is = socket.getInputStream();
         ObjectInputStream ois = new ObjectInputStream(is);
-        return ois.readObject();
+        int resultCode = ois.readInt();
+        Object resultObject = ois.readObject();
+        if (resultCode != ResultCode.CODE_SUCCESS) {
+            throw (ServiceRequestFailedException) resultObject;
+        } else {
+            return resultObject;
+        }
     }
 }
