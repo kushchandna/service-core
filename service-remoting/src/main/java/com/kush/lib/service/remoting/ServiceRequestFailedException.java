@@ -11,6 +11,10 @@ public class ServiceRequestFailedException extends Exception {
         super(message);
     }
 
+    public ServiceRequestFailedException(Throwable e) {
+        super(e.getMessage(), e);
+    }
+
     public ServiceRequestFailedException(String message, Throwable e) {
         super(message, e);
     }
