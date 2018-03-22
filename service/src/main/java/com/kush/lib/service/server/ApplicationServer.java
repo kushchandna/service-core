@@ -5,6 +5,7 @@ import java.util.Set;
 
 import com.kush.lib.persistence.api.Persistor;
 import com.kush.lib.service.remoting.ServiceRequestResolver;
+import com.kush.lib.service.remoting.ShutdownFailedException;
 import com.kush.lib.service.remoting.StartupFailedException;
 import com.kush.lib.service.remoting.receiver.ServiceRequestReceiver;
 import com.kush.lib.service.server.authentication.Auth;
@@ -42,6 +43,12 @@ public class ApplicationServer {
         startServiceRequestReceivers(requestResolver);
         postStartup(context, serviceInitializer.getServiceRequestResolver());
         LOGGER.info("Application Server Started");
+    }
+
+    public final void stop() throws ShutdownFailedException {
+        for (ServiceRequestReceiver receiver : requestReceivers) {
+            receiver.stop();
+        }
     }
 
     protected void preStartup(Context context) {

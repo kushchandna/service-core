@@ -1,6 +1,8 @@
 package com.kush.lib.service.remoting.receiver;
 
 import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import com.kush.lib.service.remoting.ServiceRequest;
 import com.kush.lib.service.remoting.ServiceRequestFailedException;
@@ -13,12 +15,14 @@ public abstract class ServiceRequestReceiver {
     private static final com.kush.logger.Logger LOGGER =
             com.kush.logger.LoggerFactory.INSTANCE.getLogger(ServiceRequestReceiver.class);
 
-    private final Executor executor;
+    private final Executor requestResolverExecutor;
+    private final ExecutorService requestReceiverExecutor;
 
     private volatile boolean running = false;
 
-    public ServiceRequestReceiver(Executor executor) {
-        this.executor = executor;
+    public ServiceRequestReceiver(Executor requestResolverExecutor) {
+        this.requestResolverExecutor = requestResolverExecutor;
+        requestReceiverExecutor = Executors.newSingleThreadExecutor();
     }
 
     public final void start(ServiceRequestResolver requestResolver) throws StartupFailedException {
@@ -26,12 +30,19 @@ public abstract class ServiceRequestReceiver {
         performStartup();
         running = true;
         LOGGER.info("Started request receiver %s", getClass().getName());
-        startProcessingRequests(requestResolver);
+        requestReceiverExecutor.execute(new Runnable() {
+
+            @Override
+            public void run() {
+                startProcessingRequests(requestResolver);
+            }
+        });
     }
 
     public final void stop() throws ShutdownFailedException {
         LOGGER.info("Stopping request receiver %s", getClass().getName());
         performStop();
+        requestReceiverExecutor.shutdownNow();
         running = false;
         LOGGER.info("Stopped request receiver %s", getClass().getName());
     }
@@ -52,7 +63,7 @@ public abstract class ServiceRequestReceiver {
                 // TODO add error handling
                 continue;
             }
-            executor.execute(new Task(requestResolver, resolvableRequest));
+            requestResolverExecutor.execute(new Task(requestResolver, resolvableRequest));
         }
     }
 
