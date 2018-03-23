@@ -22,7 +22,7 @@ public abstract class BaseService {
         LOGGER.info("Initialized service %s", getClass().getName());
     }
 
-    protected final Context getContext() {
+    protected Context getContext() {
         if (context == null) {
             throw new IllegalStateException("Service not initialized yet");
         }
