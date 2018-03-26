@@ -14,7 +14,7 @@ public abstract class BaseService {
 
     private Context context;
 
-    synchronized final void initialize(Context context) {
+    public synchronized final void initialize(Context context) {
         if (this.context != null) {
             throw new IllegalStateException("Service already initialized");
         }
