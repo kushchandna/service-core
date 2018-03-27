@@ -39,7 +39,7 @@ public class TestApplicationServer extends ExternalResource {
     @Override
     protected void before() throws Throwable {
         Persistor<UserCredential> userCredPersistor = new InMemoryUserCredentialPersistor();
-        context = getContextBuilder()
+        context = createContextBuilder()
             .withInstance(Auth.class, new Auth())
             .withInstance(SessionManager.class, new SessionManager())
             .withInstance(LoginService.KEY_USER_ID_GEN, new SequentialIdGenerator())
@@ -65,7 +65,7 @@ public class TestApplicationServer extends ExternalResource {
         loginService = null;
     }
 
-    protected ContextBuilder getContextBuilder() {
+    protected ContextBuilder createContextBuilder() {
         return ContextBuilder.create();
     }
 
