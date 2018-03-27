@@ -1,9 +1,10 @@
 package com.kush.lib.service.sample.application;
 
+import static com.kush.lib.persistence.helpers.InMemoryPersistor.forType;
+
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
-import com.kush.lib.persistence.helpers.InMemoryPersistor;
 import com.kush.lib.service.client.api.ApplicationClient;
 import com.kush.lib.service.client.api.ServiceClientActivationFailedException;
 import com.kush.lib.service.client.api.ServiceClientProvider;
@@ -25,8 +26,6 @@ import com.kush.utils.async.Response;
 import com.kush.utils.async.Response.ErrorListener;
 import com.kush.utils.async.Response.ResultListener;
 import com.kush.utils.exceptions.ObjectNotFoundException;
-import com.kush.utils.id.Identifier;
-import com.kush.utils.id.SequentialIdGenerator;
 
 public abstract class SampleApplication {
 
@@ -40,7 +39,7 @@ public abstract class SampleApplication {
         SampleHelloTextProvider greetingProvider = new SampleHelloTextProvider();
         Context context = ContextBuilder.create()
             .withInstance(SampleHelloTextProvider.class, greetingProvider)
-            .withPersistor(UserCredential.class, new InMemoryUserCredentialPersistor())
+            .withPersistor(UserCredential.class, forType(UserCredential.class))
             .build();
         server.start(context);
     }
@@ -117,17 +116,5 @@ public abstract class SampleApplication {
         LoginServiceClient loginServiceClient = serviceClientProvider.getServiceClient(LoginServiceClient.class);
         Response<User> response = loginServiceClient.register(credential);
         response.waitForResult();
-    }
-
-    private static final class InMemoryUserCredentialPersistor extends InMemoryPersistor<UserCredential> {
-
-        private InMemoryUserCredentialPersistor() {
-            super(new SequentialIdGenerator());
-        }
-
-        @Override
-        protected UserCredential createPersistableObject(Identifier id, UserCredential reference) {
-            return new UserCredential(id, reference.getUser(), reference.getCredential());
-        }
     }
 }

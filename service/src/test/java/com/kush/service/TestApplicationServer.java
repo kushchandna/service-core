@@ -20,7 +20,6 @@ import com.kush.lib.service.server.authentication.SessionManager;
 import com.kush.lib.service.server.authentication.credential.DefaultUserCredentialPersistor;
 import com.kush.lib.service.server.authentication.credential.UserCredential;
 import com.kush.lib.service.server.authentication.credential.UserCredentialPersistor;
-import com.kush.utils.id.Identifier;
 import com.kush.utils.id.SequentialIdGenerator;
 
 public class TestApplicationServer extends ExternalResource {
@@ -38,7 +37,7 @@ public class TestApplicationServer extends ExternalResource {
 
     @Override
     protected void before() throws Throwable {
-        Persistor<UserCredential> userCredPersistor = new InMemoryUserCredentialPersistor();
+        Persistor<UserCredential> userCredPersistor = InMemoryPersistor.forType(UserCredential.class);
         context = createContextBuilder()
             .withInstance(Auth.class, new Auth())
             .withInstance(SessionManager.class, new SessionManager())
@@ -89,17 +88,5 @@ public class TestApplicationServer extends ExternalResource {
     public void endSession() throws Exception {
         loginService.logout();
         context.getInstance(Auth.class).logout();
-    }
-
-    private static final class InMemoryUserCredentialPersistor extends InMemoryPersistor<UserCredential> {
-
-        private InMemoryUserCredentialPersistor() {
-            super(new SequentialIdGenerator());
-        }
-
-        @Override
-        protected UserCredential createPersistableObject(Identifier id, UserCredential reference) {
-            return new UserCredential(id, reference.getUser(), reference.getCredential());
-        }
     }
 }

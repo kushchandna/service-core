@@ -15,6 +15,10 @@ public class UserCredential implements Identifiable {
         this(Identifier.NULL, user, credential);
     }
 
+    public UserCredential(Identifier id, UserCredential userCredential) {
+        this(id, userCredential.getUser(), userCredential.getCredential());
+    }
+
     public UserCredential(Identifier id, User user, Credential credential) {
         this.id = id;
         this.user = user;
