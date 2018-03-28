@@ -76,17 +76,28 @@ public class TestApplicationServer extends ExternalResource {
         return userVsCredential.keySet().toArray(new User[userVsCredential.size()]);
     }
 
-    public void beginTestSession() throws Exception {
-        beginSession(getUsers()[0]);
+    public void runAuthenticatedOperation(Operation operation) throws Exception {
+        runAuthenticatedOperation(getUsers()[0], operation);
     }
 
-    public void beginSession(User user) throws Exception {
+    public void runAuthenticatedOperation(User user, Operation operation) throws Exception {
+        beginSession(user);
+        operation.run();
+        endSession();
+    }
+
+    private void beginSession(User user) throws Exception {
         AuthToken token = loginService.login(userVsCredential.get(user));
         context.getInstance(Auth.class).login(token);
     }
 
-    public void endSession() throws Exception {
+    private void endSession() throws Exception {
         loginService.logout();
         context.getInstance(Auth.class).logout();
+    }
+
+    public static interface Operation {
+
+        void run() throws Exception;
     }
 }
