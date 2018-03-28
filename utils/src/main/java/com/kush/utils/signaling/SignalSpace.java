@@ -37,7 +37,16 @@ public class SignalSpace {
         Collection<SignalReceiver> receivers = registeredReceivers.get(signalId);
         if (receivers != null) {
             receivers.remove(receiver);
+            if (receivers.isEmpty()) {
+                registeredReceivers.remove(signalId);
+            }
         }
+    }
+
+    public <S extends Signal<?>> boolean hasReceiverForSignal(Class<S> signalClass) {
+        Identifier signalId = id(signalClass);
+        Collection<SignalReceiver> receivers = registeredReceivers.get(signalId);
+        return receivers != null && !receivers.isEmpty();
     }
 
     public void emit(Signal<?> signal) {
