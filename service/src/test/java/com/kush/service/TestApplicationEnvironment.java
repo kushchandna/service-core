@@ -22,7 +22,7 @@ import com.kush.lib.service.server.authentication.credential.UserCredential;
 import com.kush.lib.service.server.authentication.credential.UserCredentialPersistor;
 import com.kush.utils.id.SequentialIdGenerator;
 
-public class TestApplicationServer extends ExternalResource {
+public class TestApplicationEnvironment extends ExternalResource {
 
     private final Map<User, Credential> userVsCredential = new HashMap<>();
 
@@ -31,7 +31,7 @@ public class TestApplicationServer extends ExternalResource {
     private Context context;
     private LoginService loginService;
 
-    public TestApplicationServer(int numOfUsers) {
+    public TestApplicationEnvironment(int numOfUsers) {
         this.numOfUsers = numOfUsers;
     }
 
