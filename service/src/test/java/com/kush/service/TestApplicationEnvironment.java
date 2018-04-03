@@ -31,6 +31,10 @@ public class TestApplicationEnvironment extends ExternalResource {
     private Context context;
     private LoginService loginService;
 
+    public TestApplicationEnvironment() {
+        this(5);
+    }
+
     public TestApplicationEnvironment(int numOfUsers) {
         this.numOfUsers = numOfUsers;
     }
@@ -72,12 +76,16 @@ public class TestApplicationEnvironment extends ExternalResource {
         service.initialize(context);
     }
 
+    public User getTestUser() {
+        return getUsers()[0];
+    }
+
     public User[] getUsers() {
         return userVsCredential.keySet().toArray(new User[userVsCredential.size()]);
     }
 
     public void runAuthenticatedOperation(Operation operation) throws Exception {
-        runAuthenticatedOperation(getUsers()[0], operation);
+        runAuthenticatedOperation(getTestUser(), operation);
     }
 
     public void runAuthenticatedOperation(User user, Operation operation) throws Exception {
