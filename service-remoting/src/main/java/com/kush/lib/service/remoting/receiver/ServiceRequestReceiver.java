@@ -104,7 +104,7 @@ public abstract class ServiceRequestReceiver {
         }
     }
 
-    protected static interface ResponseListener {
+    public static interface ResponseListener {
 
         void onResult(Object result);
 

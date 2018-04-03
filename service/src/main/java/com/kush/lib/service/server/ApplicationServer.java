@@ -37,11 +37,9 @@ public class ApplicationServer {
     public final void start(Context context) throws StartupFailedException {
         LOGGER.info("Starting Application Server");
         enrichContext(context);
-        preStartup(context);
         ServiceInitializer serviceInitializer = new ServiceInitializer(context);
         ServiceRequestResolver requestResolver = initializeServicesAndGetRequestResolver(serviceInitializer);
         startServiceRequestReceivers(requestResolver);
-        postStartup(context, serviceInitializer.getServiceRequestResolver());
         LOGGER.info("Application Server Started");
     }
 
@@ -49,12 +47,6 @@ public class ApplicationServer {
         for (ServiceRequestReceiver receiver : requestReceivers) {
             receiver.stop();
         }
-    }
-
-    protected void preStartup(Context context) {
-    }
-
-    protected void postStartup(Context context, ServiceRequestResolver serviceRequestResolver) {
     }
 
     private void enrichContext(Context context) throws StartupFailedException {
