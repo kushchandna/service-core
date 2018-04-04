@@ -1,4 +1,4 @@
-package com.kush.service;
+package com.kush.lib.service.server;
 
 import java.util.HashMap;
 import java.util.Map;
