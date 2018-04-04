@@ -14,7 +14,7 @@ public abstract class BaseService {
 
     private Context context;
 
-    public synchronized final void initialize(Context context) {
+    synchronized final void initialize(Context context) {
         if (this.context != null) {
             throw new IllegalStateException("Service already initialized");
         }
@@ -22,7 +22,7 @@ public abstract class BaseService {
         LOGGER.info("Initialized service %s", getClass().getName());
     }
 
-    protected Context getContext() {
+    protected synchronized final Context getContext() {
         if (context == null) {
             throw new IllegalStateException("Service not initialized yet");
         }

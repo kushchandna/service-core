@@ -11,9 +11,6 @@ import com.kush.lib.service.remoting.auth.AuthToken;
 import com.kush.lib.service.remoting.auth.Credential;
 import com.kush.lib.service.remoting.auth.User;
 import com.kush.lib.service.remoting.auth.password.PasswordBasedCredential;
-import com.kush.lib.service.server.BaseService;
-import com.kush.lib.service.server.Context;
-import com.kush.lib.service.server.ContextBuilder;
 import com.kush.lib.service.server.authentication.Auth;
 import com.kush.lib.service.server.authentication.LoginService;
 import com.kush.lib.service.server.authentication.SessionManager;
@@ -49,7 +46,7 @@ public class TestApplicationEnvironment extends ExternalResource {
             .withInstance(UserCredentialPersistor.class, new DefaultUserCredentialPersistor(userCredPersistor))
             .build();
         loginService = new LoginService();
-        loginService.initialize(context);
+        ((BaseService) loginService).initialize(context);
         for (int i = 1; i <= numOfUsers; i++) {
             Credential credential = new PasswordBasedCredential("testusr" + i, ("testpwd" + i).toCharArray());
             User user = loginService.register(credential);
