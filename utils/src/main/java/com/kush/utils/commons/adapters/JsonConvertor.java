@@ -3,10 +3,10 @@ package com.kush.utils.commons.adapters;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-public class JsonAdapter implements StringAdapter {
+public class JsonConvertor implements StringConvertor {
 
     @Override
-    public <T> T adapt(String source, Class<T> targetType) {
+    public <T> T convert(String source, Class<T> targetType) {
         Gson gson = new GsonBuilder()
             .setLenient()
             .create();

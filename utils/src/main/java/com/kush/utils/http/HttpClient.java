@@ -16,25 +16,25 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 
-import com.kush.utils.commons.adapters.StringAdapter;
+import com.kush.utils.commons.adapters.StringConvertor;
 
 public class HttpClient {
 
     private static final String DEFAULT_ENCODING = "UTF-8";
 
     private final String url;
-    private final StringAdapter adapter;
+    private final StringConvertor stringConvertor;
 
-    public HttpClient(String url, StringAdapter adapter) {
+    public HttpClient(String url, StringConvertor stringConvertor) {
         this.url = url.endsWith("/") ? url : url + '/';
-        this.adapter = adapter;
+        this.stringConvertor = stringConvertor;
     }
 
     public <T> T getObject(Class<T> returnType, Map<String, Object> parameters) throws IOException {
         String queryString = buildQueryString(parameters);
         String queryUrl = prepareQueryUrl(queryString);
         String resultAsString = getResultAsString(queryUrl);
-        return adapter.adapt(resultAsString, returnType);
+        return stringConvertor.convert(resultAsString, returnType);
     }
 
     private String prepareQueryUrl(String queryString) {
