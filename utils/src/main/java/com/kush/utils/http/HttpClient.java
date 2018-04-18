@@ -16,7 +16,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 
-import com.kush.utils.commons.adapters.StringConvertor;
+import com.kush.utils.convertor.StringConvertor;
 
 public class HttpClient {
 

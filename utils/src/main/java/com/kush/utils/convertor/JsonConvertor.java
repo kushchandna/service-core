@@ -1,4 +1,4 @@
-package com.kush.utils.commons.adapters;
+package com.kush.utils.convertor;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

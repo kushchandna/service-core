@@ -1,4 +1,4 @@
-package com.kush.utils.commons.adapters;
+package com.kush.utils.convertor;
 
 public interface Convertor<FROM> {
 

@@ -1,4 +1,4 @@
-package com.kush.utils.commons.adapters;
+package com.kush.utils.convertor;
 
 public interface StringConvertor extends Convertor<String> {
 }
