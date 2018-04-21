@@ -1,11 +1,9 @@
 package com.kush.lib.persistence.helpers;
 
 import java.lang.reflect.Constructor;
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
 
@@ -62,13 +60,8 @@ public class InMemoryPersistor<T extends Identifiable> implements Persistor<T> {
     }
 
     @Override
-    public Iterator<T> fetch(Collection<Identifier> ids) {
-        List<T> objects = new ArrayList<>();
-        for (Identifier id : ids) {
-            T object = fetch(id);
-            objects.add(object);
-        }
-        return objects.iterator();
+    public Iterator<T> fetch(Predicate<T> filter, Comparator<T> order, int count) throws PersistorOperationFailedException {
+        return savedObjects.values().stream().filter(filter).sorted(order).limit(count).iterator();
     }
 
     @Override
