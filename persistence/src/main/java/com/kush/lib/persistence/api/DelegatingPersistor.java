@@ -1,7 +1,7 @@
 package com.kush.lib.persistence.api;
 
 import java.util.Comparator;
-import java.util.Iterator;
+import java.util.List;
 import java.util.function.Predicate;
 
 import com.kush.utils.id.Identifiable;
@@ -26,17 +26,17 @@ public class DelegatingPersistor<T extends Identifiable> implements Persistor<T>
     }
 
     @Override
-    public Iterator<T> fetch(Predicate<T> filter, Comparator<T> order, int count) throws PersistorOperationFailedException {
+    public List<T> fetch(Predicate<T> filter, Comparator<T> order, int count) throws PersistorOperationFailedException {
         return delegate.fetch(filter, order, count);
     }
 
     @Override
-    public Iterator<T> fetch(Predicate<T> filter) throws PersistorOperationFailedException {
+    public List<T> fetch(Predicate<T> filter) throws PersistorOperationFailedException {
         return delegate.fetch(filter);
     }
 
     @Override
-    public Iterator<T> fetchAll() throws PersistorOperationFailedException {
+    public List<T> fetchAll() throws PersistorOperationFailedException {
         return delegate.fetchAll();
     }
 

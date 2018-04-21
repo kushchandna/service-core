@@ -1,6 +1,6 @@
 package com.kush.lib.service.server.authentication.credential;
 
-import java.util.Iterator;
+import java.util.List;
 
 import com.kush.lib.persistence.api.DelegatingPersistor;
 import com.kush.lib.persistence.api.Persistor;
@@ -20,9 +20,8 @@ public class DefaultUserCredentialPersistor extends DelegatingPersistor<UserCred
 
     @Override
     public User getUserForCredential(Credential credential) throws PersistorOperationFailedException {
-        Iterator<UserCredential> allUserCredentials = fetchAll();
-        while (allUserCredentials.hasNext()) {
-            UserCredential userCredential = allUserCredentials.next();
+        List<UserCredential> allUserCredentials = fetchAll();
+        for (UserCredential userCredential : allUserCredentials) {
             Credential savedCredential = userCredential.getCredential();
             if (credentialHandler.canHandle(savedCredential)) {
                 if (credentialHandler.matches(credential, savedCredential)) {
@@ -35,9 +34,8 @@ public class DefaultUserCredentialPersistor extends DelegatingPersistor<UserCred
 
     @Override
     public void addUserCredential(User user, Credential credential) throws PersistorOperationFailedException {
-        Iterator<UserCredential> allUserCredentials = fetchAll();
-        while (allUserCredentials.hasNext()) {
-            UserCredential userCredential = allUserCredentials.next();
+        List<UserCredential> allUserCredentials = fetchAll();
+        for (UserCredential userCredential : allUserCredentials) {
             Credential savedCredential = userCredential.getCredential();
             if (credentialHandler.canHandle(savedCredential)) {
                 if (credentialHandler.conflicts(credential, savedCredential)) {

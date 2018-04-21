@@ -1,11 +1,14 @@
 package com.kush.lib.persistence.helpers;
 
 import java.lang.reflect.Constructor;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import com.kush.lib.persistence.api.Persistor;
 import com.kush.lib.persistence.api.PersistorOperationFailedException;
@@ -60,18 +63,18 @@ public class InMemoryPersistor<T extends Identifiable> implements Persistor<T> {
     }
 
     @Override
-    public Iterator<T> fetch(Predicate<T> filter, Comparator<T> order, int count) throws PersistorOperationFailedException {
-        return savedObjects.values().stream().filter(filter).sorted(order).limit(count).iterator();
+    public List<T> fetch(Predicate<T> filter, Comparator<T> order, int count) throws PersistorOperationFailedException {
+        return savedObjects.values().stream().filter(filter).sorted(order).limit(count).collect(Collectors.toList());
     }
 
     @Override
-    public Iterator<T> fetch(Predicate<T> filter) throws PersistorOperationFailedException {
-        return savedObjects.values().stream().filter(filter).iterator();
+    public List<T> fetch(Predicate<T> filter) throws PersistorOperationFailedException {
+        return savedObjects.values().stream().filter(filter).collect(Collectors.toList());
     }
 
     @Override
-    public Iterator<T> fetchAll() {
-        return savedObjects.values().iterator();
+    public List<T> fetchAll() {
+        return Collections.unmodifiableList(new ArrayList<>(savedObjects.values()));
     }
 
     @Override
