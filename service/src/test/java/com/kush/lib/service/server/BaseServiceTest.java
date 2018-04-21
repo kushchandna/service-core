@@ -3,7 +3,7 @@ package com.kush.lib.service.server;
 import java.time.Clock;
 import java.time.Instant;
 import java.time.ZoneId;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.junit.After;
@@ -30,7 +30,7 @@ public class BaseServiceTest {
     protected static final ZoneId CURRENT_ZONE = ZoneId.systemDefault();
     private static final Clock CLOCK = Clock.fixed(CURRENT_TIME, CURRENT_ZONE);
 
-    private final Map<User, Credential> userVsCredential = new HashMap<>();
+    private final Map<User, Credential> userVsCredential = new LinkedHashMap<>();
     private final Context context = new Context();
     private final int numOfUsers;
 
@@ -69,6 +69,10 @@ public class BaseServiceTest {
 
     protected final User getTestUser() {
         return getUsers()[0];
+    }
+
+    protected final User getUser(int index) {
+        return getUsers()[index];
     }
 
     protected final User[] getUsers() {

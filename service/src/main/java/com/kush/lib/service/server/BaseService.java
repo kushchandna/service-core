@@ -27,6 +27,10 @@ public abstract class BaseService {
         return context;
     }
 
+    protected final void checkSessionActive() throws AuthenticationFailedException {
+        getCurrentUser();
+    }
+
     protected final User getCurrentUser() throws AuthenticationFailedException {
         Auth authenticator = context.getInstance(Auth.class);
         AuthToken token = authenticator.getToken();
