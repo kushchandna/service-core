@@ -7,8 +7,10 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Predicate;
 
 import com.kush.lib.persistence.api.Persistor;
+import com.kush.lib.persistence.api.PersistorOperationFailedException;
 import com.kush.utils.id.IdGenerator;
 import com.kush.utils.id.Identifiable;
 import com.kush.utils.id.Identifier;
@@ -67,6 +69,11 @@ public class InMemoryPersistor<T extends Identifiable> implements Persistor<T> {
             objects.add(object);
         }
         return objects.iterator();
+    }
+
+    @Override
+    public Iterator<T> fetch(Predicate<T> filter) throws PersistorOperationFailedException {
+        return savedObjects.values().stream().filter(filter).iterator();
     }
 
     @Override

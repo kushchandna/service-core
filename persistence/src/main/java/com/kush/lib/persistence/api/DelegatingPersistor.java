@@ -2,6 +2,7 @@ package com.kush.lib.persistence.api;
 
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.function.Predicate;
 
 import com.kush.utils.id.Identifiable;
 import com.kush.utils.id.Identifier;
@@ -27,6 +28,11 @@ public class DelegatingPersistor<T extends Identifiable> implements Persistor<T>
     @Override
     public Iterator<T> fetch(Collection<Identifier> ids) throws PersistorOperationFailedException {
         return delegate.fetch(ids);
+    }
+
+    @Override
+    public Iterator<T> fetch(Predicate<T> filter) throws PersistorOperationFailedException {
+        return delegate.fetch(filter);
     }
 
     @Override

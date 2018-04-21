@@ -2,6 +2,7 @@ package com.kush.lib.persistence.api;
 
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.function.Predicate;
 
 import com.kush.utils.id.Identifiable;
 import com.kush.utils.id.Identifier;
@@ -13,6 +14,8 @@ public interface Persistor<T extends Identifiable> {
     T fetch(Identifier id) throws PersistorOperationFailedException;
 
     Iterator<T> fetch(Collection<Identifier> ids) throws PersistorOperationFailedException;
+
+    Iterator<T> fetch(Predicate<T> filter) throws PersistorOperationFailedException;
 
     Iterator<T> fetchAll() throws PersistorOperationFailedException;
 
