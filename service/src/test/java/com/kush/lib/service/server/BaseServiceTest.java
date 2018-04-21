@@ -2,6 +2,7 @@ package com.kush.lib.service.server;
 
 import java.time.Clock;
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -91,6 +92,10 @@ public class BaseServiceTest {
 
     protected final void addToContext(Object key, Object value) {
         context.addInstance(key, value);
+    }
+
+    protected final LocalDateTime getCurrentDateTime() {
+        return LocalDateTime.now(CLOCK);
     }
 
     private void beginSession(User user) throws Exception {
