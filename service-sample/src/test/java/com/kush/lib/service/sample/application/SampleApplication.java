@@ -5,6 +5,7 @@ import static com.kush.lib.persistence.helpers.InMemoryPersistor.forType;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
+import com.kush.lib.persistence.api.Persistor;
 import com.kush.lib.service.client.api.ApplicationClient;
 import com.kush.lib.service.client.api.ServiceClientActivationFailedException;
 import com.kush.lib.service.client.api.ServiceClientProvider;
@@ -20,7 +21,9 @@ import com.kush.lib.service.sample.server.SampleHelloTextProvider;
 import com.kush.lib.service.server.ApplicationServer;
 import com.kush.lib.service.server.Context;
 import com.kush.lib.service.server.ContextBuilder;
+import com.kush.lib.service.server.authentication.credential.DefaultUserCredentialPersistor;
 import com.kush.lib.service.server.authentication.credential.UserCredential;
+import com.kush.lib.service.server.authentication.credential.UserCredentialPersistor;
 import com.kush.utils.async.RequestFailedException;
 import com.kush.utils.async.Response;
 import com.kush.utils.async.Response.ErrorListener;
@@ -37,9 +40,10 @@ public abstract class SampleApplication {
         registerReceivers(server);
         server.registerService(SampleHelloService.class);
         SampleHelloTextProvider greetingProvider = new SampleHelloTextProvider();
+        Persistor<UserCredential> delegate = forType(UserCredential.class);
         Context context = ContextBuilder.create()
             .withInstance(SampleHelloTextProvider.class, greetingProvider)
-            .withPersistor(UserCredential.class, forType(UserCredential.class))
+            .withInstance(UserCredentialPersistor.class, new DefaultUserCredentialPersistor(delegate))
             .build();
         server.start(context);
     }

@@ -19,11 +19,6 @@ public class ContextBuilder {
         return this;
     }
 
-    public ContextBuilder withPersistor(Object key, Object instance) {
-        Context.addPersistor(instances, key, instance);
-        return this;
-    }
-
     public Context build() {
         return new Context(instances);
     }

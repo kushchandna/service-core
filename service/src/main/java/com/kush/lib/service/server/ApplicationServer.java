@@ -3,7 +3,6 @@ package com.kush.lib.service.server;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.kush.lib.persistence.api.Persistor;
 import com.kush.lib.service.remoting.ServiceRequestResolver;
 import com.kush.lib.service.remoting.ShutdownFailedException;
 import com.kush.lib.service.remoting.StartupFailedException;
@@ -11,9 +10,6 @@ import com.kush.lib.service.remoting.receiver.ServiceRequestReceiver;
 import com.kush.lib.service.server.authentication.Auth;
 import com.kush.lib.service.server.authentication.LoginService;
 import com.kush.lib.service.server.authentication.SessionManager;
-import com.kush.lib.service.server.authentication.credential.DefaultUserCredentialPersistor;
-import com.kush.lib.service.server.authentication.credential.UserCredential;
-import com.kush.lib.service.server.authentication.credential.UserCredentialPersistor;
 import com.kush.utils.id.SequentialIdGenerator;
 
 public class ApplicationServer {
@@ -50,7 +46,6 @@ public class ApplicationServer {
     }
 
     private void enrichContext(Context context) throws StartupFailedException {
-        enrichUserCredentialPersistor(context);
         enrichSessionRelatedInformation(context);
     }
 
@@ -67,16 +62,6 @@ public class ApplicationServer {
         } catch (ServiceInitializationFailedException e) {
             LOGGER.error(e);
             throw new StartupFailedException(e.getMessage(), e);
-        }
-    }
-
-    private void enrichUserCredentialPersistor(Context context) throws StartupFailedException {
-        if (!context.containsKey(UserCredentialPersistor.class)) {
-            if (!context.containsPersistor(UserCredential.class)) {
-                throw new StartupFailedException("No user credential persistor specified");
-            }
-            Persistor<UserCredential> delegate = context.getPersistor(UserCredential.class);
-            context.addInstance(UserCredentialPersistor.class, new DefaultUserCredentialPersistor(delegate));
         }
     }
 
