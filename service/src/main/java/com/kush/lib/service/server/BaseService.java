@@ -16,6 +16,7 @@ public abstract class BaseService {
         if (this.context != null) {
             throw new IllegalStateException("Service already initialized");
         }
+        context.addInstance(getClass(), this);
         this.context = context;
         LOGGER.info("Initialized service %s", getClass().getName());
     }

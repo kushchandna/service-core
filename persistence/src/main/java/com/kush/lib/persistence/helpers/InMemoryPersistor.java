@@ -64,7 +64,8 @@ public class InMemoryPersistor<T extends Identifiable> implements Persistor<T> {
 
     @Override
     public List<T> fetch(Predicate<T> filter, Comparator<T> order, int count) throws PersistorOperationFailedException {
-        return savedObjects.values().stream().filter(filter).sorted(order).limit(count).collect(Collectors.toList());
+        return savedObjects.values().stream().filter(filter).sorted(order).limit(count == -1 ? Integer.MAX_VALUE : count)
+            .collect(Collectors.toList());
     }
 
     @Override
