@@ -4,7 +4,7 @@ import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
@@ -19,7 +19,7 @@ import com.kush.utils.id.SequentialIdGenerator;
 
 public class InMemoryPersistor<T extends Identifiable> implements Persistor<T> {
 
-    private final Map<Identifier, T> savedObjects = new HashMap<>();
+    private final Map<Identifier, T> savedObjects = new LinkedHashMap<>();
 
     private final Class<T> type;
     private final IdGenerator idGenerator;
