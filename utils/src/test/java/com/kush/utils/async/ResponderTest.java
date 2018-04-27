@@ -14,7 +14,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -42,7 +41,6 @@ public class ResponderTest {
     }
 
     @Test
-    @Ignore
     public void getResult_WhenResultIsDelayed_WaitsForResult() throws Exception {
         int testSleepTime = 100;
         watch.start();
@@ -76,7 +74,6 @@ public class ResponderTest {
         response.getResult();
     }
 
-    @Ignore
     @Test
     public void onResult_WhenDelayedResultIsReceived_GetsCallbackWithResult() throws Exception {
         int testSleepTime = 100;
