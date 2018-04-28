@@ -7,10 +7,6 @@ import com.kush.lib.service.remoting.ServiceRequestResolver;
 import com.kush.lib.service.remoting.ShutdownFailedException;
 import com.kush.lib.service.remoting.StartupFailedException;
 import com.kush.lib.service.remoting.receiver.ServiceRequestReceiver;
-import com.kush.lib.service.server.authentication.Auth;
-import com.kush.lib.service.server.authentication.LoginService;
-import com.kush.lib.service.server.authentication.SessionManager;
-import com.kush.utils.id.SequentialIdGenerator;
 
 public class ApplicationServer {
 
@@ -32,7 +28,6 @@ public class ApplicationServer {
 
     public final void start(Context context) throws StartupFailedException {
         LOGGER.info("Starting Application Server");
-        enrichContext(context);
         ServiceInitializer serviceInitializer = new ServiceInitializer(context);
         ServiceRequestResolver requestResolver = initializeServicesAndGetRequestResolver(serviceInitializer);
         startServiceRequestReceivers(requestResolver);
@@ -43,10 +38,6 @@ public class ApplicationServer {
         for (ServiceRequestReceiver receiver : requestReceivers) {
             receiver.stop();
         }
-    }
-
-    private void enrichContext(Context context) throws StartupFailedException {
-        enrichSessionRelatedInformation(context);
     }
 
     private void startServiceRequestReceivers(ServiceRequestResolver requestResolver) throws StartupFailedException {
@@ -63,13 +54,5 @@ public class ApplicationServer {
             LOGGER.error(e);
             throw new StartupFailedException(e.getMessage(), e);
         }
-    }
-
-    private void enrichSessionRelatedInformation(Context context) {
-        if (!context.containsKey(LoginService.KEY_USER_ID_GEN)) {
-            context.addInstance(LoginService.KEY_USER_ID_GEN, new SequentialIdGenerator());
-        }
-        context.addInstance(Auth.class, new Auth());
-        context.addInstance(SessionManager.class, new SessionManager());
     }
 }

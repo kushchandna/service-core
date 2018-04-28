@@ -7,10 +7,12 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -24,6 +26,7 @@ import javax.tools.JavaFileObject;
 import javax.tools.ToolProvider;
 
 import com.google.common.io.Files;
+import com.kush.lib.service.server.annotations.Exportable;
 import com.kush.servicegen.CodeGenerationFailedException;
 import com.kush.servicegen.ServiceInfo;
 import com.kush.servicegen.ServiceReader;
@@ -43,18 +46,14 @@ public class ServiceClientJarGenerator {
     }
 
     public File generate(List<String> services) throws CodeGenerationFailedException {
-        return this.generate(services, Collections.emptyList());
-    }
-
-    public File generate(List<String> services, List<String> additionalClasses) throws CodeGenerationFailedException {
         try {
-            return generateJarAndReturnFile(services, additionalClasses);
+            return generateJarAndReturnFile(services);
         } catch (ClassNotFoundException | IOException e) {
             throw new CodeGenerationFailedException(e.getMessage(), e);
         }
     }
 
-    private File generateJarAndReturnFile(List<String> services, List<String> typesToExport)
+    private File generateJarAndReturnFile(List<String> services)
             throws ClassNotFoundException, CodeGenerationFailedException, IOException, FileNotFoundException {
         File generatedFilesDir = new File(targetDirectory, "generated");
         generatedFilesDir.mkdirs();
@@ -65,14 +64,11 @@ public class ServiceClientJarGenerator {
         Set<Class<?>> classesToExport = new HashSet<>();
         for (String serviceClassName : services) {
             Class<?> serviceClass = loadClass(serviceClassName);
+            addClassesToExport(serviceClass, classesToExport);
             JavapoetBasedServiceClientCodeGenerator codeGenerator = createCodeGenerator(serviceClass);
             String targetPackage = getTargetPackage(serviceClass);
             JavaFileObject javaFileObject = codeGenerator.generate(targetPackage, sourceDir);
             compileGeneratedFile(javaFileObject, binDir.getAbsolutePath());
-            classesToExport.addAll(codeGenerator.getClassesToExport());
-        }
-        for (String typeToExport : typesToExport) {
-            classesToExport.add(loadClass(typeToExport));
         }
         for (Class<?> classToExport : classesToExport) {
             File classFile = JarUtils.getClassFile(classToExport);
@@ -84,6 +80,33 @@ public class ServiceClientJarGenerator {
             Files.copy(classFile, targetClassFile);
         }
         return generateJar(binDir);
+    }
+
+    private void addClassesToExport(Class<?> serviceClass, Set<Class<?>> classesToExport) {
+        Field[] fields = serviceClass.getFields();
+        for (Field field : fields) {
+            addIfRequired(classesToExport, field.getType());
+        }
+        Method[] methods = serviceClass.getMethods();
+        for (Method method : methods) {
+            Parameter[] parameters = method.getParameters();
+            for (Parameter parameter : parameters) {
+                addIfRequired(classesToExport, parameter.getType());
+            }
+            Class<?>[] exceptionTypes = method.getExceptionTypes();
+            for (Class<?> exceptionType : exceptionTypes) {
+                addIfRequired(classesToExport, exceptionType);
+            }
+        }
+    }
+
+    private void addIfRequired(Set<Class<?>> classesToExport, Class<?> type) {
+        if (type.isAnnotationPresent(Exportable.class)) {
+            if (!classesToExport.contains(type)) {
+                classesToExport.add(type);
+                addClassesToExport(type, classesToExport);
+            }
+        }
     }
 
     private Class<?> loadClass(String className) throws ClassNotFoundException {

@@ -1,5 +1,7 @@
 package com.kush.lib.service.server;
 
+import static java.lang.String.format;
+
 import com.kush.lib.service.remoting.auth.AuthToken;
 import com.kush.lib.service.remoting.auth.User;
 import com.kush.lib.service.server.authentication.Auth;
@@ -18,6 +20,7 @@ public abstract class BaseService {
         }
         context.addInstance(getClass(), this);
         this.context = context;
+        processContext();
         LOGGER.info("Initialized service %s", getClass().getName());
     }
 
@@ -26,6 +29,23 @@ public abstract class BaseService {
             throw new IllegalStateException("Service not initialized yet");
         }
         return context;
+    }
+
+    protected void processContext() {
+    }
+
+    protected final void addIfDoesNotExist(Object key, Object instance) {
+        if (!context.containsKey(key)) {
+            context.addInstance(key, instance);
+            LOGGER.info("Added %s to context", key);
+        }
+    }
+
+    protected final void checkContextHasValueFor(Object key) {
+        if (!context.containsKey(key)) {
+            String error = format("%s service requires %s in its context.", getClass().getName(), key);
+            throw new IllegalStateException(error);
+        }
     }
 
     protected final void checkSessionActive() throws AuthenticationFailedException {

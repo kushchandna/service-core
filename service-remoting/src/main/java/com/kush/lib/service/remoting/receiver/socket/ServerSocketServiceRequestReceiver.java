@@ -90,7 +90,7 @@ public class ServerSocketServiceRequestReceiver extends ServiceRequestReceiver {
             try {
                 writeResult(socket, result);
             } catch (IOException e) {
-                onError(new ServiceRequestFailedException(e.getMessage(), e));
+                onError(new ServiceRequestFailedException(e.getMessage()));
             } finally {
                 closeSocket();
             }

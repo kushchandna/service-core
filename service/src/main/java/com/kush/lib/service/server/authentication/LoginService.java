@@ -10,6 +10,7 @@ import com.kush.lib.service.server.annotations.ServiceMethod;
 import com.kush.lib.service.server.authentication.credential.UserCredentialPersistor;
 import com.kush.utils.id.IdGenerator;
 import com.kush.utils.id.Identifier;
+import com.kush.utils.id.SequentialIdGenerator;
 
 @Service(name = "Login")
 public class LoginService extends BaseService {
@@ -43,6 +44,14 @@ public class LoginService extends BaseService {
         User currentUser = getCurrentUser();
         SessionManager sessionManager = getSessionManager();
         sessionManager.endSession(currentUser);
+    }
+
+    @Override
+    protected void processContext() {
+        addIfDoesNotExist(KEY_USER_ID_GEN, new SequentialIdGenerator());
+        addIfDoesNotExist(Auth.class, new Auth());
+        addIfDoesNotExist(SessionManager.class, new SessionManager());
+        checkContextHasValueFor(UserCredentialPersistor.class);
     }
 
     private UserCredentialPersistor getUserCredentialPersistor() {
