@@ -8,6 +8,7 @@ import com.kush.lib.service.server.BaseService;
 import com.kush.lib.service.server.annotations.Service;
 import com.kush.lib.service.server.annotations.ServiceMethod;
 import com.kush.lib.service.server.authentication.credential.UserCredentialPersistor;
+import com.kush.utils.exceptions.ValidationFailedException;
 import com.kush.utils.id.IdGenerator;
 import com.kush.utils.id.Identifier;
 import com.kush.utils.id.SequentialIdGenerator;
@@ -18,7 +19,7 @@ public class LoginService extends BaseService {
     public static final String KEY_USER_ID_GEN = "USER_ID_GEN";
 
     @ServiceMethod(name = "register")
-    public User register(Credential credential) throws PersistorOperationFailedException, UserRegistrationFailedException {
+    public User register(Credential credential) throws PersistorOperationFailedException, ValidationFailedException {
         UserCredentialPersistor userCredentialPersistor = getUserCredentialPersistor();
         validateCredentialDoesNotExists(credential, userCredentialPersistor);
         User user = createUser();
@@ -65,15 +66,15 @@ public class LoginService extends BaseService {
     }
 
     private void validateCredentialDoesNotExists(Credential credential, UserCredentialPersistor userCredentialPersistor)
-            throws UserRegistrationFailedException {
+            throws ValidationFailedException {
         User user;
         try {
             user = userCredentialPersistor.getUserForCredential(credential);
             if (user != null) {
-                throw new UserRegistrationFailedException("User with specified credential already exists");
+                throw new ValidationFailedException("User with specified credential already exists");
             }
         } catch (PersistorOperationFailedException e) {
-            throw new UserRegistrationFailedException(e.getMessage(), e);
+            throw new ValidationFailedException(e.getMessage(), e);
         }
     }
 

@@ -19,7 +19,6 @@ import com.kush.lib.service.remoting.auth.password.PasswordBasedCredential;
 import com.kush.lib.service.server.authentication.Auth;
 import com.kush.lib.service.server.authentication.LoginService;
 import com.kush.lib.service.server.authentication.SessionManager;
-import com.kush.lib.service.server.authentication.UserRegistrationFailedException;
 import com.kush.lib.service.server.authentication.credential.DefaultUserCredentialPersistor;
 import com.kush.lib.service.server.authentication.credential.UserCredential;
 import com.kush.lib.service.server.authentication.credential.UserCredentialPersistor;
@@ -108,7 +107,7 @@ public class BaseServiceTest {
         context.getInstance(Auth.class).logout();
     }
 
-    private void createUsers() throws UserRegistrationFailedException {
+    private void createUsers() throws Exception {
         for (int i = 1; i <= numOfUsers; i++) {
             Credential credential = new PasswordBasedCredential("testusr" + i, ("testpwd" + i).toCharArray());
             User user = loginService.register(credential);
