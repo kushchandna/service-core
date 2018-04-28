@@ -7,9 +7,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.lang.reflect.Parameter;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Arrays;
@@ -32,20 +29,27 @@ import com.kush.servicegen.ServiceInfo;
 import com.kush.servicegen.ServiceReader;
 import com.kush.servicegen.javapoet.JavapoetBasedServiceClientCodeGenerator;
 import com.kush.utils.commons.JarUtils;
+import com.kush.utils.commons.ReferedClassesFinder;
 
 public class ServiceClientJarGenerator {
+
+    private static final com.kush.logger.Logger LOGGER =
+            com.kush.logger.LoggerFactory.INSTANCE.getLogger(ServiceClientJarGenerator.class);
 
     private final File targetDirectory;
     private final String targetJarName;
     private final ServiceReader serviceReader;
+    private final ReferedClassesFinder referedClassesFinder;
 
     public ServiceClientJarGenerator(File targetDirectory, String targetJarName) {
         this.targetDirectory = targetDirectory;
         this.targetJarName = targetJarName;
         serviceReader = new ServiceReader();
+        referedClassesFinder = new ReferedClassesFinder(klass -> klass.isAnnotationPresent(Exportable.class));
     }
 
     public File generate(List<String> services) throws CodeGenerationFailedException {
+        LOGGER.info("Generating service clients for %s", services);
         try {
             return generateJarAndReturnFile(services);
         } catch (ClassNotFoundException | IOException e) {
@@ -64,12 +68,13 @@ public class ServiceClientJarGenerator {
         Set<Class<?>> classesToExport = new HashSet<>();
         for (String serviceClassName : services) {
             Class<?> serviceClass = loadClass(serviceClassName);
-            addClassesToExport(serviceClass, classesToExport);
+            classesToExport.addAll(referedClassesFinder.find(serviceClass));
             JavapoetBasedServiceClientCodeGenerator codeGenerator = createCodeGenerator(serviceClass);
             String targetPackage = getTargetPackage(serviceClass);
             JavaFileObject javaFileObject = codeGenerator.generate(targetPackage, sourceDir);
             compileGeneratedFile(javaFileObject, binDir.getAbsolutePath());
         }
+        LOGGER.info("Exporting required exportable classes %s", classesToExport);
         for (Class<?> classToExport : classesToExport) {
             File classFile = JarUtils.getClassFile(classToExport);
             String targetClassName = classToExport.getName();
@@ -80,33 +85,6 @@ public class ServiceClientJarGenerator {
             Files.copy(classFile, targetClassFile);
         }
         return generateJar(binDir);
-    }
-
-    private void addClassesToExport(Class<?> serviceClass, Set<Class<?>> classesToExport) {
-        Field[] fields = serviceClass.getFields();
-        for (Field field : fields) {
-            addIfRequired(classesToExport, field.getType());
-        }
-        Method[] methods = serviceClass.getMethods();
-        for (Method method : methods) {
-            Parameter[] parameters = method.getParameters();
-            for (Parameter parameter : parameters) {
-                addIfRequired(classesToExport, parameter.getType());
-            }
-            Class<?>[] exceptionTypes = method.getExceptionTypes();
-            for (Class<?> exceptionType : exceptionTypes) {
-                addIfRequired(classesToExport, exceptionType);
-            }
-        }
-    }
-
-    private void addIfRequired(Set<Class<?>> classesToExport, Class<?> type) {
-        if (type.isAnnotationPresent(Exportable.class)) {
-            if (!classesToExport.contains(type)) {
-                classesToExport.add(type);
-                addClassesToExport(type, classesToExport);
-            }
-        }
     }
 
     private Class<?> loadClass(String className) throws ClassNotFoundException {
