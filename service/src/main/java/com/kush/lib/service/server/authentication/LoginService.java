@@ -18,15 +18,11 @@ public class LoginService extends BaseService {
     public static final String KEY_USER_ID_GEN = "USER_ID_GEN";
 
     @ServiceMethod(name = "register")
-    public User register(Credential credential) throws UserRegistrationFailedException {
+    public User register(Credential credential) throws PersistorOperationFailedException, UserRegistrationFailedException {
         UserCredentialPersistor userCredentialPersistor = getUserCredentialPersistor();
         validateCredentialDoesNotExists(credential, userCredentialPersistor);
         User user = createUser();
-        try {
-            userCredentialPersistor.addUserCredential(user, credential);
-        } catch (PersistorOperationFailedException e) {
-            throw new UserRegistrationFailedException(e.getMessage(), e);
-        }
+        userCredentialPersistor.addUserCredential(user, credential);
         return user;
     }
 
