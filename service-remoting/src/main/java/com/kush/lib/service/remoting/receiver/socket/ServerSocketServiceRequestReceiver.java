@@ -89,7 +89,7 @@ public class ServerSocketServiceRequestReceiver extends ServiceRequestReceiver {
         public void onResult(Object result) {
             try {
                 writeResult(socket, result);
-            } catch (IOException e) {
+            } catch (Exception e) {
                 onError(new ServiceRequestFailedException(e.getMessage()));
             } finally {
                 closeSocket();

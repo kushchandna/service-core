@@ -62,7 +62,7 @@ public class LoginService extends BaseService {
     private User createUser() {
         IdGenerator idGenerator = getContext().getInstance(KEY_USER_ID_GEN, IdGenerator.class);
         Identifier userId = idGenerator.next();
-        return new DefaultUser(userId);
+        return new User(userId);
     }
 
     private void validateCredentialDoesNotExists(Credential credential, UserCredentialPersistor userCredentialPersistor)
