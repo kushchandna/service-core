@@ -3,30 +3,23 @@ package com.kush.utils.commons;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.URL;
+import java.io.InputStream;
 import java.util.jar.JarEntry;
 import java.util.jar.JarOutputStream;
 
+import org.apache.commons.io.IOUtils;
+
 public class JarUtils {
 
-    public static File getClassFile(Class<?> klass) {
+    public static void copyClassFile(Class<?> klass, File targetDirectory) throws IOException {
         String classAsFile = getClassAsFile(klass);
-        URL url = klass.getResource("/" + classAsFile);
-        return new File(url.getFile());
-    }
-
-    // TODO fix this logic
-    // file:/D:/repo/git/commons/utils/target/test-classes
-    // file:/D:/repo/git/commons/utils/target/test-classes/com/kush/utils/practice/Resources.class
-    public static File getParentDirectory(Class<?> klass) {
-        File classFile = getClassFile(klass);
-        String classAsFile = getClassAsFile(klass);
-        String absolutePath = classFile.getAbsolutePath();
-        if (absolutePath.endsWith(classAsFile)) {
-            absolutePath = absolutePath.substring(0, absolutePath.length() - classAsFile.length());
-        }
-        return new File(absolutePath);
+        InputStream inputStream = klass.getResourceAsStream("/" + classAsFile);
+        File targetFile = new File(targetDirectory, classAsFile);
+        targetFile.getParentFile().mkdirs();
+        FileOutputStream fos = new FileOutputStream(targetFile);
+        IOUtils.copy(inputStream, fos);
     }
 
     public static void addToJar(File parent, File source, JarOutputStream target) throws IOException {

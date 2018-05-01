@@ -22,7 +22,6 @@ import javax.tools.JavaCompiler.CompilationTask;
 import javax.tools.JavaFileObject;
 import javax.tools.ToolProvider;
 
-import com.google.common.io.Files;
 import com.kush.lib.service.server.annotations.Exportable;
 import com.kush.servicegen.CodeGenerationFailedException;
 import com.kush.servicegen.ServiceInfo;
@@ -58,7 +57,7 @@ public class ServiceClientJarGenerator {
     }
 
     private File generateJarAndReturnFile(List<String> services)
-            throws ClassNotFoundException, CodeGenerationFailedException, IOException, FileNotFoundException {
+            throws ClassNotFoundException, CodeGenerationFailedException, IOException {
         File generatedFilesDir = new File(targetDirectory, "generated");
         generatedFilesDir.mkdirs();
         File sourceDir = new File(generatedFilesDir, "sources");
@@ -74,15 +73,16 @@ public class ServiceClientJarGenerator {
             JavaFileObject javaFileObject = codeGenerator.generate(targetPackage, sourceDir);
             compileGeneratedFile(javaFileObject, binDir.getAbsolutePath());
         }
-        LOGGER.info("Exporting required exportable classes %s", classesToExport);
+        LOGGER.info("Exporting requires exportable classes %s", classesToExport);
         for (Class<?> classToExport : classesToExport) {
-            File classFile = JarUtils.getClassFile(classToExport);
-            String targetClassName = classToExport.getName();
-            String targetClassRelativePath = targetClassName.replace('.', '/') + ".class";
-            File targetClassFile = new File(binDir, targetClassRelativePath);
-            targetClassFile.getParentFile().mkdirs();
-            targetClassFile.createNewFile();
-            Files.copy(classFile, targetClassFile);
+            LOGGER.info("Exporting %s", classToExport.getName());
+            try {
+                JarUtils.copyClassFile(classToExport, binDir);
+                LOGGER.info("Exported %s", classToExport.getName());
+            } catch (IOException e) {
+                LOGGER.error(e);
+                throw e;
+            }
         }
         return generateJar(binDir);
     }
