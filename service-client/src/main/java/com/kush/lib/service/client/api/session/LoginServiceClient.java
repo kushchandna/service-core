@@ -47,4 +47,8 @@ public class LoginServiceClient extends ServiceClient {
         });
         return response;
     }
+
+    public Response<Boolean> isLoggeedIn() {
+        return null;
+    }
 }
