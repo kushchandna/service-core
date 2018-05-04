@@ -3,8 +3,8 @@ package com.kush.servicegen.maven;
 import static com.kush.utils.commons.CollectionUtils.nonNull;
 
 import java.io.File;
-import java.util.List;
 import java.util.Properties;
+import java.util.Set;
 
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -14,12 +14,16 @@ import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
+import org.reflections.Reflections;
 
+import com.kush.lib.service.server.annotations.Service;
 import com.kush.servicegen.CodeGenerationFailedException;
 import com.kush.servicegen.clients.ServiceClientJarGenerator;
 
-@Mojo(name = "generate-service-clients", defaultPhase = LifecyclePhase.COMPILE)
+@Mojo(name = "generate", defaultPhase = LifecyclePhase.COMPILE)
 public class ServiceClientJarGeneratorMojo extends AbstractMojo {
+
+    private final Reflections reflections;
 
     @Component
     private MavenProject mavenProject;
@@ -28,11 +32,15 @@ public class ServiceClientJarGeneratorMojo extends AbstractMojo {
     private File targetDirectory;
     @Parameter(defaultValue = "generated.service.client.jar.path", readonly = true)
     private String generatedServiceClientJarPath;
-    @Parameter
-    private List<String> services;
+
+    public ServiceClientJarGeneratorMojo() {
+        reflections = new Reflections();
+    }
 
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
+        Set<Class<?>> services = reflections.getTypesAnnotatedWith(Service.class);
+        getLog().info("Found services " + services);
         String serviceClientJarName = prepareServiceClientJarName();
         ServiceClientJarGenerator jarGenerator = new ServiceClientJarGenerator(targetDirectory, serviceClientJarName);
         try {
