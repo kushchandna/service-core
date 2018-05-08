@@ -12,7 +12,7 @@ public class SampleHelloService extends BaseService {
     private static final com.kush.logger.Logger LOGGER =
             com.kush.logger.LoggerFactory.INSTANCE.getLogger(SampleHelloService.class);
 
-    @ServiceMethod(name = "Say Hello")
+    @ServiceMethod
     public String sayHello(String name) {
         String text = sayHelloInternal(name);
         LOGGER.info("[Server] returning result for sayHello: %s", text);
@@ -20,7 +20,7 @@ public class SampleHelloService extends BaseService {
     }
 
     @AuthenticationRequired
-    @ServiceMethod(name = "Say Hello To Me")
+    @ServiceMethod
     public String sayHelloToMe() {
         User currentUser = getCurrentUser();
         String name = fetchName(currentUser);

@@ -73,8 +73,7 @@ class ServiceInitializer {
         Method[] declaredMethods = serviceClass.getDeclaredMethods();
         for (Method method : declaredMethods) {
             if (method.isAnnotationPresent(ServiceMethod.class)) {
-                ServiceMethod serviceMethod = method.getAnnotation(ServiceMethod.class);
-                ServiceRequestKey key = new ServiceRequestKey(serviceName, serviceMethod.name());
+                ServiceRequestKey key = new ServiceRequestKey(serviceName, method.getName());
                 if (serviceInvokers.containsKey(key)) {
                     throw new ServiceInitializationFailedException("A service method with name '" + key.getMethodName()
                             + "' already exist in service " + key.getServiceName());

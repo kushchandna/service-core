@@ -11,37 +11,37 @@ import com.kush.lib.service.server.authentication.AuthenticationRequired;
 @Service
 public class DummyService extends BaseService {
 
-    @ServiceMethod(name = "A Void Method With No Params")
+    @ServiceMethod
     public void aVoidMethodWithNoParams() {
     }
 
-    @ServiceMethod(name = "B Int Method With Two Primitive Params")
+    @ServiceMethod
     public int bIntMethodWithTwoPrimitiveParams(int param1, double param2) {
         return 0;
     }
 
-    @ServiceMethod(name = "C String Method With Two Non Primitive Params")
+    @ServiceMethod
     public String cStringMethodWithTwoNonPrimitiveParams(Integer param1, Double param2) {
         return null;
     }
 
-    @ServiceMethod(name = "D Int Array Method With Two Array Params")
+    @ServiceMethod
     public int[] dIntArrayMethodWithTwoArrayParams(int[] param1, Double[] param2) {
         return null;
     }
 
-    @ServiceMethod(name = "E String List Method With Two Generic Params")
+    @ServiceMethod
     public List<String> eStringListMethodWithTwoGenericParams(List<Integer> param1, Set<Double> param2) {
         return null;
     }
 
     @AuthenticationRequired
-    @ServiceMethod(name = "F Void Method With Authentication")
+    @ServiceMethod
     public void fVoidMethodWithAuthentication() {
     }
 
     @AuthenticationRequired
-    @ServiceMethod(name = "G Int Method With Authentication")
+    @ServiceMethod
     public int gIntMethodWithAuthentication(int param1, double param2) {
         return 0;
     }

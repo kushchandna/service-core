@@ -10,10 +10,10 @@ public class SampleHelloServiceClient extends ServiceClient {
     }
 
     public Response<String> sayHello(String name) {
-        return invoke("Say Hello", name);
+        return invoke("sayHello", name);
     }
 
     public Response<String> sayHelloToMe() {
-        return authInvoke("Say Hello To Me");
+        return authInvoke("sayHelloToMe");
     }
 }

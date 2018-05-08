@@ -18,7 +18,7 @@ public class LoginService extends BaseService {
 
     public static final String KEY_USER_ID_GEN = "USER_ID_GEN";
 
-    @ServiceMethod(name = "register")
+    @ServiceMethod
     public User register(Credential credential) throws PersistorOperationFailedException, ValidationFailedException {
         UserCredentialPersistor userCredentialPersistor = getUserCredentialPersistor();
         validateCredentialDoesNotExists(credential, userCredentialPersistor);
@@ -27,7 +27,7 @@ public class LoginService extends BaseService {
         return user;
     }
 
-    @ServiceMethod(name = "login")
+    @ServiceMethod
     public AuthToken login(Credential credential) throws AuthenticationFailedException {
         UserCredentialPersistor userCredentialPersistor = getUserCredentialPersistor();
         User user = getUser(credential, userCredentialPersistor);
@@ -36,7 +36,7 @@ public class LoginService extends BaseService {
     }
 
     @AuthenticationRequired
-    @ServiceMethod(name = "logout")
+    @ServiceMethod
     public void logout() {
         User currentUser = getCurrentUser();
         SessionManager sessionManager = getSessionManager();

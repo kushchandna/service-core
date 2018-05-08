@@ -6,7 +6,6 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.kush.lib.service.server.annotations.ServiceMethod;
 import com.kush.lib.service.server.authentication.AuthenticationRequired;
 
 public class ServiceMethodInfo {
@@ -15,11 +14,6 @@ public class ServiceMethodInfo {
 
     public ServiceMethodInfo(Method serviceMethod) {
         method = serviceMethod;
-    }
-
-    public String getServiceMethodId() {
-        ServiceMethod serviceMethod = method.getAnnotation(ServiceMethod.class);
-        return serviceMethod.name();
     }
 
     public String getMethodName() {

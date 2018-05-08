@@ -88,8 +88,7 @@ public class JavapoetBasedServiceClientCodeGenerator implements CodeGenerator {
             .returns(responseReturnTypeName)
             .addModifiers(PUBLIC)
             .addParameters(parameterSpecs)
-            .addStatement(createInvokeStatement(parameterSpecs, serviceMethod.isAuthenticationRequired()),
-                    serviceMethod.getServiceMethodId())
+            .addStatement(createInvokeStatement(parameterSpecs, serviceMethod.isAuthenticationRequired()), methodName)
             .build();
     }
 
