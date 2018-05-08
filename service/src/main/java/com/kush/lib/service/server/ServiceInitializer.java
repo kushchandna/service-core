@@ -6,7 +6,6 @@ import java.util.Map;
 import java.util.Set;
 
 import com.kush.lib.service.remoting.ServiceRequestResolver;
-import com.kush.lib.service.server.annotations.Service;
 import com.kush.lib.service.server.annotations.ServiceMethod;
 import com.kush.lib.service.server.authentication.Auth;
 import com.kush.lib.service.server.authentication.LoginService;
@@ -63,11 +62,7 @@ class ServiceInitializer {
     }
 
     private String getServiceName(Class<? extends BaseService> serviceClass) throws ServiceInitializationFailedException {
-        Service service = serviceClass.getAnnotation(Service.class);
-        if (service == null) {
-            throw new ServiceInitializationFailedException("No @Service annotation found on class " + serviceClass.getName());
-        }
-        return service.name();
+        return serviceClass.getName();
     }
 
     private void registerServiceInvokers(Class<? extends BaseService> serviceClass, Context context,

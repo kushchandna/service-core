@@ -116,7 +116,7 @@ public class JavapoetBasedServiceClientCodeGenerator implements CodeGenerator {
     }
 
     private String getServiceApiName(ServiceInfo serviceInfo) {
-        return serviceInfo.getName() + "Client";
+        return serviceInfo.getClassName() + "Client";
     }
 
     private Type wrapType(Type returnType) {

@@ -6,7 +6,7 @@ import com.kush.utils.async.Response;
 public class SampleHelloServiceClient extends ServiceClient {
 
     public SampleHelloServiceClient() {
-        super("Sample Hello Service");
+        super("com.kush.lib.service.sample.server.SampleHelloService");
     }
 
     public Response<String> sayHello(String name) {

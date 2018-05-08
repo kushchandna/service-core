@@ -6,7 +6,7 @@ import com.kush.lib.service.server.annotations.Service;
 import com.kush.lib.service.server.annotations.ServiceMethod;
 import com.kush.lib.service.server.authentication.AuthenticationRequired;
 
-@Service(name = "Sample Hello Service")
+@Service
 public class SampleHelloService extends BaseService {
 
     private static final com.kush.logger.Logger LOGGER =

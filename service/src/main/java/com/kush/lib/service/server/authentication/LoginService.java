@@ -13,7 +13,7 @@ import com.kush.utils.id.IdGenerator;
 import com.kush.utils.id.Identifier;
 import com.kush.utils.id.SequentialIdGenerator;
 
-@Service(name = "Login")
+@Service
 public class LoginService extends BaseService {
 
     public static final String KEY_USER_ID_GEN = "USER_ID_GEN";

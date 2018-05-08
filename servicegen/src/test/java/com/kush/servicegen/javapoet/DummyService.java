@@ -8,7 +8,7 @@ import com.kush.lib.service.server.annotations.Service;
 import com.kush.lib.service.server.annotations.ServiceMethod;
 import com.kush.lib.service.server.authentication.AuthenticationRequired;
 
-@Service(name = "Dummy Service")
+@Service
 public class DummyService extends BaseService {
 
     @ServiceMethod(name = "A Void Method With No Params")

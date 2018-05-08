@@ -13,7 +13,7 @@ public class LoginServiceClient extends ServiceClient {
             com.kush.logger.LoggerFactory.INSTANCE.getLogger(LoginServiceClient.class);
 
     public LoginServiceClient() {
-        super("Login");
+        super("com.kush.lib.service.server.authentication.LoginService");
     }
 
     public Response<User> register(Credential credential) {

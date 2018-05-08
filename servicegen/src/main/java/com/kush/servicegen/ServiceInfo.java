@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-import com.kush.lib.service.server.annotations.Service;
 import com.kush.lib.service.server.annotations.ServiceMethod;
 
 public class ServiceInfo {
@@ -19,11 +18,10 @@ public class ServiceInfo {
     }
 
     public String getServiceId() {
-        Service service = serviceClass.getAnnotation(Service.class);
-        return service.name();
+        return serviceClass.getName();
     }
 
-    public String getName() {
+    public String getClassName() {
         return serviceClass.getSimpleName();
     }
 
