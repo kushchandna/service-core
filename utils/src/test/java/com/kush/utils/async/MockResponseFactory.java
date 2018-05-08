@@ -8,6 +8,12 @@ public class MockResponseFactory {
         return response;
     }
 
+    public static <T> Response<T> aFailingResponse(Exception error) {
+        LocalResponse<T> response = new LocalResponse<>();
+        response.setError(new RequestFailedException(error));
+        return response;
+    }
+
     private MockResponseFactory() {
     }
 }
