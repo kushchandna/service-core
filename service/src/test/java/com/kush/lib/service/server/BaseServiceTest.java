@@ -28,7 +28,7 @@ public class BaseServiceTest {
 
     protected static final Instant CURRENT_TIME = Instant.now();
     protected static final ZoneId CURRENT_ZONE = ZoneId.systemDefault();
-    private static final Clock CLOCK = Clock.fixed(CURRENT_TIME, CURRENT_ZONE);
+    protected static final Clock CLOCK = Clock.fixed(CURRENT_TIME, CURRENT_ZONE);
 
     private final Map<User, Credential> userVsCredential = new LinkedHashMap<>();
     private final Context context = new Context();
