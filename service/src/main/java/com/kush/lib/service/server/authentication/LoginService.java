@@ -45,10 +45,10 @@ public class LoginService extends BaseService {
 
     @Override
     protected void processContext() {
+        checkContextHasValueFor(UserCredentialPersistor.class);
         addIfDoesNotExist(KEY_USER_ID_GEN, new SequentialIdGenerator());
         addIfDoesNotExist(Auth.class, new Auth());
         addIfDoesNotExist(SessionManager.class, new SessionManager());
-        checkContextHasValueFor(UserCredentialPersistor.class);
     }
 
     private UserCredentialPersistor getUserCredentialPersistor() {

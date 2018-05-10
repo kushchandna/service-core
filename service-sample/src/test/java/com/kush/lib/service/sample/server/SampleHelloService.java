@@ -29,8 +29,13 @@ public class SampleHelloService extends BaseService {
         return text;
     }
 
+    @Override
+    protected void processContext() {
+        checkContextHasValueFor(SampleHelloTextProvider.class);
+    }
+
     private String sayHelloInternal(String name) {
-        SampleHelloTextProvider helloTextProvider = getContext().getInstance(SampleHelloTextProvider.class);
+        SampleHelloTextProvider helloTextProvider = getInstance(SampleHelloTextProvider.class);
         return helloTextProvider.getHelloText() + " " + name;
     }
 
