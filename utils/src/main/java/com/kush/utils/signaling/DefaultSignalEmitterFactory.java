@@ -13,6 +13,10 @@ public class DefaultSignalEmitterFactory implements SignalEmitterFactory {
         this(null, null);
     }
 
+    public DefaultSignalEmitterFactory(Executor executor) {
+        this(executor, true);
+    }
+
     public DefaultSignalEmitterFactory(Executor executor, boolean useOneThreadPerSignal) {
         if (useOneThreadPerSignal) {
             signalSpecificExecutor = executor;
