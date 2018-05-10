@@ -29,7 +29,7 @@ import com.kush.servicegen.ServiceInfo;
 import com.kush.servicegen.ServiceReader;
 import com.kush.servicegen.javapoet.JavapoetBasedServiceClientCodeGenerator;
 import com.kush.utils.commons.JarUtils;
-import com.kush.utils.commons.ReferedClassesFinder;
+import com.kush.utils.commons.AssociatedClassesFinder;
 
 public class ServiceClientJarGenerator {
 
@@ -39,13 +39,13 @@ public class ServiceClientJarGenerator {
     private final File targetDirectory;
     private final String targetJarName;
     private final ServiceReader serviceReader;
-    private final ReferedClassesFinder referedClassesFinder;
+    private final AssociatedClassesFinder referedClassesFinder;
 
     public ServiceClientJarGenerator(File targetDirectory, String targetJarName) {
         this.targetDirectory = targetDirectory;
         this.targetJarName = targetJarName;
         serviceReader = new ServiceReader();
-        referedClassesFinder = new ReferedClassesFinder(klass -> klass.isAnnotationPresent(Exportable.class));
+        referedClassesFinder = new AssociatedClassesFinder(klass -> klass.isAnnotationPresent(Exportable.class));
     }
 
     public File generate(Collection<Class<?>> services) throws CodeGenerationFailedException {

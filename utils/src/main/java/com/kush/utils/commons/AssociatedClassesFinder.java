@@ -1,5 +1,7 @@
 package com.kush.utils.commons;
 
+import static java.util.Arrays.stream;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
@@ -8,17 +10,21 @@ import java.lang.reflect.Type;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.reflections.Reflections;
+import org.reflections.scanners.SubTypesScanner;
+import org.reflections.util.ConfigurationBuilder;
+
 import com.google.common.base.Predicate;
 
-public class ReferedClassesFinder {
+public class AssociatedClassesFinder {
 
     private final Predicate<Class<?>> filter;
 
-    public ReferedClassesFinder() {
+    public AssociatedClassesFinder() {
         this(c -> true);
     }
 
-    public ReferedClassesFinder(Predicate<Class<?>> filter) {
+    public AssociatedClassesFinder(Predicate<Class<?>> filter) {
         this.filter = filter;
     }
 
@@ -32,6 +38,31 @@ public class ReferedClassesFinder {
         processFields(klass, klasses);
         processMethods(klass, klasses);
         processSuperClasses(klass, klasses);
+        processOtherAssociatedTypes(klass, klasses);
+        // processSubClasses(klass, klasses);
+    }
+
+    private void processOtherAssociatedTypes(Class<?> klass, Set<Class<?>> klasses) {
+        if (klass.isAnnotationPresent(AssociatedClasses.class)) {
+            AssociatedClasses associatedClasses = klass.getAnnotation(AssociatedClasses.class);
+            Class<?>[] value = associatedClasses.value();
+            stream(value).forEach(c -> {
+                addToClasses(klasses, c);
+                processAsGeneric(klasses, c);
+            });
+        }
+    }
+
+    // TODO not working as expected
+    final void processSubClasses(Class<?> klass, Set<Class<?>> klasses) {
+        Reflections reflections = new Reflections(new ConfigurationBuilder()
+            .setScanners(new SubTypesScanner()));
+        Set<?> subTypes = reflections.getSubTypesOf(klass);
+        for (Object subType : subTypes) {
+            Class<?> subTypeClass = (Class<?>) subType;
+            addToClasses(klasses, subTypeClass);
+            processAsGeneric(klasses, subTypeClass);
+        }
     }
 
     private void processSuperClasses(Class<?> klass, Set<Class<?>> klasses) {

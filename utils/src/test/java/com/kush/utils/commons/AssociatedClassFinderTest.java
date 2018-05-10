@@ -19,7 +19,7 @@ import org.junit.runners.Parameterized.Parameters;
 import com.google.common.base.Predicate;
 
 @RunWith(Parameterized.class)
-public class ReferredClassFinderTest {
+public class AssociatedClassFinderTest {
 
     @Target({ TYPE })
     @Retention(RetentionPolicy.RUNTIME)
@@ -105,8 +105,21 @@ public class ReferredClassFinderTest {
     static abstract class SuperClassScenario extends BaseClassLevel2 {
     }
 
+    @TestExportable
+    static interface SubTypeScenario {
+    }
+
+    @TestExportable
+    static interface SubType extends SubTypeScenario {
+    }
+
+    @AssociatedClasses({ Type1.class, Type2.class })
+    @TestExportable
+    static interface OtherAssociatedClassesScenario {
+    }
+
     @Parameters
-    public static Object[][] getParameters() {
+    public static Object[][] getParameters() throws Exception {
         return new Object[][] {
                 { FieldReferencesScenario.class, asList(Type1.class, Type2.class, Type3.class, GenericType.class) },
                 { MethodReturnTypeScenario.class, asList(Type1.class, Type2.class, Type3.class, GenericType.class) },
@@ -115,13 +128,15 @@ public class ReferredClassFinderTest {
                 { SuperClassScenario.class,
                         asList(ExportableException.class, Type1.class, Type2.class, BaseClassLevel1.class,
                                 BaseClassLevel2.class, Type3.class, GenericType.class) },
+                /* { SubTypeScenario.class, asList(SubType.class) }, */
+                { OtherAssociatedClassesScenario.class, asList(Type1.class, Type2.class) },
         };
     }
 
     private final Class<?> testClass;
     private final Class<?>[] expectedReferedTypes;
 
-    public ReferredClassFinderTest(Class<?> testClass, List<Class<?>> expectedReferedTypes) {
+    public AssociatedClassFinderTest(Class<?> testClass, List<Class<?>> expectedReferedTypes) {
         this.testClass = testClass;
         this.expectedReferedTypes = expectedReferedTypes.toArray(new Class<?>[0]);
     }
@@ -129,8 +144,8 @@ public class ReferredClassFinderTest {
     @Test
     public void runTest() throws Exception {
         Predicate<Class<?>> isExportable = klass -> klass != null && klass.isAnnotationPresent(TestExportable.class);
-        ReferedClassesFinder referedClassesFinder = new ReferedClassesFinder(isExportable);
+        AssociatedClassesFinder referedClassesFinder = new AssociatedClassesFinder(isExportable);
         Set<Class<?>> referedClasses = referedClassesFinder.find(testClass);
-        assertThat(testClass.getName() + " scenario failed.", referedClasses, containsInAnyOrder(expectedReferedTypes));
+        assertThat(testClass.getSimpleName() + " scenario failed.", referedClasses, containsInAnyOrder(expectedReferedTypes));
     }
 }
