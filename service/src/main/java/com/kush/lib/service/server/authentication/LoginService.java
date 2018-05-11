@@ -31,6 +31,9 @@ public class LoginService extends BaseService {
     public AuthToken login(Credential credential) throws AuthenticationFailedException {
         UserCredentialPersistor userCredentialPersistor = getUserCredentialPersistor();
         User user = getUser(credential, userCredentialPersistor);
+        if (user == null) {
+            throw new AuthenticationFailedException("No user exists with specified credential");
+        }
         SessionManager sessionManager = getSessionManager();
         return sessionManager.startSession(user);
     }

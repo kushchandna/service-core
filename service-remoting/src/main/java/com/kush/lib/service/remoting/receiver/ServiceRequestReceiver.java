@@ -96,10 +96,11 @@ public abstract class ServiceRequestReceiver {
                             request.getServiceName());
                 }
                 resolvableRequest.getListener().onResult(result);
-            } catch (ServiceRequestFailedException e) {
+            } catch (Exception e) {
                 LOGGER.error("Error occured with message %s while resolving request %s from service %s", e.getMessage(),
                         request.getMethodName(), request.getServiceName());
-                resolvableRequest.getListener().onError(e);
+                LOGGER.error(e);
+                resolvableRequest.getListener().onError(new ServiceRequestFailedException(e.getMessage()));
             }
         }
     }
