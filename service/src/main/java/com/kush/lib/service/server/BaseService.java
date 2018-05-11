@@ -44,6 +44,7 @@ public abstract class BaseService {
     protected final void checkContextHasValueFor(Object key) {
         if (!context.containsKey(key)) {
             String error = format("%s service requires %s in its context.", getClass().getName(), key);
+            LOGGER.error(error);
             throw new IllegalStateException(error);
         }
     }
