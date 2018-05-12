@@ -24,7 +24,7 @@ import com.kush.utils.async.Response.ResultListener;
 public class ResponderTest {
 
     private static final String RESULT_SUCCESS = "SUCCESS";
-    private static final long ACCURACY = 10;
+    private static final long ACCURACY = 100;
 
     private final Stopwatch watch = Stopwatch.createUnstarted();
 
