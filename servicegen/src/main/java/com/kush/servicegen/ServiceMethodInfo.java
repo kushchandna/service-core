@@ -6,7 +6,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.kush.lib.service.server.authentication.AuthenticationRequired;
+import com.kush.service.auth.AuthenticationRequired;
 
 public class ServiceMethodInfo {
 

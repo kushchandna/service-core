@@ -22,8 +22,8 @@ import javax.tools.JavaCompiler.CompilationTask;
 import javax.tools.JavaFileObject;
 import javax.tools.ToolProvider;
 
-import com.kush.lib.service.server.annotations.Exportable;
-import com.kush.lib.service.server.authentication.LoginService;
+import com.kush.service.annotations.Exportable;
+import com.kush.service.auth.LoginService;
 import com.kush.servicegen.CodeGenerationFailedException;
 import com.kush.servicegen.ServiceInfo;
 import com.kush.servicegen.ServiceReader;

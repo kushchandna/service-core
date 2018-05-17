@@ -11,7 +11,7 @@ import com.kush.lib.service.remoting.receiver.ResolvableServiceRequest;
 import com.kush.lib.service.remoting.receiver.ServiceRequestReceiver;
 import com.kush.lib.service.remoting.receiver.local.LocalServiceRequestReceiver;
 import com.kush.lib.service.sample.application.SampleApplication;
-import com.kush.lib.service.server.ApplicationServer;
+import com.kush.service.ApplicationServer;
 
 public class SampleLocalApplicationImpl extends SampleApplication {
 

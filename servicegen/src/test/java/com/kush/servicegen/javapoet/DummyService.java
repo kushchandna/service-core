@@ -3,10 +3,10 @@ package com.kush.servicegen.javapoet;
 import java.util.List;
 import java.util.Set;
 
-import com.kush.lib.service.server.BaseService;
-import com.kush.lib.service.server.annotations.Service;
-import com.kush.lib.service.server.annotations.ServiceMethod;
-import com.kush.lib.service.server.authentication.AuthenticationRequired;
+import com.kush.service.BaseService;
+import com.kush.service.annotations.Service;
+import com.kush.service.annotations.ServiceMethod;
+import com.kush.service.auth.AuthenticationRequired;
 
 @Service
 public class DummyService extends BaseService {

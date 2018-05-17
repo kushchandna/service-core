@@ -16,7 +16,7 @@ import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 import org.reflections.Reflections;
 
-import com.kush.lib.service.server.annotations.Service;
+import com.kush.service.annotations.Service;
 import com.kush.servicegen.CodeGenerationFailedException;
 import com.kush.servicegen.clients.ServiceClientJarGenerator;
 

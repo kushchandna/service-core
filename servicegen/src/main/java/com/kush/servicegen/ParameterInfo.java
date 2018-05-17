@@ -3,7 +3,7 @@ package com.kush.servicegen;
 import java.lang.reflect.Parameter;
 import java.lang.reflect.Type;
 
-import com.kush.lib.service.server.annotations.Exportable;
+import com.kush.service.annotations.Exportable;
 
 public class ParameterInfo {
 

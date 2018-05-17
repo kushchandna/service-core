@@ -7,7 +7,7 @@ import com.kush.lib.service.remoting.connect.ServiceConnectionFactory;
 import com.kush.lib.service.remoting.connect.socket.SocketServiceConnectionFactory;
 import com.kush.lib.service.remoting.receiver.socket.ServerSocketServiceRequestReceiver;
 import com.kush.lib.service.sample.application.SampleApplication;
-import com.kush.lib.service.server.ApplicationServer;
+import com.kush.service.ApplicationServer;
 
 public class SampleSocketApplicationImpl extends SampleApplication {
 
