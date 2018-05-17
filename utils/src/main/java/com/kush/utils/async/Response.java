@@ -10,6 +10,8 @@ public interface Response<T> {
 
     void addErrorListener(ErrorListener errorListener);
 
+    void removeListeners();
+
     public static interface ResultListener<R> {
 
         void onResult(R result);

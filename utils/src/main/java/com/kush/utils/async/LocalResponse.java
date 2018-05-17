@@ -47,6 +47,12 @@ class LocalResponse<T> implements Response<T> {
         }
     }
 
+    @Override
+    public void removeListeners() {
+        resultListeners.clear();
+        errorListeners.clear();
+    }
+
     void setResult(T result) {
         if (latch.getCount() == 0) {
             return;
