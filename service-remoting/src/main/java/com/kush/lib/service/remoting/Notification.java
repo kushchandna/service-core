@@ -1,8 +1,22 @@
 package com.kush.lib.service.remoting;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
-public class Notification implements Serializable {
+import com.kush.utils.id.Identifier;
 
-    private static final long serialVersionUID = 1L;
+public interface Notification extends Serializable {
+
+    Identifier getId();
+
+    Identifier getUserId();
+
+    Serializable getData();
+
+    boolean isRead();
+
+    LocalDateTime getNotificationTime();
+
+    String getSource();
+
 }

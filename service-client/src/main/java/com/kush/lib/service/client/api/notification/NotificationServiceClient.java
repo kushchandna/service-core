@@ -4,16 +4,16 @@ import com.kush.lib.service.client.api.ServiceClient;
 import com.kush.lib.service.remoting.Notification;
 import com.kush.utils.async.Response;
 
-public class NotificationClient extends ServiceClient {
+public class NotificationServiceClient extends ServiceClient {
 
     private Response<Notification> lastNotificationResponse;
 
-    public NotificationClient(String serviceName) {
+    public NotificationServiceClient(String serviceName) {
         super("com.kush.service.notification.NotificationService");
     }
 
-    public synchronized void startListeningNotification() {
-        readNextNotification();
+    public synchronized void startListeningNotification(NotificationHandler notificationHandler) {
+        readNextNotification(notificationHandler);
     }
 
     public synchronized void stopListeningNotifications() {
@@ -22,13 +22,16 @@ public class NotificationClient extends ServiceClient {
         }
     }
 
-    private void readNextNotification() {
+    private void readNextNotification(NotificationHandler notificationHandler) {
         lastNotificationResponse = invoke("getNotification");
+        lastNotificationResponse.addResultListener((notification) -> {
+            notificationHandler.handle(notification);
+        });
         lastNotificationResponse.addResultListener((anyNotification) -> {
-            readNextNotification();
+            readNextNotification(notificationHandler);
         });
         lastNotificationResponse.addErrorListener((anyError) -> {
-            readNextNotification();
+            readNextNotification(notificationHandler);
         });
     }
 }
