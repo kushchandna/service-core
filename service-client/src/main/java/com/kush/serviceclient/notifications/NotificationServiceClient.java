@@ -1,7 +1,7 @@
-package com.kush.lib.service.client.api.notification;
+package com.kush.serviceclient.notifications;
 
-import com.kush.lib.service.client.api.ServiceClient;
 import com.kush.lib.service.remoting.Notification;
+import com.kush.serviceclient.ServiceClient;
 import com.kush.utils.async.Response;
 
 public class NotificationServiceClient extends ServiceClient {

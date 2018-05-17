@@ -1,9 +1,9 @@
-package com.kush.lib.service.client.api;
+package com.kush.serviceclient;
 
 import java.util.concurrent.Executor;
 
-import com.kush.lib.service.client.api.session.SessionManager;
 import com.kush.lib.service.remoting.connect.ServiceConnectionFactory;
+import com.kush.serviceclient.auth.SessionManager;
 
 class ServiceClientActivator {
 

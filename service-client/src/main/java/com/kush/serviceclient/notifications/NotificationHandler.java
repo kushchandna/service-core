@@ -1,4 +1,4 @@
-package com.kush.lib.service.client.api.notification;
+package com.kush.serviceclient.notifications;
 
 import com.kush.lib.service.remoting.Notification;
 

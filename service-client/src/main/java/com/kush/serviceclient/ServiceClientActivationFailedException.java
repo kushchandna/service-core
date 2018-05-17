@@ -1,4 +1,4 @@
-package com.kush.lib.service.client.api;
+package com.kush.serviceclient;
 
 public class ServiceClientActivationFailedException extends Exception {
 

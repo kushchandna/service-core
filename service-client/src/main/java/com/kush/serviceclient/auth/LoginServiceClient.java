@@ -1,9 +1,9 @@
-package com.kush.lib.service.client.api.session;
+package com.kush.serviceclient.auth;
 
-import com.kush.lib.service.client.api.ServiceClient;
 import com.kush.lib.service.remoting.auth.AuthToken;
 import com.kush.lib.service.remoting.auth.Credential;
 import com.kush.lib.service.remoting.auth.User;
+import com.kush.serviceclient.ServiceClient;
 import com.kush.utils.async.Response;
 import com.kush.utils.async.Response.ResultListener;
 

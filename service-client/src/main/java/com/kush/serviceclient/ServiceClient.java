@@ -1,16 +1,16 @@
-package com.kush.lib.service.client.api;
+package com.kush.serviceclient;
 
 import java.io.IOException;
 import java.util.concurrent.Executor;
 
-import com.kush.lib.service.client.api.session.Session;
-import com.kush.lib.service.client.api.session.SessionManager;
 import com.kush.lib.service.remoting.ServiceRequest;
 import com.kush.lib.service.remoting.ServiceRequestFailedException;
 import com.kush.lib.service.remoting.auth.AuthToken;
 import com.kush.lib.service.remoting.connect.ServiceConnection;
 import com.kush.lib.service.remoting.connect.ServiceConnectionFactory;
 import com.kush.lib.service.remoting.connect.ServiceConnectionFailedException;
+import com.kush.serviceclient.auth.Session;
+import com.kush.serviceclient.auth.SessionManager;
 import com.kush.utils.async.Request;
 import com.kush.utils.async.RequestFailedException;
 import com.kush.utils.async.Responder;

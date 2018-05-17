@@ -11,7 +11,7 @@ import java.util.List;
 import javax.tools.JavaFileObject;
 
 import com.google.common.primitives.Primitives;
-import com.kush.lib.service.client.api.ServiceClient;
+import com.kush.serviceclient.ServiceClient;
 import com.kush.servicegen.CodeGenerationFailedException;
 import com.kush.servicegen.CodeGenerator;
 import com.kush.servicegen.ParameterInfo;

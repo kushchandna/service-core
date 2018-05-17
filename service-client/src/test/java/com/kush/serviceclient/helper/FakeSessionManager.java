@@ -1,14 +1,14 @@
-package com.kush.service.client.helper;
+package com.kush.serviceclient.helper;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import org.junit.rules.ExternalResource;
 
-import com.kush.lib.service.client.api.session.LoginServiceClient;
 import com.kush.lib.service.remoting.auth.Credential;
 import com.kush.lib.service.remoting.auth.User;
 import com.kush.lib.service.remoting.auth.password.PasswordBasedCredential;
+import com.kush.serviceclient.auth.LoginServiceClient;
 
 public class FakeSessionManager extends ExternalResource {
 

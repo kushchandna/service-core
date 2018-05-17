@@ -1,4 +1,4 @@
-package com.kush.lib.service.client.api;
+package com.kush.serviceclient;
 
 import java.util.HashMap;
 import java.util.Map;
