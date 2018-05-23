@@ -1,10 +1,10 @@
-package com.kush.utils.async.remoting.connection.local;
+package com.kush.utils.remoting.connection.local;
 
 import java.util.concurrent.BlockingQueue;
 
-import com.kush.utils.async.remoting.connection.Connection;
-import com.kush.utils.async.remoting.connection.ConnectionFactory;
-import com.kush.utils.async.remoting.receivers.ResolvableRequest;
+import com.kush.utils.remoting.connection.Connection;
+import com.kush.utils.remoting.connection.ConnectionFactory;
+import com.kush.utils.remoting.receivers.ResolvableRequest;
 
 public class LocalConnectionFactory implements ConnectionFactory {
 

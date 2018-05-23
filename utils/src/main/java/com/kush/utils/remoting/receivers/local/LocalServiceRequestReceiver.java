@@ -1,13 +1,13 @@
-package com.kush.utils.async.remoting.receivers.local;
+package com.kush.utils.remoting.receivers.local;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executor;
 
 import com.kush.utils.async.RequestFailedException;
-import com.kush.utils.async.remoting.receivers.RequestReceiver;
-import com.kush.utils.async.remoting.receivers.ResolvableRequest;
-import com.kush.utils.async.remoting.receivers.ShutdownFailedException;
-import com.kush.utils.async.remoting.receivers.StartupFailedException;
+import com.kush.utils.remoting.receivers.RequestReceiver;
+import com.kush.utils.remoting.receivers.ResolvableRequest;
+import com.kush.utils.remoting.receivers.ShutdownFailedException;
+import com.kush.utils.remoting.receivers.StartupFailedException;
 
 public class LocalServiceRequestReceiver extends RequestReceiver {
 

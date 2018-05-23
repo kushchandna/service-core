@@ -1,4 +1,4 @@
-package com.kush.utils.async.remoting.receivers.socket;
+package com.kush.utils.remoting.receivers.socket;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -11,11 +11,11 @@ import java.util.concurrent.Executor;
 
 import com.kush.utils.async.Request;
 import com.kush.utils.async.RequestFailedException;
-import com.kush.utils.async.remoting.receivers.RequestReceiver;
-import com.kush.utils.async.remoting.receivers.ResolvableRequest;
-import com.kush.utils.async.remoting.receivers.ResultCode;
-import com.kush.utils.async.remoting.receivers.ShutdownFailedException;
-import com.kush.utils.async.remoting.receivers.StartupFailedException;
+import com.kush.utils.remoting.receivers.RequestReceiver;
+import com.kush.utils.remoting.receivers.ResolvableRequest;
+import com.kush.utils.remoting.receivers.ResultCode;
+import com.kush.utils.remoting.receivers.ShutdownFailedException;
+import com.kush.utils.remoting.receivers.StartupFailedException;
 
 public class SocketBasedRequestReceiver extends RequestReceiver {
 

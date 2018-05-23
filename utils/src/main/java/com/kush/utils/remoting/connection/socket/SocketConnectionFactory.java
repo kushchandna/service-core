@@ -1,8 +1,8 @@
-package com.kush.utils.async.remoting.connection.socket;
+package com.kush.utils.remoting.connection.socket;
 
-import com.kush.utils.async.remoting.connection.Connection;
-import com.kush.utils.async.remoting.connection.ConnectionFactory;
-import com.kush.utils.async.remoting.connection.ConnectionFailedException;
+import com.kush.utils.remoting.connection.Connection;
+import com.kush.utils.remoting.connection.ConnectionFactory;
+import com.kush.utils.remoting.connection.ConnectionFailedException;
 
 public class SocketConnectionFactory implements ConnectionFactory {
 

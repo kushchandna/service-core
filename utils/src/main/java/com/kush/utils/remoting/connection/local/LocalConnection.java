@@ -1,4 +1,4 @@
-package com.kush.utils.async.remoting.connection.local;
+package com.kush.utils.remoting.connection.local;
 
 import java.io.IOException;
 import java.util.concurrent.BlockingQueue;
@@ -7,9 +7,9 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import com.kush.utils.async.Request;
 import com.kush.utils.async.RequestFailedException;
-import com.kush.utils.async.remoting.connection.Connection;
-import com.kush.utils.async.remoting.receivers.RequestReceiver.ResponseListener;
-import com.kush.utils.async.remoting.receivers.ResolvableRequest;
+import com.kush.utils.remoting.connection.Connection;
+import com.kush.utils.remoting.receivers.ResolvableRequest;
+import com.kush.utils.remoting.receivers.RequestReceiver.ResponseListener;
 
 public class LocalConnection implements Connection {
 
