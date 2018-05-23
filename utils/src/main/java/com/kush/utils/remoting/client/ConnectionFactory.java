@@ -1,4 +1,4 @@
-package com.kush.utils.remoting.connection;
+package com.kush.utils.remoting.client;
 
 public interface ConnectionFactory {
 

@@ -1,4 +1,4 @@
-package com.kush.utils.remoting.receivers;
+package com.kush.utils.remoting.server;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;

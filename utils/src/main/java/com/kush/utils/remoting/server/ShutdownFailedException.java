@@ -1,4 +1,4 @@
-package com.kush.utils.remoting.receivers;
+package com.kush.utils.remoting.server;
 
 public class ShutdownFailedException extends Exception {
 

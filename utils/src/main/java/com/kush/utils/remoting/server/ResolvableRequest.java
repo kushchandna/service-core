@@ -1,7 +1,7 @@
-package com.kush.utils.remoting.receivers;
+package com.kush.utils.remoting.server;
 
 import com.kush.utils.async.Request;
-import com.kush.utils.remoting.receivers.RequestReceiver.ResponseListener;
+import com.kush.utils.remoting.server.RequestReceiver.ResponseListener;
 
 public class ResolvableRequest {
 

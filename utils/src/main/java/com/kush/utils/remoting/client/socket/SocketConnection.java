@@ -1,4 +1,4 @@
-package com.kush.utils.remoting.connection.socket;
+package com.kush.utils.remoting.client.socket;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -9,9 +9,9 @@ import java.net.Socket;
 
 import com.kush.utils.async.Request;
 import com.kush.utils.async.RequestFailedException;
-import com.kush.utils.remoting.connection.Connection;
-import com.kush.utils.remoting.connection.ConnectionFailedException;
-import com.kush.utils.remoting.receivers.ResultCode;
+import com.kush.utils.remoting.client.Connection;
+import com.kush.utils.remoting.client.ConnectionFailedException;
+import com.kush.utils.remoting.server.ResultCode;
 
 public class SocketConnection implements Connection {
 
