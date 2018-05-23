@@ -3,17 +3,17 @@ package com.kush.utils.remoting.server.local;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executor;
 
-import com.kush.utils.async.RequestFailedException;
-import com.kush.utils.remoting.server.RequestReceiver;
-import com.kush.utils.remoting.server.ResolvableRequest;
+import com.kush.utils.remoting.ResolutionFailedException;
+import com.kush.utils.remoting.server.ResolvableProcessor;
+import com.kush.utils.remoting.server.ResolvableQuery;
 import com.kush.utils.remoting.server.ShutdownFailedException;
 import com.kush.utils.remoting.server.StartupFailedException;
 
-public class LocalServiceRequestReceiver extends RequestReceiver {
+public class LocalServiceResolvableProcessor extends ResolvableProcessor {
 
-    private final BlockingQueue<ResolvableRequest> pendingRequests;
+    private final BlockingQueue<ResolvableQuery> pendingRequests;
 
-    public LocalServiceRequestReceiver(Executor requestResolverExecutor, BlockingQueue<ResolvableRequest> pendingRequests) {
+    public LocalServiceResolvableProcessor(Executor requestResolverExecutor, BlockingQueue<ResolvableQuery> pendingRequests) {
         super(requestResolverExecutor);
         this.pendingRequests = pendingRequests;
     }
@@ -29,12 +29,12 @@ public class LocalServiceRequestReceiver extends RequestReceiver {
     }
 
     @Override
-    protected ResolvableRequest getNextRequest() throws RequestFailedException {
+    protected ResolvableQuery getNextResolvableQuery() throws ResolutionFailedException {
         try {
             return pendingRequests.take();
         } catch (InterruptedException e) {
             // TODO interrupt waiting thread
-            throw new RequestFailedException(e);
+            throw new ResolutionFailedException(e);
         }
     }
 }

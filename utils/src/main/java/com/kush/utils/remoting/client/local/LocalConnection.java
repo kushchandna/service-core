@@ -5,26 +5,26 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicReference;
 
-import com.kush.utils.async.Request;
-import com.kush.utils.async.RequestFailedException;
+import com.kush.utils.remoting.ResolutionFailedException;
+import com.kush.utils.remoting.Resolvable;
 import com.kush.utils.remoting.client.Connection;
-import com.kush.utils.remoting.server.ResolvableRequest;
-import com.kush.utils.remoting.server.RequestReceiver.ResponseListener;
+import com.kush.utils.remoting.server.ResolvableProcessor.ResponseListener;
+import com.kush.utils.remoting.server.ResolvableQuery;
 
 public class LocalConnection implements Connection {
 
-    private final BlockingQueue<ResolvableRequest> pendingRequests;
+    private final BlockingQueue<ResolvableQuery> pendingRequests;
 
-    public LocalConnection(BlockingQueue<ResolvableRequest> pendingRequests) {
+    public LocalConnection(BlockingQueue<ResolvableQuery> pendingRequests) {
         this.pendingRequests = pendingRequests;
     }
 
     @Override
-    public Object resolve(Request<?> request) throws RequestFailedException {
+    public Object resolve(Resolvable resolvable) throws ResolutionFailedException {
         AtomicReference<Object> resultReference = new AtomicReference<>();
-        AtomicReference<RequestFailedException> exceptionReference = new AtomicReference<>();
-        resolveRequestAndWaitForResult(request, resultReference, exceptionReference);
-        RequestFailedException exception = exceptionReference.get();
+        AtomicReference<ResolutionFailedException> exceptionReference = new AtomicReference<>();
+        resolveAndWaitForResult(resolvable, resultReference, exceptionReference);
+        ResolutionFailedException exception = exceptionReference.get();
         if (exception != null) {
             throw exception;
         }
@@ -36,28 +36,28 @@ public class LocalConnection implements Connection {
         // do nothing
     }
 
-    private void resolveRequestAndWaitForResult(Request<?> request, AtomicReference<Object> resultReference,
-            AtomicReference<RequestFailedException> exceptionReference) throws RequestFailedException {
+    private void resolveAndWaitForResult(Resolvable resolvable, AtomicReference<Object> resultReference,
+            AtomicReference<ResolutionFailedException> exceptionReference) throws ResolutionFailedException {
         CountDownLatch latch = new CountDownLatch(1);
-        ResponseListener responseListener = new LocalRequestResponseListener(latch, resultReference, exceptionReference);
-        ResolvableRequest resolvableRequest = new ResolvableRequest(request, responseListener);
+        ResponseListener responseListener = new LocalResolutionResponseListener(latch, resultReference, exceptionReference);
+        ResolvableQuery resolvableRequest = new ResolvableQuery(resolvable, responseListener);
         try {
             pendingRequests.put(resolvableRequest);
             latch.await();
         } catch (InterruptedException e) {
             // TODO handle
-            throw new RequestFailedException(e);
+            throw new ResolutionFailedException(e);
         }
     }
 
-    private final class LocalRequestResponseListener implements ResponseListener {
+    private final class LocalResolutionResponseListener implements ResponseListener {
 
         private final CountDownLatch latch;
         private final AtomicReference<Object> resultReference;
-        private final AtomicReference<RequestFailedException> exceptionReference;
+        private final AtomicReference<ResolutionFailedException> exceptionReference;
 
-        public LocalRequestResponseListener(CountDownLatch latch, AtomicReference<Object> resultReference,
-                AtomicReference<RequestFailedException> exceptionReference) {
+        public LocalResolutionResponseListener(CountDownLatch latch, AtomicReference<Object> resultReference,
+                AtomicReference<ResolutionFailedException> exceptionReference) {
             this.latch = latch;
             this.resultReference = resultReference;
             this.exceptionReference = exceptionReference;
@@ -70,7 +70,7 @@ public class LocalConnection implements Connection {
         }
 
         @Override
-        public void onError(RequestFailedException e) {
+        public void onError(ResolutionFailedException e) {
             exceptionReference.set(e);
             responseReceived();
         }

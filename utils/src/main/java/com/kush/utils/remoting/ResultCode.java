@@ -1,4 +1,4 @@
-package com.kush.utils.remoting.server;
+package com.kush.utils.remoting;
 
 public class ResultCode {
 

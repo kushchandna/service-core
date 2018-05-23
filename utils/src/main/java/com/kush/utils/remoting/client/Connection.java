@@ -2,10 +2,10 @@ package com.kush.utils.remoting.client;
 
 import java.io.Closeable;
 
-import com.kush.utils.async.Request;
-import com.kush.utils.async.RequestFailedException;
+import com.kush.utils.remoting.ResolutionFailedException;
+import com.kush.utils.remoting.Resolvable;
 
 public interface Connection extends Closeable {
 
-    Object resolve(Request<?> request) throws RequestFailedException;
+    Object resolve(Resolvable resolvable) throws ResolutionFailedException;
 }

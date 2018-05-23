@@ -7,11 +7,11 @@ import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 
-import com.kush.utils.async.Request;
-import com.kush.utils.async.RequestFailedException;
+import com.kush.utils.remoting.ResolutionFailedException;
+import com.kush.utils.remoting.Resolvable;
+import com.kush.utils.remoting.ResultCode;
 import com.kush.utils.remoting.client.Connection;
 import com.kush.utils.remoting.client.ConnectionFailedException;
-import com.kush.utils.remoting.server.ResultCode;
 
 public class SocketConnection implements Connection {
 
@@ -26,12 +26,12 @@ public class SocketConnection implements Connection {
     }
 
     @Override
-    public Object resolve(Request<?> request) throws RequestFailedException {
+    public Object resolve(Resolvable resolvable) throws ResolutionFailedException {
         try {
-            sendRequest(request, socket);
+            sendForResolution(resolvable, socket);
             return readResult(socket);
         } catch (ClassNotFoundException | IOException e) {
-            throw new RequestFailedException(e);
+            throw new ResolutionFailedException(e);
         }
     }
 
@@ -40,19 +40,19 @@ public class SocketConnection implements Connection {
         socket.close();
     }
 
-    private static <T> void sendRequest(Request<?> request, Socket socket) throws IOException {
+    private static <T> void sendForResolution(Resolvable resolvable, Socket socket) throws IOException {
         OutputStream os = socket.getOutputStream();
         ObjectOutputStream oos = new ObjectOutputStream(os);
-        oos.writeObject(request);
+        oos.writeObject(resolvable);
     }
 
-    private static Object readResult(Socket socket) throws IOException, ClassNotFoundException, RequestFailedException {
+    private static Object readResult(Socket socket) throws IOException, ClassNotFoundException, ResolutionFailedException {
         InputStream is = socket.getInputStream();
         ObjectInputStream ois = new ObjectInputStream(is);
         int resultCode = ois.readInt();
         Object resultObject = ois.readObject();
         if (resultCode != ResultCode.CODE_SUCCESS) {
-            throw (RequestFailedException) resultObject;
+            throw (ResolutionFailedException) resultObject;
         } else {
             return resultObject;
         }

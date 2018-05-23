@@ -9,21 +9,21 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.Executor;
 
-import com.kush.utils.async.Request;
-import com.kush.utils.async.RequestFailedException;
-import com.kush.utils.remoting.server.RequestReceiver;
-import com.kush.utils.remoting.server.ResolvableRequest;
-import com.kush.utils.remoting.server.ResultCode;
+import com.kush.utils.remoting.ResolutionFailedException;
+import com.kush.utils.remoting.Resolvable;
+import com.kush.utils.remoting.ResultCode;
+import com.kush.utils.remoting.server.ResolvableProcessor;
+import com.kush.utils.remoting.server.ResolvableQuery;
 import com.kush.utils.remoting.server.ShutdownFailedException;
 import com.kush.utils.remoting.server.StartupFailedException;
 
-public class SocketBasedRequestReceiver extends RequestReceiver {
+public class SocketBasedResolvableProcessor extends ResolvableProcessor {
 
     private final int port;
 
     private ServerSocket serverSocket;
 
-    public SocketBasedRequestReceiver(Executor executor, int port) {
+    public SocketBasedResolvableProcessor(Executor executor, int port) {
         super(executor);
         this.port = port;
     }
@@ -38,13 +38,13 @@ public class SocketBasedRequestReceiver extends RequestReceiver {
     }
 
     @Override
-    protected ResolvableRequest getNextRequest() throws RequestFailedException {
+    protected ResolvableQuery getNextResolvableQuery() throws ResolutionFailedException {
         try {
             Socket socket = serverSocket.accept();
-            Request<?> request = readRequest(socket);
-            return new ResolvableRequest(request, new SocketBasedResponseListener(socket));
+            Resolvable resolvable = readResolvable(socket);
+            return new ResolvableQuery(resolvable, new SocketBasedResponseListener(socket));
         } catch (IOException | ClassNotFoundException e) {
-            throw new RequestFailedException(e);
+            throw new ResolutionFailedException(e);
         }
     }
 
@@ -64,17 +64,17 @@ public class SocketBasedRequestReceiver extends RequestReceiver {
         oos.writeObject(result);
     }
 
-    private static void writeError(Socket socket, RequestFailedException e) throws IOException {
+    private static void writeError(Socket socket, ResolutionFailedException e) throws IOException {
         OutputStream os = socket.getOutputStream();
         ObjectOutputStream oos = new ObjectOutputStream(os);
         oos.writeInt(ResultCode.CODE_ERROR);
         oos.writeObject(e);
     }
 
-    private static Request<?> readRequest(Socket socket) throws IOException, ClassNotFoundException {
+    private static Resolvable readResolvable(Socket socket) throws IOException, ClassNotFoundException {
         InputStream is = socket.getInputStream();
         ObjectInputStream ois = new ObjectInputStream(is);
-        return (Request<?>) ois.readObject();
+        return (Resolvable) ois.readObject();
     }
 
     private final class SocketBasedResponseListener implements ResponseListener {
@@ -90,14 +90,14 @@ public class SocketBasedRequestReceiver extends RequestReceiver {
             try {
                 writeResult(socket, result);
             } catch (Exception e) {
-                onError(new RequestFailedException(e));
+                onError(new ResolutionFailedException(e));
             } finally {
                 closeSocket();
             }
         }
 
         @Override
-        public void onError(RequestFailedException e) {
+        public void onError(ResolutionFailedException e) {
             try {
                 writeError(socket, e);
             } catch (IOException exception) {
