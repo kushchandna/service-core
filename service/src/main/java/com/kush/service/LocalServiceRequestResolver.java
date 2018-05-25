@@ -4,11 +4,11 @@ import java.util.Map;
 
 import com.kush.lib.service.remoting.ServiceRequest;
 import com.kush.lib.service.remoting.ServiceRequestFailedException;
-import com.kush.lib.service.remoting.ServiceRequestResolver;
 import com.kush.lib.service.remoting.auth.AuthToken;
 import com.kush.service.auth.Auth;
+import com.kush.utils.remoting.server.Resolver;
 
-class LocalServiceRequestResolver implements ServiceRequestResolver {
+class LocalServiceRequestResolver implements Resolver<ServiceRequest> {
 
     private static final com.kush.logger.Logger LOGGER =
             com.kush.logger.LoggerFactory.INSTANCE.getLogger(LocalServiceRequestResolver.class);

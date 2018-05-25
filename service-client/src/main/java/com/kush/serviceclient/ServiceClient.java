@@ -4,17 +4,17 @@ import java.io.IOException;
 import java.util.concurrent.Executor;
 
 import com.kush.lib.service.remoting.ServiceRequest;
-import com.kush.lib.service.remoting.ServiceRequestFailedException;
 import com.kush.lib.service.remoting.auth.AuthToken;
-import com.kush.lib.service.remoting.connect.ServiceConnection;
-import com.kush.lib.service.remoting.connect.ServiceConnectionFactory;
-import com.kush.lib.service.remoting.connect.ServiceConnectionFailedException;
 import com.kush.serviceclient.auth.Session;
 import com.kush.serviceclient.auth.SessionManager;
 import com.kush.utils.async.Request;
 import com.kush.utils.async.RequestFailedException;
 import com.kush.utils.async.Responder;
 import com.kush.utils.async.Response;
+import com.kush.utils.remoting.ResolutionFailedException;
+import com.kush.utils.remoting.client.Connection;
+import com.kush.utils.remoting.client.ConnectionFactory;
+import com.kush.utils.remoting.client.ConnectionFailedException;
 
 public abstract class ServiceClient {
 
@@ -23,14 +23,14 @@ public abstract class ServiceClient {
     private final String serviceName;
 
     private Responder responder;
-    private ServiceConnectionFactory connectionFactory;
+    private ConnectionFactory connectionFactory;
     private SessionManager sessionManager;
 
     public ServiceClient(String serviceName) {
         this.serviceName = serviceName;
     }
 
-    void activate(Executor executor, ServiceConnectionFactory connectionFactory, SessionManager sessionManager) {
+    void activate(Executor executor, ConnectionFactory connectionFactory, SessionManager sessionManager) {
         this.connectionFactory = connectionFactory;
         this.sessionManager = sessionManager;
         responder = new Responder(executor);
@@ -64,12 +64,12 @@ public abstract class ServiceClient {
                 if (LOGGER.isDebugEnabled()) {
                     LOGGER.debug("Creating connection for request '%s'", request);
                 }
-                try (ServiceConnection connection = connectionFactory.createConnection()) {
+                try (Connection connection = connectionFactory.createConnection()) {
                     LOGGER.info("Resolving '%s' request from '%s'", methodName, serviceName);
                     T result = (T) connection.resolve(request);
                     LOGGER.info("Resolved '%s' request from '%s'", methodName, serviceName);
                     return result;
-                } catch (IOException | ServiceRequestFailedException | ServiceConnectionFailedException e) {
+                } catch (IOException | ConnectionFailedException | ResolutionFailedException e) {
                     LOGGER.error(e);
                     throw new RequestFailedException(e);
                 }

@@ -3,22 +3,23 @@ package com.kush.service;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.kush.lib.service.remoting.ServiceRequestResolver;
-import com.kush.lib.service.remoting.ShutdownFailedException;
-import com.kush.lib.service.remoting.StartupFailedException;
-import com.kush.lib.service.remoting.receiver.ServiceRequestReceiver;
+import com.kush.lib.service.remoting.ServiceRequest;
+import com.kush.utils.remoting.server.ResolvableProcessor;
+import com.kush.utils.remoting.server.Resolver;
+import com.kush.utils.remoting.server.ShutdownFailedException;
+import com.kush.utils.remoting.server.StartupFailedException;
 
 public class ApplicationServer {
 
     private static final com.kush.logger.Logger LOGGER =
             com.kush.logger.LoggerFactory.INSTANCE.getLogger(ApplicationServer.class);
 
-    private final Set<ServiceRequestReceiver> requestReceivers = new HashSet<>();
+    private final Set<ResolvableProcessor<ServiceRequest>> serviceRequestProcessors = new HashSet<>();
     private final Set<Class<? extends BaseService>> serviceClasses = new HashSet<>();
 
-    public final void registerServiceRequestReceiver(ServiceRequestReceiver requestReceiver) {
-        requestReceivers.add(requestReceiver);
-        LOGGER.info("Registered service receiver of type %s", requestReceiver.getClass().getName());
+    public final void registerServiceRequestReceiver(ResolvableProcessor<ServiceRequest> serviceRequestReceiver) {
+        serviceRequestProcessors.add(serviceRequestReceiver);
+        LOGGER.info("Registered service receiver of type %s", serviceRequestReceiver.getClass().getName());
     }
 
     public final void registerService(Class<? extends BaseService> serviceClass) {
@@ -29,24 +30,24 @@ public class ApplicationServer {
     public final void start(Context context) throws StartupFailedException {
         LOGGER.info("Starting Application Server");
         ServiceInitializer serviceInitializer = new ServiceInitializer(context);
-        ServiceRequestResolver requestResolver = initializeServicesAndGetRequestResolver(serviceInitializer);
+        Resolver<ServiceRequest> requestResolver = initializeServicesAndGetRequestResolver(serviceInitializer);
         startServiceRequestReceivers(requestResolver);
         LOGGER.info("Application Server Started");
     }
 
     public final void stop() throws ShutdownFailedException {
-        for (ServiceRequestReceiver receiver : requestReceivers) {
-            receiver.stop();
+        for (ResolvableProcessor<ServiceRequest> processor : serviceRequestProcessors) {
+            processor.stop();
         }
     }
 
-    private void startServiceRequestReceivers(ServiceRequestResolver requestResolver) throws StartupFailedException {
-        for (ServiceRequestReceiver receiver : requestReceivers) {
-            receiver.start(requestResolver);
+    private void startServiceRequestReceivers(Resolver<ServiceRequest> requestResolver) throws StartupFailedException {
+        for (ResolvableProcessor<ServiceRequest> processor : serviceRequestProcessors) {
+            processor.start(requestResolver);
         }
     }
 
-    private ServiceRequestResolver initializeServicesAndGetRequestResolver(ServiceInitializer serviceInitializer)
+    private Resolver<ServiceRequest> initializeServicesAndGetRequestResolver(ServiceInitializer serviceInitializer)
             throws StartupFailedException {
         try {
             return serviceInitializer.initialize(serviceClasses);

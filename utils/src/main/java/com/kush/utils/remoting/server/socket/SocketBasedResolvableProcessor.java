@@ -17,7 +17,7 @@ import com.kush.utils.remoting.server.ResolvableQuery;
 import com.kush.utils.remoting.server.ShutdownFailedException;
 import com.kush.utils.remoting.server.StartupFailedException;
 
-public class SocketBasedResolvableProcessor extends ResolvableProcessor {
+public class SocketBasedResolvableProcessor<T extends Resolvable> extends ResolvableProcessor<T> {
 
     private final int port;
 

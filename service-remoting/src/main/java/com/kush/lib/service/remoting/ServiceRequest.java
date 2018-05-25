@@ -1,11 +1,11 @@
 package com.kush.lib.service.remoting;
 
-import java.io.Serializable;
 import java.util.Arrays;
 
 import com.kush.lib.service.remoting.auth.AuthToken;
+import com.kush.utils.remoting.Resolvable;
 
-public class ServiceRequest implements Serializable {
+public class ServiceRequest implements Resolvable {
 
     private static final long serialVersionUID = 1L;
 

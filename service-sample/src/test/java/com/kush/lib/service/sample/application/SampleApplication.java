@@ -6,11 +6,9 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 import com.kush.lib.persistence.api.Persistor;
-import com.kush.lib.service.remoting.StartupFailedException;
 import com.kush.lib.service.remoting.auth.AuthToken;
 import com.kush.lib.service.remoting.auth.User;
 import com.kush.lib.service.remoting.auth.password.PasswordBasedCredential;
-import com.kush.lib.service.remoting.connect.ServiceConnectionFactory;
 import com.kush.lib.service.sample.client.SampleHelloServiceClient;
 import com.kush.lib.service.sample.server.SampleHelloService;
 import com.kush.lib.service.sample.server.SampleHelloTextProvider;
@@ -29,6 +27,8 @@ import com.kush.utils.async.Response;
 import com.kush.utils.async.Response.ErrorListener;
 import com.kush.utils.async.Response.ResultListener;
 import com.kush.utils.exceptions.ObjectNotFoundException;
+import com.kush.utils.remoting.client.ConnectionFactory;
+import com.kush.utils.remoting.server.StartupFailedException;
 
 public abstract class SampleApplication {
 
@@ -49,7 +49,7 @@ public abstract class SampleApplication {
     }
 
     public ApplicationClient setupClient() throws ServiceClientActivationFailedException {
-        ServiceConnectionFactory connectionFactory = createServiceConnectionFactory();
+        ConnectionFactory connectionFactory = createServiceConnectionFactory();
         ApplicationClient client = new ApplicationClient();
         client.start(connectionFactory);
         Executor executor = Executors.newSingleThreadExecutor();
@@ -75,7 +75,7 @@ public abstract class SampleApplication {
     protected void registerReceivers(ApplicationServer server) {
     }
 
-    protected abstract ServiceConnectionFactory createServiceConnectionFactory();
+    protected abstract ConnectionFactory createServiceConnectionFactory();
 
 
     private static void invokeSayHello(ServiceClientProvider serviceClientProvider) throws Exception {

@@ -7,7 +7,7 @@ import java.util.concurrent.Executors;
 import com.kush.utils.remoting.ResolutionFailedException;
 import com.kush.utils.remoting.Resolvable;
 
-public abstract class ResolvableProcessor {
+public abstract class ResolvableProcessor<T extends Resolvable> {
 
     private static final com.kush.logger.Logger LOGGER =
             com.kush.logger.LoggerFactory.INSTANCE.getLogger(ResolvableProcessor.class);
@@ -22,7 +22,7 @@ public abstract class ResolvableProcessor {
         resolvableReceiverExecutor = Executors.newSingleThreadExecutor();
     }
 
-    public final void start(Resolver resolver) throws StartupFailedException {
+    public final void start(Resolver<T> resolver) throws StartupFailedException {
         LOGGER.info("Starting request receiver %s", getClass().getName());
         performStartup();
         running = true;
@@ -44,7 +44,7 @@ public abstract class ResolvableProcessor {
         LOGGER.info("Stopped request receiver %s", getClass().getName());
     }
 
-    private void startProcessingRequests(Resolver resolver) {
+    private void startProcessingRequests(Resolver<T> resolver) {
         while (running) {
             ResolvableQuery resolvableQuery;
             try {
@@ -53,7 +53,7 @@ public abstract class ResolvableProcessor {
                 // TODO add error handling
                 continue;
             }
-            resolutionExecutor.execute(new Task(resolvableQuery, resolver));
+            resolutionExecutor.execute(new Task<T>(resolvableQuery, resolver));
         }
     }
 
@@ -63,12 +63,12 @@ public abstract class ResolvableProcessor {
 
     protected abstract ResolvableQuery getNextResolvableQuery() throws ResolutionFailedException;
 
-    private static final class Task implements Runnable {
+    private static final class Task<T extends Resolvable> implements Runnable {
 
         private final ResolvableQuery resolvableQuery;
-        private final Resolver resolver;
+        private final Resolver<T> resolver;
 
-        public Task(ResolvableQuery resolvableQuery, Resolver resolver) {
+        public Task(ResolvableQuery resolvableQuery, Resolver<T> resolver) {
             this.resolvableQuery = resolvableQuery;
             this.resolver = resolver;
         }
@@ -77,7 +77,8 @@ public abstract class ResolvableProcessor {
         public void run() {
             Resolvable resolvable = resolvableQuery.getResolvable();
             try {
-                Object result = resolver.resolve(resolvable);
+                @SuppressWarnings("unchecked")
+                Object result = resolver.resolve((T) resolvable);
                 resolvableQuery.getListener().onResult(result);
             } catch (Exception e) {
                 LOGGER.error(e);

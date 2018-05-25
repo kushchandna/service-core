@@ -4,16 +4,17 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executor;
 
 import com.kush.utils.remoting.ResolutionFailedException;
+import com.kush.utils.remoting.Resolvable;
 import com.kush.utils.remoting.server.ResolvableProcessor;
 import com.kush.utils.remoting.server.ResolvableQuery;
 import com.kush.utils.remoting.server.ShutdownFailedException;
 import com.kush.utils.remoting.server.StartupFailedException;
 
-public class LocalServiceResolvableProcessor extends ResolvableProcessor {
+public class LocalResolvableProcessor<T extends Resolvable> extends ResolvableProcessor<T> {
 
     private final BlockingQueue<ResolvableQuery> pendingRequests;
 
-    public LocalServiceResolvableProcessor(Executor requestResolverExecutor, BlockingQueue<ResolvableQuery> pendingRequests) {
+    public LocalResolvableProcessor(Executor requestResolverExecutor, BlockingQueue<ResolvableQuery> pendingRequests) {
         super(requestResolverExecutor);
         this.pendingRequests = pendingRequests;
     }

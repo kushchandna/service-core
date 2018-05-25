@@ -5,10 +5,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import com.kush.lib.service.remoting.ServiceRequestResolver;
+import com.kush.lib.service.remoting.ServiceRequest;
 import com.kush.service.annotations.ServiceMethod;
 import com.kush.service.auth.Auth;
 import com.kush.service.auth.LoginService;
+import com.kush.utils.remoting.server.Resolver;
 
 class ServiceInitializer {
 
@@ -17,13 +18,13 @@ class ServiceInitializer {
 
     private final Context context;
 
-    private ServiceRequestResolver requestResolver;
+    private Resolver<ServiceRequest> requestResolver;
 
     public ServiceInitializer(Context context) {
         this.context = context;
     }
 
-    ServiceRequestResolver initialize(Set<Class<? extends BaseService>> serviceClasses)
+    Resolver<ServiceRequest> initialize(Set<Class<? extends BaseService>> serviceClasses)
             throws ServiceInitializationFailedException {
         LOGGER.info("Initializing %d service(s)", serviceClasses.size());
         Map<ServiceRequestKey, ServiceInvoker> serviceInvokers = new HashMap<>();
@@ -41,7 +42,7 @@ class ServiceInitializer {
         registerServiceInvokers(LoginService.class, context, serviceInvokers);
     }
 
-    ServiceRequestResolver getServiceRequestResolver() {
+    Resolver<ServiceRequest> getServiceRequestResolver() {
         return requestResolver;
     }
 

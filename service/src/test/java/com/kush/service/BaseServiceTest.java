@@ -16,8 +16,6 @@ import com.kush.lib.service.remoting.auth.AuthToken;
 import com.kush.lib.service.remoting.auth.Credential;
 import com.kush.lib.service.remoting.auth.User;
 import com.kush.lib.service.remoting.auth.password.PasswordBasedCredential;
-import com.kush.service.BaseService;
-import com.kush.service.Context;
 import com.kush.service.auth.Auth;
 import com.kush.service.auth.LoginService;
 import com.kush.service.auth.SessionManager;

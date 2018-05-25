@@ -2,15 +2,15 @@ package com.kush.serviceclient;
 
 import java.util.concurrent.Executor;
 
-import com.kush.lib.service.remoting.connect.ServiceConnectionFactory;
 import com.kush.serviceclient.auth.SessionManager;
+import com.kush.utils.remoting.client.ConnectionFactory;
 
 class ServiceClientActivator {
 
     private final SessionManager sessionManager;
-    private final ServiceConnectionFactory connectionFactory;
+    private final ConnectionFactory connectionFactory;
 
-    public ServiceClientActivator(SessionManager sessionManager, ServiceConnectionFactory connectionFactory) {
+    public ServiceClientActivator(SessionManager sessionManager, ConnectionFactory connectionFactory) {
         this.sessionManager = sessionManager;
         this.connectionFactory = connectionFactory;
     }

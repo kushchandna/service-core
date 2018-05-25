@@ -8,6 +8,14 @@ public class ResolutionFailedException extends Exception {
     }
 
     public ResolutionFailedException(Throwable e) {
-        super(e.getMessage(), e);
+        this(e.getMessage(), e);
+    }
+
+    public ResolutionFailedException(String message) {
+        super(message);
+    }
+
+    public ResolutionFailedException(String message, Throwable e) {
+        super(message, e);
     }
 }
