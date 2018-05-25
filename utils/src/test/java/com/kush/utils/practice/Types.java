@@ -10,7 +10,7 @@ import java.util.Map;
 
 import org.junit.Test;
 
-public class Types {
+class Types {
 
     @Test
     public void parameterisedType() throws Exception {

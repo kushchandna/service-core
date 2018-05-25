@@ -7,7 +7,7 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executor;
 
-public class FixedSizePooledExecutor implements Executor, AutoCloseable {
+class FixedSizePooledExecutor implements Executor, AutoCloseable {
 
     private final List<PooledThread> pooledThreads = new ArrayList<>();
     private final BlockingQueue<Runnable> queuedTasks;

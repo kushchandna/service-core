@@ -2,7 +2,7 @@ package com.kush.utils.pooling.connection;
 
 import java.sql.Connection;
 
-public interface ConnectionFactory {
+interface ConnectionFactory {
 
     Connection create();
 }

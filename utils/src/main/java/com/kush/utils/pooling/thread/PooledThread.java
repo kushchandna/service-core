@@ -2,7 +2,7 @@ package com.kush.utils.pooling.thread;
 
 import java.util.concurrent.BlockingQueue;
 
-public class PooledThread extends Thread {
+class PooledThread extends Thread {
 
     private final BlockingQueue<Runnable> queuedTasks;
 

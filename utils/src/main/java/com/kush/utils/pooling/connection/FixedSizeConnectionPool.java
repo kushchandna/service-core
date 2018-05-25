@@ -6,7 +6,7 @@ import java.util.Iterator;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
-public class FixedSizeConnectionPool implements ConnectionProvider, AutoCloseable {
+class FixedSizeConnectionPool implements ConnectionProvider, AutoCloseable {
 
     private final BlockingQueue<Connection> availableConnections;
 

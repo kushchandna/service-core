@@ -4,7 +4,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.junit.Test;
 
-public class ThreadLocals {
+class ThreadLocals {
 
     @Test
     public void test() throws Exception {

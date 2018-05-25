@@ -13,7 +13,7 @@ import javax.crypto.Cipher;
 
 import org.junit.Test;
 
-public class AsymmetricCryptography {
+class AsymmetricCryptography {
 
     @Test
     public void test() throws Exception {

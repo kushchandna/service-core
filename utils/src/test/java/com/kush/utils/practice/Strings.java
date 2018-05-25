@@ -6,7 +6,7 @@ import static org.junit.Assert.assertThat;
 
 import org.junit.Test;
 
-public class Strings {
+class Strings {
 
     @Test
     public void string1() throws Exception {

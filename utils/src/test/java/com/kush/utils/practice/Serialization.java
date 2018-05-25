@@ -16,7 +16,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
-public class Serialization {
+class Serialization {
 
     @Rule
     public TemporaryFolder temp = new TemporaryFolder();
