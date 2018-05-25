@@ -4,6 +4,9 @@ import java.util.Collection;
 
 public class SignalEmitter {
 
+    SignalEmitter() {
+    }
+
     final void emit(Signal<?> signal, Collection<SignalReceiver> receivers) {
         executeSignalEmissionToReceivers(signal, receivers);
     }

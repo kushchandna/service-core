@@ -15,12 +15,12 @@ public class SignalSpace {
 
     private final Map<Identifier, Map<Object, Collection<SignalReceiver>>> registeredReceivers;
     private final Executor executor;
-    private final SignalEmitterFactory signalEmitterFactory;
+    private final SignalEmitter signalEmitter;
 
-    public SignalSpace(Executor executor, SignalEmitterFactory signalEmitterFactory) {
+    public SignalSpace(Executor executor, SignalEmitter signalEmitter) {
+        this.signalEmitter = signalEmitter;
         registeredReceivers = new ConcurrentHashMap<>();
         this.executor = executor;
-        this.signalEmitterFactory = signalEmitterFactory;
     }
 
     public <R extends SignalReceiver, S extends Signal<R>> void register(Class<S> signalClass, SignalReceiver receiver) {
@@ -81,9 +81,8 @@ public class SignalSpace {
         Map<Object, Collection<SignalReceiver>> filterVsReceivers = registeredReceivers.get(signalId);
         if (filterVsReceivers != null) {
             Collection<SignalReceiver> receivers = filterVsReceivers.get(filter);
-            SignalEmitter emitter = signalEmitterFactory.create();
             if (receivers != null) {
-                emitter.emit(signal, receivers);
+                signalEmitter.emit(signal, receivers);
             }
         }
     }

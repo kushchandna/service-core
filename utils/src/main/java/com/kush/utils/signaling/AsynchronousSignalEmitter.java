@@ -4,12 +4,12 @@ import java.util.Collection;
 import java.util.Objects;
 import java.util.concurrent.Executor;
 
-public class AsynchronousSignalEmitter extends SignalEmitter {
+class AsynchronousSignalEmitter extends SignalEmitter {
 
     private final Executor signalSpecificExecutor;
     private final Executor receiverSpecificExecutor;
 
-    public AsynchronousSignalEmitter(Executor signalSpecificExecutor, Executor receiverSpecificExecutor) {
+    AsynchronousSignalEmitter(Executor signalSpecificExecutor, Executor receiverSpecificExecutor) {
         Objects.requireNonNull(signalSpecificExecutor, "signalSpecificExecutor");
         Objects.requireNonNull(receiverSpecificExecutor, "receiverSpecificExecutor");
         this.signalSpecificExecutor = signalSpecificExecutor;

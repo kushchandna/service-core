@@ -4,8 +4,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-import com.kush.utils.signaling.DefaultSignalEmitterFactory;
-import com.kush.utils.signaling.SignalEmitterFactory;
+import com.kush.utils.signaling.SignalEmitter;
+import com.kush.utils.signaling.SignalEmitters;
 import com.kush.utils.signaling.SignalSpace;
 import com.kush.utils.signaling.sample.handlers.SampleComponentStatusHandler;
 import com.kush.utils.signaling.sample.handlers.SampleMessageHandler;
@@ -19,8 +19,8 @@ public class SampleSignalingE2E {
     public static void main(String[] args) {
 
         ExecutorService executor = Executors.newSingleThreadExecutor();
-        SignalEmitterFactory emitterFactory = new DefaultSignalEmitterFactory();
-        SignalSpace signalSpace = new SignalSpace(executor, emitterFactory);
+        SignalEmitter signalEmitter = SignalEmitters.newSyncEmitter();
+        SignalSpace signalSpace = new SignalSpace(executor, signalEmitter);
 
         SampleComponent component = new SampleComponent(signalSpace);
 
