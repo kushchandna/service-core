@@ -65,14 +65,6 @@ public class SignalSpace {
         }
     }
 
-    public <S extends Signal<?>> boolean hasReceiverForSignal(Class<S> signalClass) {
-        Identifier signalId = id(signalClass);
-        Map<Object, Collection<SignalReceiver>> filterVsReceivers = registeredReceivers.get(signalId);
-        return filterVsReceivers != null
-                && filterVsReceivers.values().stream()
-                    .anyMatch(rcvrs -> rcvrs != null && !rcvrs.isEmpty());
-    }
-
     public void emit(Signal<?> signal) {
         executor.execute(new Runnable() {
 
