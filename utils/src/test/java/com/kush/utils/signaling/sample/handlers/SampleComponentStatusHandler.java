@@ -1,8 +1,8 @@
 package com.kush.utils.signaling.sample.handlers;
 
-import com.kush.utils.signaling.SignalReceiver;
+import com.kush.utils.signaling.SignalHandler;
 
-public interface SampleComponentStatusHandler extends SignalReceiver {
+public interface SampleComponentStatusHandler extends SignalHandler {
 
     void onStarted();
 

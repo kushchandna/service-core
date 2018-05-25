@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import com.kush.utils.id.Identifier;
 
-public abstract class Signal<S extends SignalReceiver> implements Serializable {
+public abstract class Signal<S extends SignalHandler> implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -21,7 +21,7 @@ public abstract class Signal<S extends SignalReceiver> implements Serializable {
     }
 
     @SuppressWarnings("unchecked")
-    void emit(SignalReceiver receiver) {
+    void emit(SignalHandler receiver) {
         handleSignal((S) receiver);
     }
 

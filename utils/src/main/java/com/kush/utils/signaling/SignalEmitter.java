@@ -7,25 +7,25 @@ public class SignalEmitter {
     SignalEmitter() {
     }
 
-    final void emit(Signal<?> signal, Collection<SignalReceiver> receivers) {
-        executeSignalEmissionToReceivers(signal, receivers);
+    final void emit(Signal<?> signal, Collection<SignalHandler> handlers) {
+        executeSignalEmissionToHandlers(signal, handlers);
     }
 
-    protected void executeSignalEmissionToReceivers(Signal<?> signal, Collection<SignalReceiver> receivers) {
-        emitSignalToReceivers(signal, receivers);
+    protected void executeSignalEmissionToHandlers(Signal<?> signal, Collection<SignalHandler> handlers) {
+        emitSignalToHandlers(signal, handlers);
     }
 
-    protected void executeSignalEmissionToReceiver(Signal<?> signal, SignalReceiver receiver) {
-        emitSignalToReceiver(signal, receiver);
+    protected void executeSignalEmissionToHandler(Signal<?> signal, SignalHandler handler) {
+        emitSignalToHandler(signal, handler);
     }
 
-    protected final void emitSignalToReceivers(Signal<?> signal, Collection<SignalReceiver> receivers) {
-        for (SignalReceiver receiver : receivers) {
-            executeSignalEmissionToReceiver(signal, receiver);
+    protected final void emitSignalToHandlers(Signal<?> signal, Collection<SignalHandler> handlers) {
+        for (SignalHandler handler : handlers) {
+            executeSignalEmissionToHandler(signal, handler);
         }
     }
 
-    protected final void emitSignalToReceiver(Signal<?> signal, SignalReceiver receiver) {
-        signal.emit(receiver);
+    protected final void emitSignalToHandler(Signal<?> signal, SignalHandler handler) {
+        signal.emit(handler);
     }
 }

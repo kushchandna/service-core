@@ -17,23 +17,23 @@ class AsynchronousSignalEmitter extends SignalEmitter {
     }
 
     @Override
-    protected void executeSignalEmissionToReceivers(Signal<?> signal, Collection<SignalReceiver> receivers) {
+    protected void executeSignalEmissionToHandlers(Signal<?> signal, Collection<SignalHandler> receivers) {
         signalSpecificExecutor.execute(new Runnable() {
 
             @Override
             public void run() {
-                emitSignalToReceivers(signal, receivers);
+                emitSignalToHandlers(signal, receivers);
             }
         });
     }
 
     @Override
-    protected void executeSignalEmissionToReceiver(Signal<?> signal, SignalReceiver receiver) {
+    protected void executeSignalEmissionToHandler(Signal<?> signal, SignalHandler receiver) {
         receiverSpecificExecutor.execute(new Runnable() {
 
             @Override
             public void run() {
-                emitSignalToReceiver(signal, receiver);
+                emitSignalToHandler(signal, receiver);
             }
         });
     }
