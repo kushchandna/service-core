@@ -3,6 +3,7 @@ package com.kush.utils.signaling;
 import static com.kush.utils.id.Identifier.id;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -12,7 +13,7 @@ import com.kush.utils.id.Identifier;
 
 public class SignalSpace {
 
-    private final Map<Identifier, Collection<SignalReceiver>> registeredReceivers;
+    private final Map<Identifier, Map<Object, Collection<SignalReceiver>>> registeredReceivers;
     private final Executor executor;
     private final SignalEmitterFactory signalEmitterFactory;
 
@@ -23,30 +24,53 @@ public class SignalSpace {
     }
 
     public <R extends SignalReceiver, S extends Signal<R>> void register(Class<S> signalClass, SignalReceiver receiver) {
+        this.register(signalClass, receiver, Signal.DEFAULT_FILTER);
+    }
+
+    public <R extends SignalReceiver, S extends Signal<R>> void register(Class<S> signalClass, SignalReceiver receiver,
+            Object filter) {
         Identifier signalId = id(signalClass);
-        Collection<SignalReceiver> receivers = registeredReceivers.get(signalId);
+        Map<Object, Collection<SignalReceiver>> filterVsReceivers = registeredReceivers.get(signalId);
+        if (filterVsReceivers == null) {
+            filterVsReceivers = new HashMap<>();
+            registeredReceivers.put(signalId, filterVsReceivers);
+        }
+        Collection<SignalReceiver> receivers = filterVsReceivers.get(filter);
         if (receivers == null) {
             receivers = new HashSet<>();
-            registeredReceivers.put(signalId, receivers);
+            filterVsReceivers.put(filter, receivers);
         }
         receivers.add(receiver);
     }
 
     public <R extends SignalReceiver, S extends Signal<R>> void unregister(Class<S> signalClass, SignalReceiver receiver) {
+        this.unregister(signalClass, receiver, Signal.DEFAULT_FILTER);
+    }
+
+    public <R extends SignalReceiver, S extends Signal<R>> void unregister(Class<S> signalClass, SignalReceiver receiver,
+            Object filter) {
         Identifier signalId = id(signalClass);
-        Collection<SignalReceiver> receivers = registeredReceivers.get(signalId);
-        if (receivers != null) {
-            receivers.remove(receiver);
-            if (receivers.isEmpty()) {
-                registeredReceivers.remove(signalId);
+        Map<Object, Collection<SignalReceiver>> filterVsReceivers = registeredReceivers.get(signalId);
+        if (filterVsReceivers != null) {
+            Collection<SignalReceiver> receivers = filterVsReceivers.get(filter);
+            if (receivers != null) {
+                receivers.remove(receiver);
+                if (receivers.isEmpty()) {
+                    filterVsReceivers.remove(filter);
+                }
+                if (filterVsReceivers.isEmpty()) {
+                    registeredReceivers.remove(signalId);
+                }
             }
         }
     }
 
     public <S extends Signal<?>> boolean hasReceiverForSignal(Class<S> signalClass) {
         Identifier signalId = id(signalClass);
-        Collection<SignalReceiver> receivers = registeredReceivers.get(signalId);
-        return receivers != null && !receivers.isEmpty();
+        Map<Object, Collection<SignalReceiver>> filterVsReceivers = registeredReceivers.get(signalId);
+        return filterVsReceivers != null
+                && filterVsReceivers.values().stream()
+                    .anyMatch(rcvrs -> rcvrs != null && !rcvrs.isEmpty());
     }
 
     public void emit(Signal<?> signal) {
@@ -60,11 +84,15 @@ public class SignalSpace {
     }
 
     private void findReceiversAndEmit(Signal<?> signal) {
+        Object filter = signal.getFilter();
         Identifier signalId = signal.getId();
-        Collection<SignalReceiver> receivers = registeredReceivers.get(signalId);
-        SignalEmitter emitter = signalEmitterFactory.create();
-        if (receivers != null) {
-            emitter.emit(signal, receivers);
+        Map<Object, Collection<SignalReceiver>> filterVsReceivers = registeredReceivers.get(signalId);
+        if (filterVsReceivers != null) {
+            Collection<SignalReceiver> receivers = filterVsReceivers.get(filter);
+            SignalEmitter emitter = signalEmitterFactory.create();
+            if (receivers != null) {
+                emitter.emit(signal, receivers);
+            }
         }
     }
 }

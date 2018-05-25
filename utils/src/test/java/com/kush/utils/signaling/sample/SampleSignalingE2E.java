@@ -8,8 +8,10 @@ import com.kush.utils.signaling.DefaultSignalEmitterFactory;
 import com.kush.utils.signaling.SignalEmitterFactory;
 import com.kush.utils.signaling.SignalSpace;
 import com.kush.utils.signaling.sample.handlers.SampleComponentStatusHandler;
+import com.kush.utils.signaling.sample.handlers.SampleMessageHandler;
 import com.kush.utils.signaling.sample.handlers.SamplePrintHandler;
 import com.kush.utils.signaling.sample.signals.SampleComponentStatusSignal;
+import com.kush.utils.signaling.sample.signals.SampleMessageSignal;
 import com.kush.utils.signaling.sample.signals.SamplePrintSignal;
 
 public class SampleSignalingE2E {
@@ -55,12 +57,30 @@ public class SampleSignalingE2E {
             }
         });
 
+        signalSpace.register(SampleMessageSignal.class, new SampleMessageHandler() {
+
+            @Override
+            public void handleMessage(String text) {
+                System.out.println("UserA received " + text);
+            }
+        }, "UserA");
+
+        signalSpace.register(SampleMessageSignal.class, new SampleMessageHandler() {
+
+            @Override
+            public void handleMessage(String text) {
+                System.out.println("UserB received " + text);
+            }
+        }, "UserB");
+
         component.start();
         component.print("Some data 1");
         component.stop();
         component.print("Some data 2");
         component.start();
         component.print("Some data 3");
+        component.sendMessage("UserA", "Text for UserA");
+        component.sendMessage("UserB", "Text for UserB");
 
         executor.shutdown();
         try {

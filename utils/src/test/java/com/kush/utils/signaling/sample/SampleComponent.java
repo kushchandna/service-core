@@ -2,6 +2,7 @@ package com.kush.utils.signaling.sample;
 
 import com.kush.utils.signaling.SignalSpace;
 import com.kush.utils.signaling.sample.signals.SampleComponentStatusSignal;
+import com.kush.utils.signaling.sample.signals.SampleMessageSignal;
 import com.kush.utils.signaling.sample.signals.SamplePrintSignal;
 
 public class SampleComponent {
@@ -24,6 +25,11 @@ public class SampleComponent {
         running = false;
         System.out.println("Componenet stopped");
         signalSpace.emit(new SampleComponentStatusSignal(false));
+    }
+
+    public void sendMessage(String user, String text) {
+        System.out.println("Message sent to user " + user + " with text " + text);
+        signalSpace.emit(new SampleMessageSignal(user, text));
     }
 
     public void print(Object object) {
