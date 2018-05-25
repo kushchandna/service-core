@@ -35,14 +35,22 @@ public abstract class BaseService {
     }
 
     protected final void addIfDoesNotExist(Object key, Object instance) {
-        if (!context.containsKey(key)) {
-            context.addInstance(key, instance);
-            LOGGER.info("Added %s to context", key);
+        if (!contextContains(key)) {
+            enrichContext(key, instance);
         }
     }
 
+    protected final boolean contextContains(Object key) {
+        return context.containsKey(key);
+    }
+
+    protected void enrichContext(Object key, Object instance) {
+        context.addInstance(key, instance);
+        LOGGER.info("Added %s to context", key);
+    }
+
     protected final void checkContextHasValueFor(Object key) {
-        if (!context.containsKey(key)) {
+        if (!contextContains(key)) {
             String error = format("%s service requires %s in its context.", getClass().getName(), key);
             LOGGER.error(error);
             throw new IllegalStateException(error);
