@@ -5,6 +5,8 @@ import com.kush.utils.signaling.sample.handlers.SampleComponentStatusHandler;
 
 public final class SampleComponentStatusSignal extends Signal<SampleComponentStatusHandler> {
 
+    private static final long serialVersionUID = 1L;
+
     private final boolean running;
 
     public SampleComponentStatusSignal(boolean running) {

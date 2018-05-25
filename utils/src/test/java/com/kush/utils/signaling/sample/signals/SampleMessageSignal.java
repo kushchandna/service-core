@@ -5,21 +5,17 @@ import com.kush.utils.signaling.sample.handlers.SampleMessageHandler;
 
 public class SampleMessageSignal extends Signal<SampleMessageHandler> {
 
-    private final String user;
+    private static final long serialVersionUID = 1L;
+
     private final String text;
 
     public SampleMessageSignal(String user, String text) {
-        this.user = user;
+        super(user);
         this.text = text;
     }
 
     @Override
     protected void handleSignal(SampleMessageHandler receiver) {
         receiver.handleMessage(text);
-    }
-
-    @Override
-    protected Object getFilter() {
-        return user;
     }
 }

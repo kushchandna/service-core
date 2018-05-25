@@ -1,10 +1,24 @@
 package com.kush.utils.signaling;
 
+import java.io.Serializable;
+
 import com.kush.utils.id.Identifier;
 
-public abstract class Signal<S extends SignalReceiver> {
+public abstract class Signal<S extends SignalReceiver> implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     static final Object DEFAULT_FILTER = null;
+
+    private transient final Object filter;
+
+    public Signal() {
+        this(DEFAULT_FILTER);
+    }
+
+    public Signal(Object filter) {
+        this.filter = filter;
+    }
 
     @SuppressWarnings("unchecked")
     void emit(SignalReceiver receiver) {
@@ -13,8 +27,8 @@ public abstract class Signal<S extends SignalReceiver> {
 
     protected abstract void handleSignal(S receiver);
 
-    protected Object getFilter() {
-        return DEFAULT_FILTER;
+    final Object getFilter() {
+        return filter;
     }
 
     final Identifier getId() {
