@@ -4,7 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.kush.lib.service.remoting.ServiceRequest;
-import com.kush.utils.remoting.server.ResolvableProcessor;
+import com.kush.utils.remoting.server.ResolutionRequestsReceiver;
 import com.kush.utils.remoting.server.Resolver;
 import com.kush.utils.remoting.server.ShutdownFailedException;
 import com.kush.utils.remoting.server.StartupFailedException;
@@ -14,10 +14,10 @@ public class ApplicationServer {
     private static final com.kush.logger.Logger LOGGER =
             com.kush.logger.LoggerFactory.INSTANCE.getLogger(ApplicationServer.class);
 
-    private final Set<ResolvableProcessor<ServiceRequest>> serviceRequestProcessors = new HashSet<>();
+    private final Set<ResolutionRequestsReceiver<ServiceRequest>> serviceRequestProcessors = new HashSet<>();
     private final Set<Class<? extends BaseService>> serviceClasses = new HashSet<>();
 
-    public final void registerServiceRequestReceiver(ResolvableProcessor<ServiceRequest> serviceRequestReceiver) {
+    public final void registerServiceRequestReceiver(ResolutionRequestsReceiver<ServiceRequest> serviceRequestReceiver) {
         serviceRequestProcessors.add(serviceRequestReceiver);
         LOGGER.info("Registered service receiver of type %s", serviceRequestReceiver.getClass().getName());
     }
@@ -36,13 +36,13 @@ public class ApplicationServer {
     }
 
     public final void stop() throws ShutdownFailedException {
-        for (ResolvableProcessor<ServiceRequest> processor : serviceRequestProcessors) {
+        for (ResolutionRequestsReceiver<ServiceRequest> processor : serviceRequestProcessors) {
             processor.stop();
         }
     }
 
     private void startServiceRequestReceivers(Resolver<ServiceRequest> requestResolver) throws StartupFailedException {
-        for (ResolvableProcessor<ServiceRequest> processor : serviceRequestProcessors) {
+        for (ResolutionRequestsReceiver<ServiceRequest> processor : serviceRequestProcessors) {
             processor.start(requestResolver);
         }
     }

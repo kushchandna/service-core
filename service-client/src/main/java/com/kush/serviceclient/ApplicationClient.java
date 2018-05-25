@@ -4,7 +4,7 @@ import java.util.concurrent.Executor;
 
 import com.kush.serviceclient.auth.LoginServiceClient;
 import com.kush.serviceclient.auth.SessionManager;
-import com.kush.utils.remoting.client.ConnectionFactory;
+import com.kush.utils.remoting.client.ResolutionConnectionFactory;
 
 public class ApplicationClient {
 
@@ -13,7 +13,7 @@ public class ApplicationClient {
 
     private ServiceClientProvider serviceClientProvider;
 
-    public void start(ConnectionFactory connectionFactory) {
+    public void start(ResolutionConnectionFactory connectionFactory) {
         LOGGER.info("Starting application client");
         SessionManager sessionManager = new SessionManager();
         ServiceClientActivator activator = new ServiceClientActivator(sessionManager, connectionFactory);

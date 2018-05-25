@@ -7,15 +7,15 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import com.kush.utils.remoting.ResolutionFailedException;
 import com.kush.utils.remoting.Resolvable;
-import com.kush.utils.remoting.client.Connection;
-import com.kush.utils.remoting.server.ResolvableProcessor.ResponseListener;
-import com.kush.utils.remoting.server.ResolvableQuery;
+import com.kush.utils.remoting.client.ResolutionConnection;
+import com.kush.utils.remoting.server.ResolutionRequest;
+import com.kush.utils.remoting.server.ResolutionRequestsReceiver.ResponseListener;
 
-public class LocalConnection implements Connection {
+class LocalResolutionConnection implements ResolutionConnection {
 
-    private final BlockingQueue<ResolvableQuery> pendingRequests;
+    private final BlockingQueue<ResolutionRequest> pendingRequests;
 
-    public LocalConnection(BlockingQueue<ResolvableQuery> pendingRequests) {
+    public LocalResolutionConnection(BlockingQueue<ResolutionRequest> pendingRequests) {
         this.pendingRequests = pendingRequests;
     }
 
@@ -40,7 +40,7 @@ public class LocalConnection implements Connection {
             AtomicReference<ResolutionFailedException> exceptionReference) throws ResolutionFailedException {
         CountDownLatch latch = new CountDownLatch(1);
         ResponseListener responseListener = new LocalResolutionResponseListener(latch, resultReference, exceptionReference);
-        ResolvableQuery resolvableRequest = new ResolvableQuery(resolvable, responseListener);
+        ResolutionRequest resolvableRequest = new ResolutionRequest(resolvable, responseListener);
         try {
             pendingRequests.put(resolvableRequest);
             latch.await();

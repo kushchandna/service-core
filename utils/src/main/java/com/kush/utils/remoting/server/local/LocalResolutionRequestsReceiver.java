@@ -5,16 +5,16 @@ import java.util.concurrent.Executor;
 
 import com.kush.utils.remoting.ResolutionFailedException;
 import com.kush.utils.remoting.Resolvable;
-import com.kush.utils.remoting.server.ResolvableProcessor;
-import com.kush.utils.remoting.server.ResolvableQuery;
+import com.kush.utils.remoting.server.ResolutionRequestsReceiver;
+import com.kush.utils.remoting.server.ResolutionRequest;
 import com.kush.utils.remoting.server.ShutdownFailedException;
 import com.kush.utils.remoting.server.StartupFailedException;
 
-public class LocalResolvableProcessor<T extends Resolvable> extends ResolvableProcessor<T> {
+public class LocalResolutionRequestsReceiver<T extends Resolvable> extends ResolutionRequestsReceiver<T> {
 
-    private final BlockingQueue<ResolvableQuery> pendingRequests;
+    private final BlockingQueue<ResolutionRequest> pendingRequests;
 
-    public LocalResolvableProcessor(Executor requestResolverExecutor, BlockingQueue<ResolvableQuery> pendingRequests) {
+    public LocalResolutionRequestsReceiver(Executor requestResolverExecutor, BlockingQueue<ResolutionRequest> pendingRequests) {
         super(requestResolverExecutor);
         this.pendingRequests = pendingRequests;
     }
@@ -30,7 +30,7 @@ public class LocalResolvableProcessor<T extends Resolvable> extends ResolvablePr
     }
 
     @Override
-    protected ResolvableQuery getNextResolvableQuery() throws ResolutionFailedException {
+    protected ResolutionRequest getNextResolvableQuery() throws ResolutionFailedException {
         try {
             return pendingRequests.take();
         } catch (InterruptedException e) {

@@ -10,18 +10,18 @@ import java.net.Socket;
 import com.kush.utils.remoting.ResolutionFailedException;
 import com.kush.utils.remoting.Resolvable;
 import com.kush.utils.remoting.ResultCode;
-import com.kush.utils.remoting.client.Connection;
-import com.kush.utils.remoting.client.ConnectionFailedException;
+import com.kush.utils.remoting.client.ResolutionConnection;
+import com.kush.utils.remoting.client.ResolutionConnectionFailedException;
 
-public class SocketConnection implements Connection {
+class SocketBasedResolutionConnection implements ResolutionConnection {
 
     private final Socket socket;
 
-    public SocketConnection(String host, int port) throws ConnectionFailedException {
+    public SocketBasedResolutionConnection(String host, int port) throws ResolutionConnectionFailedException {
         try {
             socket = new Socket(host, port);
         } catch (IOException e) {
-            throw new ConnectionFailedException(e.getMessage(), e);
+            throw new ResolutionConnectionFailedException(e.getMessage(), e);
         }
     }
 

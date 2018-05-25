@@ -27,7 +27,7 @@ import com.kush.utils.async.Response;
 import com.kush.utils.async.Response.ErrorListener;
 import com.kush.utils.async.Response.ResultListener;
 import com.kush.utils.exceptions.ObjectNotFoundException;
-import com.kush.utils.remoting.client.ConnectionFactory;
+import com.kush.utils.remoting.client.ResolutionConnectionFactory;
 import com.kush.utils.remoting.server.StartupFailedException;
 
 public abstract class SampleApplication {
@@ -49,7 +49,7 @@ public abstract class SampleApplication {
     }
 
     public ApplicationClient setupClient() throws ServiceClientActivationFailedException {
-        ConnectionFactory connectionFactory = createServiceConnectionFactory();
+        ResolutionConnectionFactory connectionFactory = createServiceConnectionFactory();
         ApplicationClient client = new ApplicationClient();
         client.start(connectionFactory);
         Executor executor = Executors.newSingleThreadExecutor();
@@ -75,7 +75,7 @@ public abstract class SampleApplication {
     protected void registerReceivers(ApplicationServer server) {
     }
 
-    protected abstract ConnectionFactory createServiceConnectionFactory();
+    protected abstract ResolutionConnectionFactory createServiceConnectionFactory();
 
 
     private static void invokeSayHello(ServiceClientProvider serviceClientProvider) throws Exception {

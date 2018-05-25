@@ -12,18 +12,18 @@ import java.util.concurrent.Executor;
 import com.kush.utils.remoting.ResolutionFailedException;
 import com.kush.utils.remoting.Resolvable;
 import com.kush.utils.remoting.ResultCode;
-import com.kush.utils.remoting.server.ResolvableProcessor;
-import com.kush.utils.remoting.server.ResolvableQuery;
+import com.kush.utils.remoting.server.ResolutionRequestsReceiver;
+import com.kush.utils.remoting.server.ResolutionRequest;
 import com.kush.utils.remoting.server.ShutdownFailedException;
 import com.kush.utils.remoting.server.StartupFailedException;
 
-public class SocketBasedResolvableProcessor<T extends Resolvable> extends ResolvableProcessor<T> {
+public class SocketBasedResolutionRequestsProcessor<T extends Resolvable> extends ResolutionRequestsReceiver<T> {
 
     private final int port;
 
     private ServerSocket serverSocket;
 
-    public SocketBasedResolvableProcessor(Executor executor, int port) {
+    public SocketBasedResolutionRequestsProcessor(Executor executor, int port) {
         super(executor);
         this.port = port;
     }
@@ -38,11 +38,11 @@ public class SocketBasedResolvableProcessor<T extends Resolvable> extends Resolv
     }
 
     @Override
-    protected ResolvableQuery getNextResolvableQuery() throws ResolutionFailedException {
+    protected ResolutionRequest getNextResolvableQuery() throws ResolutionFailedException {
         try {
             Socket socket = serverSocket.accept();
             Resolvable resolvable = readResolvable(socket);
-            return new ResolvableQuery(resolvable, new SocketBasedResponseListener(socket));
+            return new ResolutionRequest(resolvable, new SocketBasedResponseListener(socket));
         } catch (IOException | ClassNotFoundException e) {
             throw new ResolutionFailedException(e);
         }

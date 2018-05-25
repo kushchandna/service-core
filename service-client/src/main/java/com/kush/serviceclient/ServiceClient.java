@@ -12,9 +12,9 @@ import com.kush.utils.async.RequestFailedException;
 import com.kush.utils.async.Responder;
 import com.kush.utils.async.Response;
 import com.kush.utils.remoting.ResolutionFailedException;
-import com.kush.utils.remoting.client.Connection;
-import com.kush.utils.remoting.client.ConnectionFactory;
-import com.kush.utils.remoting.client.ConnectionFailedException;
+import com.kush.utils.remoting.client.ResolutionConnection;
+import com.kush.utils.remoting.client.ResolutionConnectionFactory;
+import com.kush.utils.remoting.client.ResolutionConnectionFailedException;
 
 public abstract class ServiceClient {
 
@@ -23,14 +23,14 @@ public abstract class ServiceClient {
     private final String serviceName;
 
     private Responder responder;
-    private ConnectionFactory connectionFactory;
+    private ResolutionConnectionFactory connectionFactory;
     private SessionManager sessionManager;
 
     public ServiceClient(String serviceName) {
         this.serviceName = serviceName;
     }
 
-    void activate(Executor executor, ConnectionFactory connectionFactory, SessionManager sessionManager) {
+    void activate(Executor executor, ResolutionConnectionFactory connectionFactory, SessionManager sessionManager) {
         this.connectionFactory = connectionFactory;
         this.sessionManager = sessionManager;
         responder = new Responder(executor);
@@ -64,12 +64,12 @@ public abstract class ServiceClient {
                 if (LOGGER.isDebugEnabled()) {
                     LOGGER.debug("Creating connection for request '%s'", request);
                 }
-                try (Connection connection = connectionFactory.createConnection()) {
+                try (ResolutionConnection connection = connectionFactory.createConnection()) {
                     LOGGER.info("Resolving '%s' request from '%s'", methodName, serviceName);
                     T result = (T) connection.resolve(request);
                     LOGGER.info("Resolved '%s' request from '%s'", methodName, serviceName);
                     return result;
-                } catch (IOException | ConnectionFailedException | ResolutionFailedException e) {
+                } catch (IOException | ResolutionConnectionFailedException | ResolutionFailedException e) {
                     LOGGER.error(e);
                     throw new RequestFailedException(e);
                 }

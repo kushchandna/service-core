@@ -7,17 +7,17 @@ import java.util.concurrent.Executors;
 import com.kush.utils.remoting.ResolutionFailedException;
 import com.kush.utils.remoting.Resolvable;
 
-public abstract class ResolvableProcessor<T extends Resolvable> {
+public abstract class ResolutionRequestsReceiver<T extends Resolvable> {
 
     private static final com.kush.logger.Logger LOGGER =
-            com.kush.logger.LoggerFactory.INSTANCE.getLogger(ResolvableProcessor.class);
+            com.kush.logger.LoggerFactory.INSTANCE.getLogger(ResolutionRequestsReceiver.class);
 
     private final Executor resolutionExecutor;
     private final ExecutorService resolvableReceiverExecutor;
 
     private volatile boolean running = false;
 
-    public ResolvableProcessor(Executor requestResolverExecutor) {
+    public ResolutionRequestsReceiver(Executor requestResolverExecutor) {
         resolutionExecutor = requestResolverExecutor;
         resolvableReceiverExecutor = Executors.newSingleThreadExecutor();
     }
@@ -46,7 +46,7 @@ public abstract class ResolvableProcessor<T extends Resolvable> {
 
     private void startProcessingRequests(Resolver<T> resolver) {
         while (running) {
-            ResolvableQuery resolvableQuery;
+            ResolutionRequest resolvableQuery;
             try {
                 resolvableQuery = getNextResolvableQuery();
             } catch (ResolutionFailedException e) {
@@ -61,14 +61,14 @@ public abstract class ResolvableProcessor<T extends Resolvable> {
 
     protected abstract void performStop() throws ShutdownFailedException;
 
-    protected abstract ResolvableQuery getNextResolvableQuery() throws ResolutionFailedException;
+    protected abstract ResolutionRequest getNextResolvableQuery() throws ResolutionFailedException;
 
     private static final class Task<T extends Resolvable> implements Runnable {
 
-        private final ResolvableQuery resolvableQuery;
+        private final ResolutionRequest resolvableQuery;
         private final Resolver<T> resolver;
 
-        public Task(ResolvableQuery resolvableQuery, Resolver<T> resolver) {
+        public Task(ResolutionRequest resolvableQuery, Resolver<T> resolver) {
             this.resolvableQuery = resolvableQuery;
             this.resolver = resolver;
         }

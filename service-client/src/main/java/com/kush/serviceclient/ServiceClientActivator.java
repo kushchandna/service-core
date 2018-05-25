@@ -3,14 +3,14 @@ package com.kush.serviceclient;
 import java.util.concurrent.Executor;
 
 import com.kush.serviceclient.auth.SessionManager;
-import com.kush.utils.remoting.client.ConnectionFactory;
+import com.kush.utils.remoting.client.ResolutionConnectionFactory;
 
 class ServiceClientActivator {
 
     private final SessionManager sessionManager;
-    private final ConnectionFactory connectionFactory;
+    private final ResolutionConnectionFactory connectionFactory;
 
-    public ServiceClientActivator(SessionManager sessionManager, ConnectionFactory connectionFactory) {
+    public ServiceClientActivator(SessionManager sessionManager, ResolutionConnectionFactory connectionFactory) {
         this.sessionManager = sessionManager;
         this.connectionFactory = connectionFactory;
     }
