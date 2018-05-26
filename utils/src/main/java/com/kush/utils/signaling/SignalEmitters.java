@@ -1,10 +1,9 @@
 package com.kush.utils.signaling;
 
 import static com.kush.utils.commons.CommonExecutors.newThreadExecutor;
+import static com.kush.utils.commons.CommonExecutors.sameThreadExecutor;
 
 import java.util.concurrent.Executor;
-
-import com.kush.utils.commons.CommonExecutors;
 
 public class SignalEmitters {
 
@@ -13,7 +12,7 @@ public class SignalEmitters {
     }
 
     public static SignalEmitter newAsyncEmitter() {
-        return new AsynchronousSignalEmitter(newThreadExecutor(), CommonExecutors.sameThreadExecutor());
+        return new AsynchronousSignalEmitter(newThreadExecutor(), sameThreadExecutor());
     }
 
     public static SignalEmitter newAsyncEmitter(Executor signalSpecificExecutor, Executor receiverSpecificExecutor) {
