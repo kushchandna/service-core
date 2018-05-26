@@ -22,7 +22,7 @@ public class SignalHandlerRegistrar {
         this.register(signalClass, handler, Signal.DEFAULT_FILTER);
     }
 
-    public <R extends SignalHandler, S extends Signal<R>> void register(Class<S> signalClass, SignalHandler handler,
+    public synchronized <R extends SignalHandler, S extends Signal<R>> void register(Class<S> signalClass, SignalHandler handler,
             Object filter) {
         Identifier signalId = id(signalClass);
         Map<Object, Collection<SignalHandler>> filterVsHandlers = registeredHandlers.get(signalId);
@@ -42,7 +42,8 @@ public class SignalHandlerRegistrar {
         this.unregister(signalClass, handler, Signal.DEFAULT_FILTER);
     }
 
-    public <R extends SignalHandler, S extends Signal<R>> void unregister(Class<S> signalClass, SignalHandler handler,
+    public synchronized <R extends SignalHandler, S extends Signal<R>> void unregister(Class<S> signalClass,
+            SignalHandler handler,
             Object filter) {
         Identifier signalId = id(signalClass);
         Map<Object, Collection<SignalHandler>> filterVsHandlers = registeredHandlers.get(signalId);
@@ -60,7 +61,7 @@ public class SignalHandlerRegistrar {
         }
     }
 
-    protected final Collection<SignalHandler> getSignalHandlers(Signal<?> signal) {
+    protected synchronized final Collection<SignalHandler> getSignalHandlers(Signal<?> signal) {
         Object filter = signal.getFilter();
         Identifier signalId = signal.getId();
         Map<Object, Collection<SignalHandler>> filterVsHandlers = registeredHandlers.get(signalId);
