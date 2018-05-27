@@ -37,7 +37,8 @@ class LocalServiceRequestResolver implements Resolver<ServiceRequest> {
         ServiceRequestKey key = new ServiceRequestKey(request.getServiceName(), request.getMethodName());
         ServiceInvoker invoker = serviceInvokers.get(key);
         if (invoker == null) {
-            throw new ServiceRequestFailedException("Could not resolve request for " + key);
+            String msg = String.format("No service invoker registered for key %s", key);
+            throw new ServiceRequestFailedException(msg);
         }
         return invoker.invoke(request.getArgs());
     }

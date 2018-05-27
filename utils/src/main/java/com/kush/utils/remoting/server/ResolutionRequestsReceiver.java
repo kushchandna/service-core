@@ -23,10 +23,10 @@ public abstract class ResolutionRequestsReceiver<T extends Resolvable> {
     }
 
     public final void start(Resolver<T> resolver) throws StartupFailedException {
-        LOGGER.info("Starting request receiver %s", getClass().getName());
+        LOGGER.info("Starting requests receiver %s", getClass().getName());
         performStartup();
         running = true;
-        LOGGER.info("Started request receiver %s", getClass().getName());
+        LOGGER.info("Started requests receiver %s", getClass().getName());
         resolvableReceiverExecutor.execute(new Runnable() {
 
             @Override
@@ -37,11 +37,11 @@ public abstract class ResolutionRequestsReceiver<T extends Resolvable> {
     }
 
     public final void stop() throws ShutdownFailedException {
-        LOGGER.info("Stopping request receiver %s", getClass().getName());
+        LOGGER.info("Stopping requests receiver %s", getClass().getName());
         performStop();
         resolvableReceiverExecutor.shutdownNow();
         running = false;
-        LOGGER.info("Stopped request receiver %s", getClass().getName());
+        LOGGER.info("Stopped requests receiver %s", getClass().getName());
     }
 
     private void startProcessingRequests(Resolver<T> resolver) {
@@ -76,9 +76,15 @@ public abstract class ResolutionRequestsReceiver<T extends Resolvable> {
         @Override
         public void run() {
             Resolvable resolvable = resolvableQuery.getResolvable();
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("Resolving %s", resolvable);
+            }
             try {
                 @SuppressWarnings("unchecked")
                 Object result = resolver.resolve((T) resolvable);
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.debug("Resolved %s, Got result %s", resolvable, result);
+                }
                 resolvableQuery.getListener().onResult(result);
             } catch (Exception e) {
                 LOGGER.error(e);
