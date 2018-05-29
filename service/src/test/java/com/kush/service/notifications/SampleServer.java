@@ -1,4 +1,4 @@
-package com.kush.utils.signaling.sample.remote;
+package com.kush.service.notifications;
 
 import java.util.concurrent.Executors;
 
@@ -7,7 +7,7 @@ import com.kush.utils.signaling.SignalEmitters;
 import com.kush.utils.signaling.SignalSpace;
 import com.kush.utils.signaling.sample.signals.SampleMessageSignal;
 
-class Server {
+class SampleServer {
 
     public static void main(String[] args) {
         SignalEmitter signalEmitter = SignalEmitters.newAsyncEmitter();

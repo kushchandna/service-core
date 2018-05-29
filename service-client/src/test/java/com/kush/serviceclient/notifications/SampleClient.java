@@ -1,10 +1,10 @@
-package com.kush.utils.signaling.sample.remote;
+package com.kush.serviceclient.notifications;
 
 import com.kush.utils.signaling.SignalHandlerRegistrar;
 import com.kush.utils.signaling.sample.handlers.SampleMessageHandler;
 import com.kush.utils.signaling.sample.signals.SampleMessageSignal;
 
-public class Client {
+public class SampleClient {
 
     public static void main(String[] args) {
         SignalHandlerRegistrar registrar = new SignalHandlerRegistrar();
