@@ -1,6 +1,6 @@
 package com.kush.serviceclient.notifications;
 
-import com.kush.lib.service.remoting.Notification;
+import com.kush.lib.service.remoting.notifications.Notification;
 
 public interface NotificationHandler {
 

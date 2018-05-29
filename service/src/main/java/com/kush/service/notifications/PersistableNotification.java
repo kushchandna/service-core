@@ -3,7 +3,7 @@ package com.kush.service.notifications;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
-import com.kush.lib.service.remoting.Notification;
+import com.kush.lib.service.remoting.notifications.Notification;
 import com.kush.utils.id.Identifiable;
 import com.kush.utils.id.Identifier;
 

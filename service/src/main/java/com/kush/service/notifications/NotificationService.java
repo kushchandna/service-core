@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import com.kush.lib.persistence.api.PersistorOperationFailedException;
-import com.kush.lib.service.remoting.Notification;
+import com.kush.lib.service.remoting.notifications.Notification;
 import com.kush.service.BaseService;
 import com.kush.service.annotations.Service;
 import com.kush.service.annotations.ServiceMethod;
