@@ -25,7 +25,7 @@ public abstract class Signal<S extends SignalHandler> implements Serializable {
         handleSignal((S) receiver);
     }
 
-    protected abstract void handleSignal(S receiver);
+    protected abstract void handleSignal(S handler);
 
     final Object getFilter() {
         return filter;
