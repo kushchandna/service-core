@@ -39,61 +39,31 @@ public class PersistableNotification implements Identifiable, Notification {
         this.source = source;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see com.kush.lib.service.server.notfication.Notification#getId()
-     */
     @Override
     public Identifier getId() {
         return notificationId;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see com.kush.lib.service.server.notfication.Notification#getUserId()
-     */
     @Override
     public Identifier getUserId() {
         return userId;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see com.kush.lib.service.server.notfication.Notification#getData()
-     */
     @Override
     public Serializable getData() {
         return data;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see com.kush.lib.service.server.notfication.Notification#isRead()
-     */
     @Override
     public boolean isRead() {
         return read;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see com.kush.lib.service.server.notfication.Notification#getNotificationTime()
-     */
     @Override
     public LocalDateTime getNotificationTime() {
         return notificationTime;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see com.kush.lib.service.server.notfication.Notification#getSource()
-     */
     @Override
     public String getSource() {
         return source;

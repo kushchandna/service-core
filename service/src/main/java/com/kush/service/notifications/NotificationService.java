@@ -31,12 +31,6 @@ public class NotificationService extends BaseService {
         return notificationPersistor.getRecentUnreadNotificationsForUser(currentUserId);
     }
 
-    @AuthenticationRequired
-    @ServiceMethod
-    public Notification getNotification() {
-        return null;
-    }
-
     @Override
     protected void processContext() {
         checkContextHasValueFor(NotificationPersistor.class);

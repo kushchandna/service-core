@@ -1,10 +1,9 @@
 package com.kush.utils.signaling;
 
-import java.io.Serializable;
-
 import com.kush.utils.id.Identifier;
+import com.kush.utils.remoting.Resolvable;
 
-public abstract class Signal<S extends SignalHandler> implements Serializable {
+public abstract class Signal<S extends SignalHandler> implements Resolvable {
 
     private static final long serialVersionUID = 1L;
 
