@@ -18,11 +18,11 @@ public class SignalHandlerRegistrar {
         registeredHandlers = new ConcurrentHashMap<>();
     }
 
-    public <R extends SignalHandler, S extends Signal<R>> void register(Class<S> signalClass, SignalHandler handler) {
+    public <R extends SignalHandler, S extends Signal<R>> void register(Class<S> signalClass, R handler) {
         this.register(signalClass, handler, Signal.DEFAULT_FILTER);
     }
 
-    public synchronized <R extends SignalHandler, S extends Signal<R>> void register(Class<S> signalClass, SignalHandler handler,
+    public synchronized <R extends SignalHandler, S extends Signal<R>> void register(Class<S> signalClass, R handler,
             Object filter) {
         Identifier signalId = id(signalClass);
         Map<Object, Collection<SignalHandler>> filterVsHandlers = registeredHandlers.get(signalId);
@@ -38,12 +38,11 @@ public class SignalHandlerRegistrar {
         handlers.add(handler);
     }
 
-    public <R extends SignalHandler, S extends Signal<R>> void unregister(Class<S> signalClass, SignalHandler handler) {
+    public <R extends SignalHandler, S extends Signal<R>> void unregister(Class<S> signalClass, R handler) {
         this.unregister(signalClass, handler, Signal.DEFAULT_FILTER);
     }
 
-    public synchronized <R extends SignalHandler, S extends Signal<R>> void unregister(Class<S> signalClass,
-            SignalHandler handler,
+    public synchronized <R extends SignalHandler, S extends Signal<R>> void unregister(Class<S> signalClass, R handler,
             Object filter) {
         Identifier signalId = id(signalClass);
         Map<Object, Collection<SignalHandler>> filterVsHandlers = registeredHandlers.get(signalId);
