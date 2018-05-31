@@ -3,10 +3,8 @@ package com.kush.lib.service.sample.application.local;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
 
 import com.kush.lib.service.sample.application.SampleApplication;
-import com.kush.service.ApplicationServer;
 import com.kush.utils.remoting.client.ResolutionConnectionFactory;
 import com.kush.utils.remoting.client.local.LocalResolutionConnectionFactory;
 import com.kush.utils.remoting.server.ResolutionRequest;
@@ -23,9 +21,7 @@ public class SampleLocalApplicationImpl extends SampleApplication {
     }
 
     @Override
-    protected void registerReceivers(ApplicationServer server) {
-        Executor executor = Executors.newSingleThreadExecutor();
-        ResolutionRequestsReceiver requestReceiver = new LocalResolutionRequestsReceiver(executor, pendingRequests);
-        server.registerServiceRequestReceiver(requestReceiver);
+    protected ResolutionRequestsReceiver createResolutionRequestsReceiver(Executor executor) {
+        return new LocalResolutionRequestsReceiver(executor, pendingRequests);
     }
 }

@@ -14,12 +14,11 @@ public class ApplicationServer {
     private static final com.kush.logger.Logger LOGGER =
             com.kush.logger.LoggerFactory.INSTANCE.getLogger(ApplicationServer.class);
 
-    private final Set<ResolutionRequestsReceiver> serviceRequestProcessors = new HashSet<>();
     private final Set<Class<? extends BaseService>> serviceClasses = new HashSet<>();
+    private final ResolutionRequestsReceiver serviceRequestReceiver;
 
-    public final void registerServiceRequestReceiver(ResolutionRequestsReceiver serviceRequestReceiver) {
-        serviceRequestProcessors.add(serviceRequestReceiver);
-        LOGGER.info("Registered service receiver of type %s", serviceRequestReceiver.getClass().getName());
+    public ApplicationServer(ResolutionRequestsReceiver serviceRequestReceiver) {
+        this.serviceRequestReceiver = serviceRequestReceiver;
     }
 
     public final void registerService(Class<? extends BaseService> serviceClass) {
@@ -36,16 +35,12 @@ public class ApplicationServer {
     }
 
     public final void stop() throws ShutdownFailedException {
-        for (ResolutionRequestsReceiver processor : serviceRequestProcessors) {
-            processor.stop();
-        }
+        serviceRequestReceiver.stop();
     }
 
     private void startServiceRequestReceivers(Resolver<ServiceRequest> requestResolver) throws StartupFailedException {
-        for (ResolutionRequestsReceiver processor : serviceRequestProcessors) {
-            processor.addResolver(ServiceRequest.class, requestResolver);
-            processor.start();
-        }
+        serviceRequestReceiver.addResolver(ServiceRequest.class, requestResolver);
+        serviceRequestReceiver.start();
     }
 
     private Resolver<ServiceRequest> initializeServicesAndGetRequestResolver(ServiceInitializer serviceInitializer)

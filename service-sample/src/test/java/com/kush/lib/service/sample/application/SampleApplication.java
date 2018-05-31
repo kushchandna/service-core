@@ -28,6 +28,7 @@ import com.kush.utils.async.Response.ErrorListener;
 import com.kush.utils.async.Response.ResultListener;
 import com.kush.utils.exceptions.ObjectNotFoundException;
 import com.kush.utils.remoting.client.ResolutionConnectionFactory;
+import com.kush.utils.remoting.server.ResolutionRequestsReceiver;
 import com.kush.utils.remoting.server.StartupFailedException;
 
 public abstract class SampleApplication {
@@ -36,8 +37,9 @@ public abstract class SampleApplication {
             com.kush.logger.LoggerFactory.INSTANCE.getLogger(SampleApplication.class);
 
     public void setupServer() throws StartupFailedException {
-        ApplicationServer server = createServerInstance();
-        registerReceivers(server);
+        Executor executor = Executors.newFixedThreadPool(5);
+        ResolutionRequestsReceiver serviceRequestReceiver = createResolutionRequestsReceiver(executor);
+        ApplicationServer server = new ApplicationServer(serviceRequestReceiver);
         server.registerService(SampleHelloService.class);
         SampleHelloTextProvider greetingProvider = new SampleHelloTextProvider();
         Persistor<UserCredential> delegate = forType(UserCredential.class);
@@ -68,15 +70,9 @@ public abstract class SampleApplication {
         doLogout(serviceClientProvider);
     }
 
-    protected ApplicationServer createServerInstance() {
-        return new ApplicationServer();
-    }
-
-    protected void registerReceivers(ApplicationServer server) {
-    }
-
     protected abstract ResolutionConnectionFactory createServiceConnectionFactory();
 
+    protected abstract ResolutionRequestsReceiver createResolutionRequestsReceiver(Executor executor);
 
     private static void invokeSayHello(ServiceClientProvider serviceClientProvider) throws Exception {
         SampleHelloServiceClient sampleServiceClient = serviceClientProvider.getServiceClient(SampleHelloServiceClient.class);

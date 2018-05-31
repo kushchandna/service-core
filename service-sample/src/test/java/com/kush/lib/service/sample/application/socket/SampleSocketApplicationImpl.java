@@ -1,12 +1,11 @@
 package com.kush.lib.service.sample.application.socket;
 
 import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
 
 import com.kush.lib.service.sample.application.SampleApplication;
-import com.kush.service.ApplicationServer;
 import com.kush.utils.remoting.client.ResolutionConnectionFactory;
 import com.kush.utils.remoting.client.socket.SocketBasedResolutionConnectionFactory;
+import com.kush.utils.remoting.server.ResolutionRequestsReceiver;
 import com.kush.utils.remoting.server.socket.SocketBasedResolutionRequestsProcessor;
 
 public class SampleSocketApplicationImpl extends SampleApplication {
@@ -20,8 +19,7 @@ public class SampleSocketApplicationImpl extends SampleApplication {
     }
 
     @Override
-    protected void registerReceivers(ApplicationServer server) {
-        Executor executor = Executors.newSingleThreadExecutor();
-        server.registerServiceRequestReceiver(new SocketBasedResolutionRequestsProcessor(executor, PORT));
+    protected ResolutionRequestsReceiver createResolutionRequestsReceiver(Executor executor) {
+        return new SocketBasedResolutionRequestsProcessor(executor, PORT);
     }
 }
