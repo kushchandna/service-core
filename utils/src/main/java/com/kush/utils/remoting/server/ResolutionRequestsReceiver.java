@@ -60,21 +60,29 @@ public abstract class ResolutionRequestsReceiver {
                 // TODO add error handling
                 continue;
             }
+            resolve(resolvableQuery);
+        }
+    }
 
-            Class<? extends Resolvable> queryType = resolvableQuery.getResolvable().getClass();
-            Resolver<?> resolver = null;
-            for (Class<?> resolvableType : registeredResolvers.keySet()) {
-                if (resolvableType.isAssignableFrom(queryType)) {
-                    resolver = registeredResolvers.get(resolvableType);
-                    break;
-                }
-            }
-            if (resolver != null) {
-                resolutionExecutor.execute(new Task<>(resolvableQuery, resolver));
-            } else {
-                LOGGER.error("No resolver found for type %s", queryType);
+    private void resolve(ResolutionRequest resolvableQuery) {
+        Class<? extends Resolvable> queryType = resolvableQuery.getResolvable().getClass();
+        Resolver<?> resolver = getResolver(queryType);
+        if (resolver != null) {
+            resolutionExecutor.execute(new Task<>(resolvableQuery, resolver));
+        } else {
+            LOGGER.error("No resolver found for type %s", queryType);
+        }
+    }
+
+    private Resolver<?> getResolver(Class<? extends Resolvable> queryType) {
+        Resolver<?> resolver = null;
+        for (Class<?> resolvableType : registeredResolvers.keySet()) {
+            if (resolvableType.isAssignableFrom(queryType)) {
+                resolver = registeredResolvers.get(resolvableType);
+                break;
             }
         }
+        return resolver;
     }
 
     protected abstract void performStartup() throws StartupFailedException;
