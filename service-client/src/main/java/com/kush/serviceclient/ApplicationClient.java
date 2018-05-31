@@ -13,7 +13,7 @@ public class ApplicationClient {
 
     private ServiceClientProvider serviceClientProvider;
 
-    public void start(ResolutionConnectionFactory connectionFactory) {
+    public final void start(ResolutionConnectionFactory connectionFactory) {
         LOGGER.info("Starting application client");
         SessionManager sessionManager = new SessionManager();
         ServiceClientActivator activator = new ServiceClientActivator(sessionManager, connectionFactory);
@@ -21,16 +21,16 @@ public class ApplicationClient {
         LOGGER.info("Started application client");
     }
 
-    public void activateServiceClient(Class<? extends ServiceClient> serviceClientClass, Executor executor)
+    public final void activateServiceClient(Class<? extends ServiceClient> serviceClientClass, Executor executor)
             throws ServiceClientActivationFailedException {
         serviceClientProvider.activateServiceClient(serviceClientClass, executor);
     }
 
-    public void activateLoginServiceClient(Executor executor) throws ServiceClientActivationFailedException {
+    public final void activateLoginServiceClient(Executor executor) throws ServiceClientActivationFailedException {
         activateServiceClient(LoginServiceClient.class, executor);
     }
 
-    public ServiceClientProvider getServiceClientProvider() {
+    public final ServiceClientProvider getServiceClientProvider() {
         return serviceClientProvider;
     }
 }
