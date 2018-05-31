@@ -52,8 +52,8 @@ public abstract class SampleApplication {
 
     public ApplicationClient setupClient() throws ServiceClientActivationFailedException {
         ResolutionConnectionFactory connectionFactory = createServiceConnectionFactory();
-        ApplicationClient client = new ApplicationClient();
-        client.start(connectionFactory);
+        ApplicationClient client = new ApplicationClient(connectionFactory);
+        client.start();
         Executor executor = Executors.newSingleThreadExecutor();
         client.activateServiceClient(SampleHelloServiceClient.class, executor);
         client.activateLoginServiceClient(executor);

@@ -11,9 +11,15 @@ public class ApplicationClient {
     private static final com.kush.logger.Logger LOGGER =
             com.kush.logger.LoggerFactory.INSTANCE.getLogger(ApplicationClient.class);
 
+    private final ResolutionConnectionFactory connectionFactory;
+
     private ServiceClientProvider serviceClientProvider;
 
-    public final void start(ResolutionConnectionFactory connectionFactory) {
+    public ApplicationClient(ResolutionConnectionFactory connectionFactory) {
+        this.connectionFactory = connectionFactory;
+    }
+
+    public final void start() {
         LOGGER.info("Starting application client");
         SessionManager sessionManager = new SessionManager();
         ServiceClientActivator activator = new ServiceClientActivator(sessionManager, connectionFactory);
