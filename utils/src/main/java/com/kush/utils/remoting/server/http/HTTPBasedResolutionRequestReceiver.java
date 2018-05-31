@@ -5,13 +5,12 @@ import java.util.concurrent.Executor;
 import org.eclipse.jetty.server.Server;
 
 import com.kush.utils.remoting.ResolutionFailedException;
-import com.kush.utils.remoting.Resolvable;
 import com.kush.utils.remoting.server.ResolutionRequest;
 import com.kush.utils.remoting.server.ResolutionRequestsReceiver;
 import com.kush.utils.remoting.server.ShutdownFailedException;
 import com.kush.utils.remoting.server.StartupFailedException;
 
-public class HTTPBasedResolutionRequestReceiver<T extends Resolvable> extends ResolutionRequestsReceiver<T> {
+public class HTTPBasedResolutionRequestReceiver extends ResolutionRequestsReceiver {
 
     private final int port;
 

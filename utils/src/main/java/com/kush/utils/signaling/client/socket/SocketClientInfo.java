@@ -6,7 +6,6 @@ import com.kush.utils.remoting.client.ResolutionConnectionFactory;
 import com.kush.utils.remoting.client.socket.SocketBasedResolutionConnectionFactory;
 import com.kush.utils.remoting.server.ResolutionRequestsReceiver;
 import com.kush.utils.remoting.server.socket.SocketBasedResolutionRequestsProcessor;
-import com.kush.utils.signaling.Signal;
 import com.kush.utils.signaling.client.ClientInfo;
 
 public class SocketClientInfo implements ClientInfo {
@@ -27,7 +26,7 @@ public class SocketClientInfo implements ClientInfo {
     }
 
     @Override
-    public ResolutionRequestsReceiver<Signal<?>> getSignalReceiver(Executor executor) {
-        return new SocketBasedResolutionRequestsProcessor<>(executor, port);
+    public ResolutionRequestsReceiver getSignalReceiver(Executor executor) {
+        return new SocketBasedResolutionRequestsProcessor(executor, port);
     }
 }

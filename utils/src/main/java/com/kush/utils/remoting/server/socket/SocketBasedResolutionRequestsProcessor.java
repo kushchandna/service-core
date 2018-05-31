@@ -12,12 +12,12 @@ import java.util.concurrent.Executor;
 import com.kush.utils.remoting.ResolutionFailedException;
 import com.kush.utils.remoting.Resolvable;
 import com.kush.utils.remoting.ResultCode;
-import com.kush.utils.remoting.server.ResolutionRequestsReceiver;
 import com.kush.utils.remoting.server.ResolutionRequest;
+import com.kush.utils.remoting.server.ResolutionRequestsReceiver;
 import com.kush.utils.remoting.server.ShutdownFailedException;
 import com.kush.utils.remoting.server.StartupFailedException;
 
-public class SocketBasedResolutionRequestsProcessor<T extends Resolvable> extends ResolutionRequestsReceiver<T> {
+public class SocketBasedResolutionRequestsProcessor extends ResolutionRequestsReceiver {
 
     private final int port;
 

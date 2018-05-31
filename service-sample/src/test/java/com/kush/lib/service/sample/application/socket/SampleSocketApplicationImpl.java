@@ -22,6 +22,6 @@ public class SampleSocketApplicationImpl extends SampleApplication {
     @Override
     protected void registerReceivers(ApplicationServer server) {
         Executor executor = Executors.newSingleThreadExecutor();
-        server.registerServiceRequestReceiver(new SocketBasedResolutionRequestsProcessor<>(executor, PORT));
+        server.registerServiceRequestReceiver(new SocketBasedResolutionRequestsProcessor(executor, PORT));
     }
 }

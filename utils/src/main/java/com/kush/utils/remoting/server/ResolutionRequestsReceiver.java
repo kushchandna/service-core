@@ -7,7 +7,7 @@ import java.util.concurrent.Executors;
 import com.kush.utils.remoting.ResolutionFailedException;
 import com.kush.utils.remoting.Resolvable;
 
-public abstract class ResolutionRequestsReceiver<T extends Resolvable> {
+public abstract class ResolutionRequestsReceiver {
 
     private static final com.kush.logger.Logger LOGGER =
             com.kush.logger.LoggerFactory.INSTANCE.getLogger(ResolutionRequestsReceiver.class);
@@ -22,7 +22,7 @@ public abstract class ResolutionRequestsReceiver<T extends Resolvable> {
         resolvableReceiverExecutor = Executors.newSingleThreadExecutor();
     }
 
-    public final void start(Resolver<T> resolver) throws StartupFailedException {
+    public final void start(Resolver<?> resolver) throws StartupFailedException {
         LOGGER.info("Starting requests receiver %s", getClass().getName());
         performStartup();
         running = true;
@@ -44,7 +44,7 @@ public abstract class ResolutionRequestsReceiver<T extends Resolvable> {
         LOGGER.info("Stopped requests receiver %s", getClass().getName());
     }
 
-    private void startProcessingRequests(Resolver<T> resolver) {
+    private void startProcessingRequests(Resolver<?> resolver) {
         while (running) {
             ResolutionRequest resolvableQuery;
             try {
@@ -53,7 +53,7 @@ public abstract class ResolutionRequestsReceiver<T extends Resolvable> {
                 // TODO add error handling
                 continue;
             }
-            resolutionExecutor.execute(new Task<T>(resolvableQuery, resolver));
+            resolutionExecutor.execute(new Task<>(resolvableQuery, resolver));
         }
     }
 

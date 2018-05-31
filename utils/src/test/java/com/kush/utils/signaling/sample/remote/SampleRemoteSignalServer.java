@@ -9,7 +9,6 @@ import com.kush.utils.remoting.server.socket.SocketBasedResolutionRequestsProces
 import com.kush.utils.signaling.RemoteSignalSpace;
 import com.kush.utils.signaling.SignalEmitter;
 import com.kush.utils.signaling.SignalEmitters;
-import com.kush.utils.signaling.client.SignalHandlerRegistrationRequest;
 import com.kush.utils.signaling.sample.signals.SampleMessageSignal;
 
 public class SampleRemoteSignalServer {
@@ -37,8 +36,7 @@ public class SampleRemoteSignalServer {
     }
 
     private static void startReceivingRemoteSignalRegistrationRequests(Executor executor, RemoteSignalSpace signalSpace) {
-        ResolutionRequestsReceiver<SignalHandlerRegistrationRequest> clientInfoReceiver =
-                new SocketBasedResolutionRequestsProcessor<>(executor, PORT);
+        ResolutionRequestsReceiver clientInfoReceiver = new SocketBasedResolutionRequestsProcessor(executor, PORT);
         try {
             clientInfoReceiver.start(signalSpace);
         } catch (StartupFailedException e) {

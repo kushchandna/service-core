@@ -14,10 +14,10 @@ public class ApplicationServer {
     private static final com.kush.logger.Logger LOGGER =
             com.kush.logger.LoggerFactory.INSTANCE.getLogger(ApplicationServer.class);
 
-    private final Set<ResolutionRequestsReceiver<ServiceRequest>> serviceRequestProcessors = new HashSet<>();
+    private final Set<ResolutionRequestsReceiver> serviceRequestProcessors = new HashSet<>();
     private final Set<Class<? extends BaseService>> serviceClasses = new HashSet<>();
 
-    public final void registerServiceRequestReceiver(ResolutionRequestsReceiver<ServiceRequest> serviceRequestReceiver) {
+    public final void registerServiceRequestReceiver(ResolutionRequestsReceiver serviceRequestReceiver) {
         serviceRequestProcessors.add(serviceRequestReceiver);
         LOGGER.info("Registered service receiver of type %s", serviceRequestReceiver.getClass().getName());
     }
@@ -36,13 +36,13 @@ public class ApplicationServer {
     }
 
     public final void stop() throws ShutdownFailedException {
-        for (ResolutionRequestsReceiver<ServiceRequest> processor : serviceRequestProcessors) {
+        for (ResolutionRequestsReceiver processor : serviceRequestProcessors) {
             processor.stop();
         }
     }
 
     private void startServiceRequestReceivers(Resolver<ServiceRequest> requestResolver) throws StartupFailedException {
-        for (ResolutionRequestsReceiver<ServiceRequest> processor : serviceRequestProcessors) {
+        for (ResolutionRequestsReceiver processor : serviceRequestProcessors) {
             processor.start(requestResolver);
         }
     }
