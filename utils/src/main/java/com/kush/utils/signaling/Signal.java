@@ -3,14 +3,15 @@ package com.kush.utils.signaling;
 import java.io.Serializable;
 
 import com.kush.utils.id.Identifier;
+import com.kush.utils.remoting.Resolvable;
 
-public abstract class Signal<S extends SignalHandler> implements Serializable {
+public abstract class Signal<S extends SignalHandler> implements Resolvable, Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    static final Object DEFAULT_FILTER = null;
+    public static final Object DEFAULT_FILTER = null;
 
-    private transient final Object filter;
+    private final Object filter;
 
     public Signal() {
         this(DEFAULT_FILTER);
@@ -21,8 +22,13 @@ public abstract class Signal<S extends SignalHandler> implements Serializable {
     }
 
     @SuppressWarnings("unchecked")
-    void emit(SignalHandler receiver) {
-        handleSignal((S) receiver);
+    final void emit(SignalHandler handler) {
+        if (isRemoteHandler(handler)) {
+            RemoteSignalSender remoteHandler = asRemoteHandler(handler);
+            remoteHandler.send(this);
+        } else {
+            handleSignal((S) handler);
+        }
     }
 
     protected abstract void handleSignal(S handler);
@@ -32,6 +38,18 @@ public abstract class Signal<S extends SignalHandler> implements Serializable {
     }
 
     final Identifier getId() {
-        return Identifier.id(getClass());
+        return getSignalId(getClass());
+    }
+
+    public static Identifier getSignalId(Class<?> signalType) {
+        return Identifier.id(signalType);
+    }
+
+    private RemoteSignalSender asRemoteHandler(SignalHandler handler) {
+        return (RemoteSignalSender) handler;
+    }
+
+    private boolean isRemoteHandler(SignalHandler handler) {
+        return handler instanceof RemoteSignalSender;
     }
 }

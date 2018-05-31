@@ -13,7 +13,7 @@ public class SignalSpace extends SignalHandlerRegistrar {
         this.executor = executor;
     }
 
-    public void emit(Signal<?> signal) {
+    public final void emit(Signal<?> signal) {
         executor.execute(new Runnable() {
 
             @Override

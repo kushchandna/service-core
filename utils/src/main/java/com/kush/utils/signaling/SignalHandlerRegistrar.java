@@ -24,6 +24,20 @@ public class SignalHandlerRegistrar {
 
     public synchronized <R extends SignalHandler, S extends Signal<R>> void register(Class<S> signalClass, R handler,
             Object filter) {
+        registerWithoutCheckingType(signalClass, handler, filter);
+    }
+
+    public <R extends SignalHandler, S extends Signal<R>> void unregister(Class<S> signalClass, R handler) {
+        this.unregister(signalClass, handler, Signal.DEFAULT_FILTER);
+    }
+
+    public synchronized <R extends SignalHandler, S extends Signal<R>> void unregister(Class<S> signalClass, R handler,
+            Object filter) {
+        unregisterWithoutCheckingType(signalClass, handler, filter);
+    }
+
+    protected final void registerWithoutCheckingType(Class<? extends Signal<?>> signalClass, SignalHandler handler,
+            Object filter) {
         Identifier signalId = id(signalClass);
         Map<Object, Collection<SignalHandler>> filterVsHandlers = registeredHandlers.get(signalId);
         if (filterVsHandlers == null) {
@@ -38,11 +52,7 @@ public class SignalHandlerRegistrar {
         handlers.add(handler);
     }
 
-    public <R extends SignalHandler, S extends Signal<R>> void unregister(Class<S> signalClass, R handler) {
-        this.unregister(signalClass, handler, Signal.DEFAULT_FILTER);
-    }
-
-    public synchronized <R extends SignalHandler, S extends Signal<R>> void unregister(Class<S> signalClass, R handler,
+    protected final void unregisterWithoutCheckingType(Class<? extends Signal<?>> signalClass, SignalHandler handler,
             Object filter) {
         Identifier signalId = id(signalClass);
         Map<Object, Collection<SignalHandler>> filterVsHandlers = registeredHandlers.get(signalId);
