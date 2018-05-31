@@ -43,7 +43,8 @@ public class ApplicationServer {
 
     private void startServiceRequestReceivers(Resolver<ServiceRequest> requestResolver) throws StartupFailedException {
         for (ResolutionRequestsReceiver processor : serviceRequestProcessors) {
-            processor.start(requestResolver);
+            processor.addResolver(ServiceRequest.class, requestResolver);
+            processor.start();
         }
     }
 

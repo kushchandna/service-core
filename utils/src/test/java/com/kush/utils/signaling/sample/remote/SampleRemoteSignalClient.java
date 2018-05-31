@@ -7,6 +7,7 @@ import com.kush.utils.remoting.client.ResolutionConnectionFactory;
 import com.kush.utils.remoting.client.socket.SocketBasedResolutionConnectionFactory;
 import com.kush.utils.remoting.server.ResolutionRequestsReceiver;
 import com.kush.utils.remoting.server.StartupFailedException;
+import com.kush.utils.signaling.Signal;
 import com.kush.utils.signaling.SignalEmitter;
 import com.kush.utils.signaling.SignalEmitters;
 import com.kush.utils.signaling.client.ClientInfo;
@@ -50,8 +51,9 @@ public class SampleRemoteSignalClient {
 
     private static void startReceivingRemoteSignals(Executor executor, ClientInfo clientInfo, ClientSignalSpace signalSpace) {
         ResolutionRequestsReceiver signalReceiver = clientInfo.getSignalReceiver(executor);
+        signalReceiver.addResolver(Signal.class, signalSpace);
         try {
-            signalReceiver.start(signalSpace);
+            signalReceiver.start();
         } catch (StartupFailedException e) {
             e.printStackTrace();
         }

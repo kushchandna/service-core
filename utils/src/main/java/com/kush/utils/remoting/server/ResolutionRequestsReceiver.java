@@ -1,5 +1,7 @@
 package com.kush.utils.remoting.server;
 
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -12,6 +14,7 @@ public abstract class ResolutionRequestsReceiver {
     private static final com.kush.logger.Logger LOGGER =
             com.kush.logger.LoggerFactory.INSTANCE.getLogger(ResolutionRequestsReceiver.class);
 
+    private final Map<Class<?>, Resolver<?>> registeredResolvers = new ConcurrentHashMap<>();
     private final Executor resolutionExecutor;
     private final ExecutorService resolvableReceiverExecutor;
 
@@ -22,7 +25,11 @@ public abstract class ResolutionRequestsReceiver {
         resolvableReceiverExecutor = Executors.newSingleThreadExecutor();
     }
 
-    public final void start(Resolver<?> resolver) throws StartupFailedException {
+    public final void addResolver(Class<? extends Resolvable> resolvableType, Resolver<? extends Resolvable> resolver) {
+        registeredResolvers.put(resolvableType, resolver);
+    }
+
+    public final void start() throws StartupFailedException {
         LOGGER.info("Starting requests receiver %s", getClass().getName());
         performStartup();
         running = true;
@@ -31,7 +38,7 @@ public abstract class ResolutionRequestsReceiver {
 
             @Override
             public void run() {
-                startProcessingRequests(resolver);
+                startProcessingRequests();
             }
         });
     }
@@ -44,7 +51,7 @@ public abstract class ResolutionRequestsReceiver {
         LOGGER.info("Stopped requests receiver %s", getClass().getName());
     }
 
-    private void startProcessingRequests(Resolver<?> resolver) {
+    private void startProcessingRequests() {
         while (running) {
             ResolutionRequest resolvableQuery;
             try {
@@ -53,7 +60,20 @@ public abstract class ResolutionRequestsReceiver {
                 // TODO add error handling
                 continue;
             }
-            resolutionExecutor.execute(new Task<>(resolvableQuery, resolver));
+
+            Class<? extends Resolvable> queryType = resolvableQuery.getResolvable().getClass();
+            Resolver<?> resolver = null;
+            for (Class<?> resolvableType : registeredResolvers.keySet()) {
+                if (resolvableType.isAssignableFrom(queryType)) {
+                    resolver = registeredResolvers.get(resolvableType);
+                    break;
+                }
+            }
+            if (resolver != null) {
+                resolutionExecutor.execute(new Task<>(resolvableQuery, resolver));
+            } else {
+                LOGGER.error("No resolver found for type %s", queryType);
+            }
         }
     }
 
