@@ -71,6 +71,7 @@ public abstract class ResolutionRequestsReceiver {
             resolutionExecutor.execute(new Task<>(resolvableQuery, resolver));
         } else {
             LOGGER.error("No resolver found for type %s", queryType);
+            throw new IllegalStateException("Could not resolve request");
         }
     }
 
