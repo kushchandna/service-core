@@ -16,6 +16,7 @@
 		<version>0.0.1-SNAPSHOT</version>
 		<artifactId>parent</artifactId>
 		<groupId>com.kush</groupId>
+		<relativePath>../parent</relativePath>
 	</parent>
 
 	<dependencies>
