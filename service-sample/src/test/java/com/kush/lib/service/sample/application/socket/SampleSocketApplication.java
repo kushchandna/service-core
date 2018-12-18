@@ -8,7 +8,7 @@ import com.kush.utils.remoting.client.socket.SocketBasedResolutionConnectionFact
 import com.kush.utils.remoting.server.ResolutionRequestsReceiver;
 import com.kush.utils.remoting.server.socket.SocketBasedResolutionRequestsProcessor;
 
-public class SampleSocketApplicationImpl extends SampleApplication {
+public class SampleSocketApplication extends SampleApplication {
 
     private static final String HOST = "localhost";
     private static final int PORT = 3789;
