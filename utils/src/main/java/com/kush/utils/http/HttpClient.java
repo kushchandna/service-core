@@ -30,7 +30,7 @@ public class HttpClient {
         this.stringConvertor = stringConvertor;
     }
 
-    public <T> T getObject(Class<T> returnType, Map<String, Object> parameters) throws IOException {
+    public <T> T getObject(Map<String, Object> parameters, Class<T> returnType) throws IOException {
         String queryString = buildQueryString(parameters);
         String queryUrl = prepareQueryUrl(queryString);
         String resultAsString = getResultAsString(queryUrl);
@@ -60,17 +60,16 @@ public class HttpClient {
         while (it.hasNext()) {
             Entry<String, Object> entry = it.next();
             String key = entry.getKey();
-            if (key != null) {
-                sb.append(URLEncoder.encode(key, DEFAULT_ENCODING));
-                sb.append("=");
-                Object value = entry.getValue();
-                String valueAsString = value != null ? URLEncoder.encode(value.toString(), DEFAULT_ENCODING) : "";
-                sb.append(valueAsString);
-                if (it.hasNext()) {
-                    sb.append("&");
-                }
-            } else {
+            if (key == null) {
                 throw new NullPointerException("Null key found in map");
+            }
+            sb.append(URLEncoder.encode(key, DEFAULT_ENCODING));
+            sb.append("=");
+            Object value = entry.getValue();
+            String valueAsString = value != null ? URLEncoder.encode(value.toString(), DEFAULT_ENCODING) : "";
+            sb.append(valueAsString);
+            if (it.hasNext()) {
+                sb.append("&");
             }
         }
         return sb.toString();
