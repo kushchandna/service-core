@@ -1,40 +1,34 @@
 package com.kush.utils.http;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.URLEncoder;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.stream.Collectors;
 
-import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 
-import com.kush.utils.convertor.StringConvertor;
-
-public class HttpClient {
+public class HttpClient<T> {
 
     private static final String DEFAULT_ENCODING = "UTF-8";
 
     private final String url;
-    private final StringConvertor stringConvertor;
+    private final HttpResponseReader<T> responseReader;
 
-    public HttpClient(String url, StringConvertor stringConvertor) {
-        this.url = url.endsWith("/") ? url : url + '/';
-        this.stringConvertor = stringConvertor;
+    public HttpClient(String url, HttpResponseReader<T> responseReader) {
+        this.responseReader = responseReader;
+        this.url = url;
     }
 
-    public <T> T getObject(Map<String, Object> parameters, Class<T> returnType) throws IOException {
+    public T getObject(Map<String, Object> parameters) throws IOException {
         String queryString = buildQueryString(parameters);
         String queryUrl = prepareQueryUrl(queryString);
-        String resultAsString = getResultAsString(queryUrl);
-        return stringConvertor.convert(resultAsString, returnType);
+        return readResult(queryUrl);
     }
 
     private String prepareQueryUrl(String queryString) {
@@ -45,13 +39,13 @@ public class HttpClient {
         return queryUrl;
     }
 
-    private String getResultAsString(String queryUrl) throws IOException, ClientProtocolException {
+    private T readResult(String queryUrl) throws IOException, ClientProtocolException {
         CloseableHttpClient client = HttpClientBuilder.create().build();
         HttpGet request = new HttpGet(queryUrl);
-        HttpResponse response = client.execute(request);
-        InputStream responseStream = response.getEntity().getContent();
-        BufferedReader reader = new BufferedReader(new InputStreamReader(responseStream));
-        return reader.lines().collect(Collectors.joining());
+        try (CloseableHttpResponse response = client.execute(request)) {
+            InputStream responseStream = response.getEntity().getContent();
+            return responseReader.read(responseStream);
+        }
     }
 
     private static String buildQueryString(Map<String, Object> map) throws IOException {
