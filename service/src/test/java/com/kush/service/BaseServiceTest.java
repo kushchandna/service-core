@@ -47,9 +47,8 @@ public class BaseServiceTest {
     @Before
     public final void parentBeforeEachTest() throws Throwable {
         setupBasicMockContext();
-        loginService = new LoginService();
-        ((BaseService) loginService).initialize(context);
-        createUsers();
+        loginService = registerService(new LoginService());
+        setupTestUsers();
     }
 
     @After
@@ -63,15 +62,16 @@ public class BaseServiceTest {
         loginService = null;
     }
 
-    protected final void registerService(BaseService service) {
+    protected final <S extends BaseService> S registerService(S service) {
         service.initialize(context);
+        return service;
     }
 
-    protected final User getTestUser() {
+    protected final User testUser() {
         return getUsers()[0];
     }
 
-    protected final User getUser(int index) {
+    protected final User user(int index) {
         return getUsers()[index];
     }
 
@@ -80,7 +80,7 @@ public class BaseServiceTest {
     }
 
     protected final void runAuthenticatedOperation(Operation operation) throws Exception {
-        runAuthenticatedOperation(getTestUser(), operation);
+        runAuthenticatedOperation(testUser(), operation);
     }
 
     protected final void runAuthenticatedOperation(User user, Operation operation) throws Exception {
@@ -107,7 +107,7 @@ public class BaseServiceTest {
         context.getInstance(Auth.class).logout();
     }
 
-    private void createUsers() throws Exception {
+    private void setupTestUsers() throws Exception {
         for (int i = 1; i <= numOfUsers; i++) {
             Credential credential = new PasswordBasedCredential("testusr" + i, ("testpwd" + i).toCharArray());
             User user = loginService.register(credential);
