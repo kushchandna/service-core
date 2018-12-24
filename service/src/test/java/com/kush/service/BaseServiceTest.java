@@ -22,7 +22,6 @@ import com.kush.service.auth.SessionManager;
 import com.kush.service.auth.credentials.DefaultUserCredentialPersistor;
 import com.kush.service.auth.credentials.UserCredential;
 import com.kush.service.auth.credentials.UserCredentialPersistor;
-import com.kush.utils.id.SequentialIdGenerator;
 
 public class BaseServiceTest {
 
@@ -120,7 +119,6 @@ public class BaseServiceTest {
         Persistor<UserCredential> userCredPersistor = InMemoryPersistor.forType(UserCredential.class);
         addToContext(Auth.class, new Auth());
         addToContext(SessionManager.class, new SessionManager());
-        addToContext(LoginService.KEY_USER_ID_GEN, new SequentialIdGenerator());
         addToContext(UserCredentialPersistor.class, new DefaultUserCredentialPersistor(userCredPersistor));
         addToContext(Clock.class, CLOCK);
     }
