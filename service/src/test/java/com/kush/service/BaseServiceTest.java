@@ -47,7 +47,7 @@ public class BaseServiceTest {
     @Before
     public final void parentBeforeEachTest() throws Throwable {
         setupBasicMockContext();
-        loginService = registerService(new LoginService());
+        loginService = registerService(LoginService.class);
         setupTestUsers();
     }
 
@@ -62,7 +62,8 @@ public class BaseServiceTest {
         loginService = null;
     }
 
-    protected final <S extends BaseService> S registerService(S service) {
+    protected final <S extends BaseService> S registerService(Class<S> serviceClass) throws Exception {
+        S service = serviceClass.newInstance();
         service.initialize(context);
         return service;
     }
