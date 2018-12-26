@@ -19,4 +19,9 @@ public class User implements Identifiable, Serializable {
     public Identifier getId() {
         return userId;
     }
+
+    @Override
+    public String toString() {
+        return "User - " + userId;
+    }
 }
