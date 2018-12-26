@@ -37,9 +37,7 @@ public abstract class SampleApplication {
             com.kush.logger.LoggerFactory.INSTANCE.getLogger(SampleApplication.class);
 
     public void setupServer() throws StartupFailedException {
-        Executor executor = Executors.newFixedThreadPool(5);
-        ResolutionRequestsReceiver serviceRequestReceiver = createResolutionRequestsReceiver(executor);
-
+        ResolutionRequestsReceiver serviceRequestReceiver = createResolutionRequestsReceiver();
         ApplicationServer server = new ApplicationServer(serviceRequestReceiver);
         server.registerService(SampleHelloService.class);
         SampleHelloTextProvider greetingProvider = new SampleHelloTextProvider();
@@ -73,7 +71,7 @@ public abstract class SampleApplication {
 
     protected abstract ResolutionConnectionFactory createServiceConnectionFactory();
 
-    protected abstract ResolutionRequestsReceiver createResolutionRequestsReceiver(Executor executor);
+    protected abstract ResolutionRequestsReceiver createResolutionRequestsReceiver();
 
     private static void invokeSayHello(ServiceClientProvider serviceClientProvider) throws Exception {
         SampleHelloServiceClient sampleServiceClient = serviceClientProvider.getServiceClient(SampleHelloServiceClient.class);
