@@ -30,11 +30,6 @@ import com.kush.utils.exceptions.ObjectNotFoundException;
 import com.kush.utils.remoting.client.ResolutionConnectionFactory;
 import com.kush.utils.remoting.server.ResolutionRequestsReceiver;
 import com.kush.utils.remoting.server.StartupFailedException;
-import com.kush.utils.signaling.RemoteSignalSpace;
-import com.kush.utils.signaling.SignalEmitter;
-import com.kush.utils.signaling.SignalEmitters;
-import com.kush.utils.signaling.SignalSpace;
-import com.kush.utils.signaling.client.SignalHandlerRegistrationRequest;
 
 public abstract class SampleApplication {
 
@@ -45,10 +40,6 @@ public abstract class SampleApplication {
         Executor executor = Executors.newFixedThreadPool(5);
         ResolutionRequestsReceiver serviceRequestReceiver = createResolutionRequestsReceiver(executor);
 
-        SignalEmitter signalEmitter = SignalEmitters.newAsyncEmitter(executor, executor);
-        RemoteSignalSpace signalSpace = new RemoteSignalSpace(executor, signalEmitter);
-        serviceRequestReceiver.addResolver(SignalHandlerRegistrationRequest.class, signalSpace);
-
         ApplicationServer server = new ApplicationServer(serviceRequestReceiver);
         server.registerService(SampleHelloService.class);
         SampleHelloTextProvider greetingProvider = new SampleHelloTextProvider();
@@ -56,7 +47,6 @@ public abstract class SampleApplication {
         Context context = ContextBuilder.create()
             .withInstance(SampleHelloTextProvider.class, greetingProvider)
             .withInstance(UserCredentialPersistor.class, new DefaultUserCredentialPersistor(delegate))
-            .withInstance(SignalSpace.class, signalSpace)
             .build();
         server.start(context);
     }
