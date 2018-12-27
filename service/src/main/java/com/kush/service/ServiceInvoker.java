@@ -22,7 +22,7 @@ class ServiceInvoker {
             throw new ServiceRequestFailedException(e.getMessage(), e);
         } catch (InvocationTargetException e) {
             Throwable cause = e.getCause();
-            throw new ServiceRequestFailedException(cause.getMessage(), cause);
+            throw new ServiceRequestFailedException(cause.getMessage());
         }
     }
 }

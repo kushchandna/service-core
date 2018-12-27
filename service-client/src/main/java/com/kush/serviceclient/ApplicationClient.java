@@ -1,5 +1,7 @@
 package com.kush.serviceclient;
 
+import static java.util.Objects.requireNonNull;
+
 import java.util.concurrent.Executor;
 
 import com.kush.serviceclient.auth.LoginServiceClient;
@@ -29,6 +31,9 @@ public class ApplicationClient {
 
     public final void activateServiceClient(Class<? extends ServiceClient> serviceClientClass, Executor executor)
             throws ServiceClientActivationFailedException {
+        requireNonNull(serviceClientProvider, "serviceClientProvider");
+        requireNonNull(serviceClientClass, "serviceClientClass");
+        requireNonNull(executor, "executor");
         serviceClientProvider.activateServiceClient(serviceClientClass, executor);
     }
 
