@@ -9,7 +9,9 @@ class LocalResponse<T> implements Response<T> {
     private final CountDownLatch latch;
 
     private T result;
+    private boolean resultAvailable = false;
     private RequestFailedException error;
+
     private final List<ResultListener<T>> resultListeners = new ArrayList<>();
     private final List<ErrorListener> errorListeners = new ArrayList<>();
 
@@ -34,7 +36,7 @@ class LocalResponse<T> implements Response<T> {
     @Override
     public void addResultListener(ResultListener<T> resultListener) {
         resultListeners.add(resultListener);
-        if (result != null) {
+        if (resultAvailable) {
             resultListener.onResult(result);
         }
     }
@@ -58,6 +60,7 @@ class LocalResponse<T> implements Response<T> {
             return;
         }
         this.result = result;
+        resultAvailable = true;
         notifyResult(result);
         latch.countDown();
     }
