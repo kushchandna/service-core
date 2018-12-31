@@ -1,17 +1,20 @@
 package com.kush.servicegen.clients;
 
 import static java.util.Arrays.asList;
+import static java.util.stream.Collectors.toList;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.Serializable;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.jar.Attributes;
 import java.util.jar.JarOutputStream;
@@ -28,8 +31,8 @@ import com.kush.servicegen.CodeGenerationFailedException;
 import com.kush.servicegen.ServiceInfo;
 import com.kush.servicegen.ServiceReader;
 import com.kush.servicegen.javapoet.JavapoetBasedServiceClientCodeGenerator;
-import com.kush.utils.commons.JarUtils;
 import com.kush.utils.commons.AssociatedClassesFinder;
+import com.kush.utils.commons.JarUtils;
 
 public class ServiceClientJarGenerator {
 
@@ -77,6 +80,11 @@ public class ServiceClientJarGenerator {
             compileGeneratedFile(javaFileObject, binDir.getAbsolutePath());
         }
         LOGGER.info("Exporting requires exportable classes %s", classesToExport);
+        List<Class<?>> nonSerializable =
+                classesToExport.stream().filter(c -> !Serializable.class.isAssignableFrom(c)).collect(toList());
+        if (!nonSerializable.isEmpty()) {
+            throw new IllegalStateException("Can not export non-seriazable classes " + nonSerializable);
+        }
         for (Class<?> classToExport : classesToExport) {
             LOGGER.info("Exporting %s", classToExport.getName());
             try {
