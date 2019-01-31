@@ -15,13 +15,13 @@ public abstract class ResolutionRequestsReceiver {
             com.kush.logger.LoggerFactory.INSTANCE.getLogger(ResolutionRequestsReceiver.class);
 
     private final Map<Class<?>, Resolver<?>> registeredResolvers = new ConcurrentHashMap<>();
-    private final Executor resolutionExecutor;
+    private final Executor requestResolverExecutor;
     private final ExecutorService resolvableReceiverExecutor;
 
     private volatile boolean running = false;
 
     public ResolutionRequestsReceiver(Executor requestResolverExecutor) {
-        resolutionExecutor = requestResolverExecutor;
+        this.requestResolverExecutor = requestResolverExecutor;
         resolvableReceiverExecutor = Executors.newSingleThreadExecutor();
     }
 
@@ -68,7 +68,7 @@ public abstract class ResolutionRequestsReceiver {
         Class<? extends Resolvable> queryType = resolvableQuery.getResolvable().getClass();
         Resolver<?> resolver = getResolver(queryType);
         if (resolver != null) {
-            resolutionExecutor.execute(new Task<>(resolvableQuery, resolver));
+            requestResolverExecutor.execute(new Task<>(resolvableQuery, resolver));
         } else {
             LOGGER.error("No resolver found for type %s", queryType);
             throw new IllegalStateException("Could not resolve request");

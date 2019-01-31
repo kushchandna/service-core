@@ -3,7 +3,7 @@ package com.kush.utils.remoting.server;
 import com.kush.utils.remoting.ResolutionFailedException;
 import com.kush.utils.remoting.Resolvable;
 
-public interface Resolver<T extends Resolvable> {
+public interface Resolver<R extends Resolvable> {
 
-    Object resolve(T resolvable) throws ResolutionFailedException;
+    Object resolve(R resolvable) throws ResolutionFailedException;
 }

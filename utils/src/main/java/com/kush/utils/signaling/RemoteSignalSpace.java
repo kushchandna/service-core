@@ -7,6 +7,10 @@ import com.kush.utils.signaling.client.SignalHandlerRegistrationRequest;
 
 public class RemoteSignalSpace extends SignalSpace implements Resolver<SignalHandlerRegistrationRequest> {
 
+    public RemoteSignalSpace() {
+        this(SignalEmitters.newAsyncEmitter());
+    }
+
     public RemoteSignalSpace(SignalEmitter signalEmitter) {
         super(signalEmitter);
     }

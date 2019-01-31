@@ -7,8 +7,6 @@ import com.kush.utils.remoting.server.ResolutionRequestsReceiver;
 import com.kush.utils.remoting.server.StartupFailedException;
 import com.kush.utils.remoting.server.socket.SocketBasedResolutionRequestsProcessor;
 import com.kush.utils.signaling.RemoteSignalSpace;
-import com.kush.utils.signaling.SignalEmitter;
-import com.kush.utils.signaling.SignalEmitters;
 import com.kush.utils.signaling.client.SignalHandlerRegistrationRequest;
 import com.kush.utils.signaling.sample.signals.SampleMessageSignal;
 
@@ -25,9 +23,8 @@ public class SampleRemoteSignalServer {
     }
 
     void startServer() {
+        signalSpace = new RemoteSignalSpace();
         Executor executor = Executors.newFixedThreadPool(5);
-        SignalEmitter signalEmitter = SignalEmitters.newAsyncEmitter();
-        signalSpace = new RemoteSignalSpace(signalEmitter);
         startReceivingRemoteSignalRegistrationRequests(executor, signalSpace);
     }
 
