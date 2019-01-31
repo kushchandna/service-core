@@ -1,4 +1,4 @@
-package com.kush.utils.remoting.server.http;
+package com.kush.utils.beta.remoting.server.http;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
