@@ -8,8 +8,6 @@ import com.kush.utils.remoting.client.socket.SocketBasedResolutionConnectionFact
 import com.kush.utils.remoting.server.ResolutionRequestsReceiver;
 import com.kush.utils.remoting.server.StartupFailedException;
 import com.kush.utils.signaling.Signal;
-import com.kush.utils.signaling.SignalEmitter;
-import com.kush.utils.signaling.SignalEmitters;
 import com.kush.utils.signaling.client.ClientInfo;
 import com.kush.utils.signaling.client.ClientSignalSpace;
 import com.kush.utils.signaling.client.socket.SocketClientInfo;
@@ -30,16 +28,15 @@ public class SampleRemoteSignalClient {
 
     private static ClientSignalSpace startClient(ClientInfo clientInfo) {
         Executor executor = Executors.newFixedThreadPool(2);
-        SignalEmitter signalEmitter = SignalEmitters.newAsyncEmitter();
-        ClientSignalSpace signalSpace = createClientSignalSpace(signalEmitter, clientInfo);
+        ClientSignalSpace signalSpace = createClientSignalSpace(clientInfo);
         startReceivingRemoteSignals(executor, clientInfo, signalSpace);
         return signalSpace;
     }
 
-    private static ClientSignalSpace createClientSignalSpace(SignalEmitter signalEmitter, ClientInfo clientInfo) {
+    private static ClientSignalSpace createClientSignalSpace(ClientInfo clientInfo) {
         ResolutionConnectionFactory regReqConnFactory =
                 new SocketBasedResolutionConnectionFactory(CLIENT_HOST, PORT_REG_REQ_SENDER);
-        return new ClientSignalSpace(signalEmitter, clientInfo, regReqConnFactory);
+        return new ClientSignalSpace(clientInfo, regReqConnFactory);
     }
 
     private static void registerForSampleMessageSignal(ClientSignalSpace signalSpace) {
