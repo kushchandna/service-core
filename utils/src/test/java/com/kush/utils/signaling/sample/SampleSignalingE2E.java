@@ -20,7 +20,7 @@ public class SampleSignalingE2E {
 
         ExecutorService executor = Executors.newSingleThreadExecutor();
         SignalEmitter signalEmitter = SignalEmitters.newSyncEmitter();
-        SignalSpace signalSpace = new SignalSpace(executor, signalEmitter);
+        SignalSpace signalSpace = new SignalSpace(signalEmitter);
 
         SampleComponent component = new SampleComponent(signalSpace);
 

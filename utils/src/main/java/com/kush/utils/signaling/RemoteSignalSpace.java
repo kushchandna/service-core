@@ -1,7 +1,5 @@
 package com.kush.utils.signaling;
 
-import java.util.concurrent.Executor;
-
 import com.kush.utils.remoting.ResolutionFailedException;
 import com.kush.utils.remoting.client.ResolutionConnectionFactory;
 import com.kush.utils.remoting.server.Resolver;
@@ -9,8 +7,8 @@ import com.kush.utils.signaling.client.SignalHandlerRegistrationRequest;
 
 public class RemoteSignalSpace extends SignalSpace implements Resolver<SignalHandlerRegistrationRequest> {
 
-    public RemoteSignalSpace(Executor executor, SignalEmitter signalEmitter) {
-        super(executor, signalEmitter);
+    public RemoteSignalSpace(SignalEmitter signalEmitter) {
+        super(signalEmitter);
     }
 
     @Override

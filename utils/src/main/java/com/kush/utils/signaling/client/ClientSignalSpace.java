@@ -1,7 +1,6 @@
 package com.kush.utils.signaling.client;
 
 import java.io.IOException;
-import java.util.concurrent.Executor;
 
 import com.kush.utils.remoting.ResolutionFailedException;
 import com.kush.utils.remoting.client.ResolutionConnection;
@@ -18,9 +17,9 @@ public class ClientSignalSpace extends SignalSpace implements Resolver<Signal<?>
     private final ClientInfo clientInfo;
     private final ResolutionConnectionFactory registrationRequestConnectionFactory;
 
-    public ClientSignalSpace(Executor executor, SignalEmitter signalEmitter, ClientInfo clientInfo,
+    public ClientSignalSpace(SignalEmitter signalEmitter, ClientInfo clientInfo,
             ResolutionConnectionFactory registrationRequestConnectionFactory) {
-        super(executor, signalEmitter);
+        super(signalEmitter);
         this.clientInfo = clientInfo;
         this.registrationRequestConnectionFactory = registrationRequestConnectionFactory;
     }

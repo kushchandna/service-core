@@ -31,16 +31,15 @@ public class SampleRemoteSignalClient {
     private static ClientSignalSpace startClient(ClientInfo clientInfo) {
         Executor executor = Executors.newFixedThreadPool(2);
         SignalEmitter signalEmitter = SignalEmitters.newAsyncEmitter();
-        ClientSignalSpace signalSpace = createClientSignalSpace(executor, signalEmitter, clientInfo);
+        ClientSignalSpace signalSpace = createClientSignalSpace(signalEmitter, clientInfo);
         startReceivingRemoteSignals(executor, clientInfo, signalSpace);
         return signalSpace;
     }
 
-    private static ClientSignalSpace createClientSignalSpace(Executor executor, SignalEmitter signalEmitter,
-            ClientInfo clientInfo) {
+    private static ClientSignalSpace createClientSignalSpace(SignalEmitter signalEmitter, ClientInfo clientInfo) {
         ResolutionConnectionFactory regReqConnFactory =
                 new SocketBasedResolutionConnectionFactory(CLIENT_HOST, PORT_REG_REQ_SENDER);
-        return new ClientSignalSpace(executor, signalEmitter, clientInfo, regReqConnFactory);
+        return new ClientSignalSpace(signalEmitter, clientInfo, regReqConnFactory);
     }
 
     private static void registerForSampleMessageSignal(ClientSignalSpace signalSpace) {

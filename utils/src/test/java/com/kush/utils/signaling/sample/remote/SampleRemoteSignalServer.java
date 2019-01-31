@@ -27,7 +27,7 @@ public class SampleRemoteSignalServer {
     void startServer() {
         Executor executor = Executors.newFixedThreadPool(5);
         SignalEmitter signalEmitter = SignalEmitters.newAsyncEmitter();
-        signalSpace = new RemoteSignalSpace(executor, signalEmitter);
+        signalSpace = new RemoteSignalSpace(signalEmitter);
         startReceivingRemoteSignalRegistrationRequests(executor, signalSpace);
     }
 
