@@ -97,12 +97,12 @@ public class BaseServiceTest {
         return LocalDateTime.now(CLOCK);
     }
 
-    private void beginSession(User user) throws Exception {
+    protected final void beginSession(User user) throws Exception {
         AuthToken token = loginService.login(userVsCredential.get(user));
         context.getInstance(Auth.class).login(token);
     }
 
-    private void endSession() throws Exception {
+    protected final void endSession() throws Exception {
         loginService.logout();
         context.getInstance(Auth.class).logout();
     }
