@@ -55,20 +55,16 @@ public abstract class ServiceClient {
 
     private <T> Response<T> createResponse(String methodName, AuthToken token, Object... args) {
         ServiceRequest request = new ServiceRequest(token, serviceName, methodName, args);
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Creating request '%s'", request);
-        }
+        LOGGER.debug("Creating request '%s'", request);
         LOGGER.info("Sending '%s' request to '%s'", methodName, serviceName);
         return responder.respond(new Request<T>() {
 
             @Override
             @SuppressWarnings("unchecked")
             public T process() throws RequestFailedException {
-                if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("Creating connection for request '%s'", request);
-                }
+                LOGGER.debug("Creating connection for request '%s'", request);
                 try (ResolutionConnection connection = connectionFactory.createConnection()) {
-                    LOGGER.info("Resolving '%s' request from '%s'", methodName, serviceName);
+                    LOGGER.debug("Resolving '%s' request from '%s'", methodName, serviceName);
                     T result = (T) connection.resolve(request);
                     LOGGER.info("Resolved '%s' request from '%s'", methodName, serviceName);
                     return result;

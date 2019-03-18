@@ -25,11 +25,11 @@ public class ApplicationServer {
 
     public final void registerService(Class<? extends BaseService> serviceClass) {
         serviceClasses.add(serviceClass);
-        LOGGER.info("Registered service '%s'", serviceClass.getName());
+        LOGGER.info("Added service '%s'", serviceClass.getName());
     }
 
     public final void start(Context context) throws StartupFailedException {
-        LOGGER.info("Starting Application Server");
+        LOGGER.debug("Starting Application Server");
         ServiceInitializer serviceInitializer = new ServiceInitializer(context);
         Resolver<ServiceRequest> requestResolver = initializeServicesAndGetRequestResolver(serviceInitializer);
         startServiceRequestReceivers(requestResolver);

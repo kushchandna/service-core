@@ -32,10 +32,9 @@ public abstract class ResolutionRequestsReceiver {
     }
 
     public final void start() throws StartupFailedException {
-        LOGGER.info("Starting requests receiver %s", getClass().getName());
+        LOGGER.debug("Starting requests receiver %s", getClass().getName());
         performStartup();
         running = true;
-        LOGGER.info("Started requests receiver %s", getClass().getName());
         resolvableReceiverExecutor.execute(new Runnable() {
 
             @Override
@@ -43,10 +42,11 @@ public abstract class ResolutionRequestsReceiver {
                 startProcessingRequests();
             }
         });
+        LOGGER.info("Started requests receiver %s", getClass().getName());
     }
 
     public final void stop() throws ShutdownFailedException {
-        LOGGER.info("Stopping requests receiver %s", getClass().getName());
+        LOGGER.debug("Stopping requests receiver %s", getClass().getName());
         performStop();
         resolvableReceiverExecutor.shutdownNow();
         running = false;

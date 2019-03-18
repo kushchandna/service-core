@@ -2,6 +2,7 @@ package com.kush.service;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -28,20 +29,22 @@ class ServiceInitializer {
 
     Resolver<ServiceRequest> initialize(Set<Class<? extends BaseService>> serviceClasses)
             throws ServiceInitializationFailedException {
-        LOGGER.info("Initializing %d service(s)", serviceClasses.size());
+        Set<Class<? extends BaseService>> servicesToRegister = addLoginService(serviceClasses);
+        LOGGER.info("Initializing %d service(s)", servicesToRegister.size());
         Map<ServiceRequestKey, ServiceInvoker> serviceInvokers = new HashMap<>();
-        for (Class<? extends BaseService> serviceClass : serviceClasses) {
+        for (Class<? extends BaseService> serviceClass : servicesToRegister) {
             registerServiceInvokers(serviceClass, context, serviceInvokers);
         }
-        initializeLoginService(serviceInvokers);
         Auth authenticator = context.getInstance(Auth.class);
         requestResolver = new LocalServiceRequestResolver(authenticator, serviceInvokers);
         return requestResolver;
     }
 
-    private void initializeLoginService(Map<ServiceRequestKey, ServiceInvoker> serviceInvokers)
-            throws ServiceInitializationFailedException {
-        registerServiceInvokers(LoginService.class, context, serviceInvokers);
+    private Set<Class<? extends BaseService>> addLoginService(Set<Class<? extends BaseService>> serviceClasses) {
+        Set<Class<? extends BaseService>> servicesToRegister = new LinkedHashSet<>();
+        servicesToRegister.add(LoginService.class);
+        servicesToRegister.addAll(serviceClasses);
+        return servicesToRegister;
     }
 
     Resolver<ServiceRequest> getServiceRequestResolver() {
@@ -71,7 +74,7 @@ class ServiceInitializer {
     private void registerServiceInvokers(Class<? extends BaseService> serviceClass, Context context,
             Map<ServiceRequestKey, ServiceInvoker> serviceInvokers) throws ServiceInitializationFailedException {
         String serviceName = getServiceName(serviceClass);
-        LOGGER.info("Registering '%s' service with name '%s'", serviceClass.getName(), serviceName);
+        LOGGER.debug("Registering '%s' service", serviceClass.getName());
         BaseService service = initializeService(serviceClass, context);
         Method[] declaredMethods = serviceClass.getDeclaredMethods();
         for (Method method : declaredMethods) {
@@ -83,11 +86,9 @@ class ServiceInitializer {
                 }
                 ServiceInvoker invoker = new ServiceInvoker(service, method);
                 serviceInvokers.put(key, invoker);
-                if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("Added invoker for key '%s'", key);
-                }
+                LOGGER.debug("Added invoker for key '%s'", key);
             }
         }
-        LOGGER.info("Registered '%s' service", serviceClass.getName());
+        LOGGER.info("Registered '%s' service with name '%s'", serviceClass.getName(), serviceName);
     }
 }

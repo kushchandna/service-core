@@ -24,7 +24,7 @@ public class ApplicationClient {
     }
 
     public final void start() {
-        LOGGER.info("Starting application client");
+        LOGGER.debug("Starting application client");
         SessionManager sessionManager = new SessionManager();
         ServiceClientActivator activator = new ServiceClientActivator(sessionManager, connectionFactory);
         serviceClientProvider = new ServiceClientProvider(activator);
