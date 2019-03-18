@@ -5,6 +5,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.kush.lib.service.remoting.ServiceRequest;
 import com.kush.service.annotations.ServiceMethod;
 import com.kush.service.auth.Auth;
@@ -13,8 +16,7 @@ import com.kush.utils.remoting.server.Resolver;
 
 class ServiceInitializer {
 
-    private static final com.kush.logger.Logger LOGGER =
-            com.kush.logger.LoggerFactory.INSTANCE.getLogger(ServiceInitializer.class);
+    private static final Logger LOGGER = LogManager.getFormatterLogger(ServiceInitializer.class);
 
     private final Context context;
 

@@ -3,6 +3,9 @@ package com.kush.service;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.kush.lib.service.remoting.ServiceRequest;
 import com.kush.utils.remoting.server.ResolutionRequestsReceiver;
 import com.kush.utils.remoting.server.Resolver;
@@ -11,8 +14,7 @@ import com.kush.utils.remoting.server.StartupFailedException;
 
 public class ApplicationServer {
 
-    private static final com.kush.logger.Logger LOGGER =
-            com.kush.logger.LoggerFactory.INSTANCE.getLogger(ApplicationServer.class);
+    private static final Logger LOGGER = LogManager.getFormatterLogger(ApplicationServer.class);
 
     private final Set<Class<? extends BaseService>> serviceClasses = new HashSet<>();
     private final ResolutionRequestsReceiver serviceRequestReceiver;

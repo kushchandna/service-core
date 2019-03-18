@@ -1,5 +1,8 @@
 package com.kush.lib.service.sample.server;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.kush.lib.service.remoting.auth.User;
 import com.kush.service.BaseService;
 import com.kush.service.annotations.Service;
@@ -9,8 +12,7 @@ import com.kush.service.auth.AuthenticationRequired;
 @Service
 public class SampleHelloService extends BaseService {
 
-    private static final com.kush.logger.Logger LOGGER =
-            com.kush.logger.LoggerFactory.INSTANCE.getLogger(SampleHelloService.class);
+    private static final Logger LOGGER = LogManager.getFormatterLogger(SampleHelloService.class);
 
     @ServiceMethod
     public String sayHello(String name) {

@@ -4,14 +4,16 @@ import static java.util.Objects.requireNonNull;
 
 import java.util.concurrent.Executor;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.kush.serviceclient.auth.LoginServiceClient;
 import com.kush.serviceclient.auth.SessionManager;
 import com.kush.utils.remoting.client.ResolutionConnectionFactory;
 
 public class ApplicationClient {
 
-    private static final com.kush.logger.Logger LOGGER =
-            com.kush.logger.LoggerFactory.INSTANCE.getLogger(ApplicationClient.class);
+    private static final Logger LOGGER = LogManager.getFormatterLogger(ApplicationClient.class);
 
     private final ResolutionConnectionFactory connectionFactory;
 

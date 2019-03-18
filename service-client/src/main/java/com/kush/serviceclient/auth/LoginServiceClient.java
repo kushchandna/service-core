@@ -1,5 +1,8 @@
 package com.kush.serviceclient.auth;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.kush.lib.service.remoting.auth.AuthToken;
 import com.kush.lib.service.remoting.auth.Credential;
 import com.kush.lib.service.remoting.auth.User;
@@ -9,8 +12,7 @@ import com.kush.utils.async.Response.ResultListener;
 
 public class LoginServiceClient extends ServiceClient {
 
-    private static final com.kush.logger.Logger LOGGER =
-            com.kush.logger.LoggerFactory.INSTANCE.getLogger(LoginServiceClient.class);
+    private static final Logger LOGGER = LogManager.getFormatterLogger(LoginServiceClient.class);
 
     public LoginServiceClient() {
         super("com.kush.service.auth.LoginService");

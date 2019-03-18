@@ -25,6 +25,9 @@ import javax.tools.JavaCompiler.CompilationTask;
 import javax.tools.JavaFileObject;
 import javax.tools.ToolProvider;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.kush.service.annotations.Exportable;
 import com.kush.service.auth.LoginService;
 import com.kush.servicegen.CodeGenerationFailedException;
@@ -36,8 +39,7 @@ import com.kush.utils.commons.JarUtils;
 
 public class ServiceClientJarGenerator {
 
-    private static final com.kush.logger.Logger LOGGER =
-            com.kush.logger.LoggerFactory.INSTANCE.getLogger(ServiceClientJarGenerator.class);
+    private static final Logger LOGGER = LogManager.getFormatterLogger(ServiceClientJarGenerator.class);
 
     private final File targetDirectory;
     private final String targetJarName;

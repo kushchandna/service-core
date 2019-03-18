@@ -6,13 +6,15 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.kush.utils.remoting.ResolutionFailedException;
 import com.kush.utils.remoting.Resolvable;
 
 public abstract class ResolutionRequestsReceiver {
 
-    private static final com.kush.logger.Logger LOGGER =
-            com.kush.logger.LoggerFactory.INSTANCE.getLogger(ResolutionRequestsReceiver.class);
+    private static final Logger LOGGER = LogManager.getFormatterLogger(ResolutionRequestsReceiver.class);
 
     private final Map<Class<?>, Resolver<?>> registeredResolvers = new ConcurrentHashMap<>();
     private final Executor requestResolverExecutor;

@@ -3,6 +3,9 @@ package com.kush.serviceclient;
 import java.io.IOException;
 import java.util.concurrent.Executor;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.kush.lib.service.remoting.ServiceRequest;
 import com.kush.lib.service.remoting.auth.AuthToken;
 import com.kush.serviceclient.auth.Session;
@@ -18,7 +21,7 @@ import com.kush.utils.remoting.client.ResolutionConnectionFailedException;
 
 public abstract class ServiceClient {
 
-    private static final com.kush.logger.Logger LOGGER = com.kush.logger.LoggerFactory.INSTANCE.getLogger(ServiceClient.class);
+    private static final Logger LOGGER = LogManager.getFormatterLogger(ServiceClient.class);
 
     private final String serviceName;
 

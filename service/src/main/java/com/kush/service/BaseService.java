@@ -2,6 +2,9 @@ package com.kush.service;
 
 import static java.lang.String.format;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.kush.lib.service.remoting.auth.AuthToken;
 import com.kush.lib.service.remoting.auth.User;
 import com.kush.service.auth.Auth;
@@ -10,7 +13,7 @@ import com.kush.service.auth.SessionManager;
 
 public abstract class BaseService {
 
-    private static final com.kush.logger.Logger LOGGER = com.kush.logger.LoggerFactory.INSTANCE.getLogger(BaseService.class);
+    private static final Logger LOGGER = LogManager.getFormatterLogger(BaseService.class);
 
     private Context context;
 

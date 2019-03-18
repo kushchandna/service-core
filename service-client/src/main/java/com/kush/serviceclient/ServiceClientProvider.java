@@ -4,10 +4,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Executor;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public class ServiceClientProvider {
 
-    private static final com.kush.logger.Logger LOGGER =
-            com.kush.logger.LoggerFactory.INSTANCE.getLogger(ServiceClientProvider.class);
+    private static final Logger LOGGER = LogManager.getFormatterLogger(ServiceClientProvider.class);
 
     private final Map<Class<? extends ServiceClient>, ServiceClient> serviceClients = new HashMap<>();
 

@@ -5,6 +5,9 @@ import static com.kush.lib.persistence.helpers.InMemoryPersistor.forType;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.kush.lib.persistence.api.Persistor;
 import com.kush.lib.service.remoting.auth.AuthToken;
 import com.kush.lib.service.remoting.auth.User;
@@ -33,8 +36,7 @@ import com.kush.utils.remoting.server.StartupFailedException;
 
 public abstract class SampleApplication {
 
-    private static final com.kush.logger.Logger LOGGER =
-            com.kush.logger.LoggerFactory.INSTANCE.getLogger(SampleApplication.class);
+    private static final Logger LOGGER = LogManager.getFormatterLogger(SampleApplication.class);
 
     public void setupServer() throws StartupFailedException {
         ResolutionRequestsReceiver serviceRequestReceiver = createResolutionRequestsReceiver();

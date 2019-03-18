@@ -2,6 +2,9 @@ package com.kush.service;
 
 import java.util.Map;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.kush.lib.service.remoting.ServiceRequest;
 import com.kush.lib.service.remoting.ServiceRequestFailedException;
 import com.kush.lib.service.remoting.auth.AuthToken;
@@ -10,8 +13,7 @@ import com.kush.utils.remoting.server.Resolver;
 
 class LocalServiceRequestResolver implements Resolver<ServiceRequest> {
 
-    private static final com.kush.logger.Logger LOGGER =
-            com.kush.logger.LoggerFactory.INSTANCE.getLogger(LocalServiceRequestResolver.class);
+    private static final Logger LOGGER = LogManager.getFormatterLogger(LocalServiceRequestResolver.class);
 
     private final Auth authenticator;
     private final Map<ServiceRequestKey, ServiceInvoker> serviceInvokers;

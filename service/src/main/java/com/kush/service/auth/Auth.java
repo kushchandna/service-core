@@ -1,10 +1,13 @@
 package com.kush.service.auth;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.kush.lib.service.remoting.auth.AuthToken;
 
 public class Auth {
 
-    private static final com.kush.logger.Logger LOGGER = com.kush.logger.LoggerFactory.INSTANCE.getLogger(Auth.class);
+    private static final Logger LOGGER = LogManager.getFormatterLogger(Auth.class);
 
     private final ThreadLocal<AuthToken> CURRENT = new ThreadLocal<>();
 
