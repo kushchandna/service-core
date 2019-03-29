@@ -1,5 +1,7 @@
 package com.kush.service.auth;
 
+import java.util.Optional;
+
 import com.kush.lib.persistence.api.PersistorOperationFailedException;
 import com.kush.lib.service.remoting.auth.AuthToken;
 import com.kush.lib.service.remoting.auth.Credential;
@@ -30,12 +32,12 @@ public class LoginService extends BaseService {
     @ServiceMethod
     public AuthToken login(Credential credential) throws AuthenticationFailedException {
         UserCredentialPersistor userCredentialPersistor = getUserCredentialPersistor();
-        User user = getUser(credential, userCredentialPersistor);
-        if (user == null) {
+        Optional<User> user = getUser(credential, userCredentialPersistor);
+        if (!user.isPresent()) {
             throw new AuthenticationFailedException("No user exists with specified credential");
         }
         SessionManager sessionManager = getSessionManager();
-        return sessionManager.startSession(user);
+        return sessionManager.startSession(user.get());
     }
 
     @AuthenticationRequired
@@ -70,10 +72,9 @@ public class LoginService extends BaseService {
 
     private void validateCredentialDoesNotExists(Credential credential, UserCredentialPersistor userCredentialPersistor)
             throws ValidationFailedException {
-        User user;
         try {
-            user = userCredentialPersistor.getUserForCredential(credential);
-            if (user != null) {
+            Optional<User> user = userCredentialPersistor.getUserForCredential(credential);
+            if (user.isPresent()) {
                 throw new ValidationFailedException("User with specified credential already exists");
             }
         } catch (PersistorOperationFailedException e) {
@@ -81,7 +82,7 @@ public class LoginService extends BaseService {
         }
     }
 
-    private User getUser(Credential credential, UserCredentialPersistor userCredentialPersistor) {
+    private Optional<User> getUser(Credential credential, UserCredentialPersistor userCredentialPersistor) {
         try {
             return userCredentialPersistor.getUserForCredential(credential);
         } catch (PersistorOperationFailedException e) {

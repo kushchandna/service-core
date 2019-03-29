@@ -1,6 +1,7 @@
 package com.kush.service.auth.credentials;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.kush.lib.persistence.api.DelegatingPersistor;
 import com.kush.lib.persistence.api.Persistor;
@@ -19,17 +20,17 @@ public class DefaultUserCredentialPersistor extends DelegatingPersistor<UserCred
     }
 
     @Override
-    public User getUserForCredential(Credential credential) throws PersistorOperationFailedException {
+    public Optional<User> getUserForCredential(Credential credential) throws PersistorOperationFailedException {
         List<UserCredential> allUserCredentials = fetchAll();
         for (UserCredential userCredential : allUserCredentials) {
             Credential savedCredential = userCredential.getCredential();
             if (credentialHandler.canHandle(savedCredential)) {
                 if (credentialHandler.matches(credential, savedCredential)) {
-                    return userCredential.getUser();
+                    return Optional.of(userCredential.getUser());
                 }
             }
         }
-        return null;
+        return Optional.empty();
     }
 
     @Override
