@@ -32,7 +32,7 @@ public abstract class ResolutionRequestsReceiver {
     }
 
     public final void start() throws StartupFailedException {
-        LOGGER.debug("Starting requests receiver %s", getClass().getName());
+        LOGGER.debug("Starting requests receiver %s", getRequestReceiverName());
         performStartup();
         running = true;
         resolvableReceiverExecutor.execute(new Runnable() {
@@ -42,15 +42,15 @@ public abstract class ResolutionRequestsReceiver {
                 startProcessingRequests();
             }
         });
-        LOGGER.info("Started requests receiver %s", getClass().getName());
+        LOGGER.info("Started requests receiver %s", getRequestReceiverName());
     }
 
     public final void stop() throws ShutdownFailedException {
-        LOGGER.debug("Stopping requests receiver %s", getClass().getName());
+        LOGGER.debug("Stopping requests receiver %s", getRequestReceiverName());
         performStop();
         resolvableReceiverExecutor.shutdownNow();
         running = false;
-        LOGGER.info("Stopped requests receiver %s", getClass().getName());
+        LOGGER.info("Stopped requests receiver %s", getRequestReceiverName());
     }
 
     private void startProcessingRequests() {
@@ -86,6 +86,10 @@ public abstract class ResolutionRequestsReceiver {
             }
         }
         return resolver;
+    }
+
+    private String getRequestReceiverName() {
+        return getClass().getSimpleName();
     }
 
     protected abstract void performStartup() throws StartupFailedException;

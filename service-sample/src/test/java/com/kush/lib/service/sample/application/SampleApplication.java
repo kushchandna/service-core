@@ -32,15 +32,18 @@ import com.kush.utils.async.Response.ResultListener;
 import com.kush.utils.exceptions.ObjectNotFoundException;
 import com.kush.utils.remoting.client.ResolutionConnectionFactory;
 import com.kush.utils.remoting.server.ResolutionRequestsReceiver;
+import com.kush.utils.remoting.server.ShutdownFailedException;
 import com.kush.utils.remoting.server.StartupFailedException;
 
 public abstract class SampleApplication {
 
     private static final Logger LOGGER = LogManager.getFormatterLogger(SampleApplication.class);
 
+    private ApplicationServer server;
+
     public void setupServer() throws StartupFailedException {
         ResolutionRequestsReceiver serviceRequestReceiver = createResolutionRequestsReceiver();
-        ApplicationServer server = new ApplicationServer(serviceRequestReceiver);
+        server = new ApplicationServer(serviceRequestReceiver);
         server.registerService(SampleHelloService.class);
         SampleHelloTextProvider greetingProvider = new SampleHelloTextProvider();
         Persistor<UserCredential> delegate = forType(UserCredential.class);
@@ -49,6 +52,10 @@ public abstract class SampleApplication {
             .withInstance(UserCredentialPersistor.class, new DefaultUserCredentialPersistor(delegate))
             .build();
         server.start(context);
+    }
+
+    public void stopServer() throws ShutdownFailedException {
+        server.stop();
     }
 
     public ApplicationClient setupClient() throws ServiceClientActivationFailedException {

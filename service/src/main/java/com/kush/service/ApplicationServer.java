@@ -7,6 +7,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.kush.lib.service.remoting.ServiceRequest;
+import com.kush.service.auth.LoginService;
 import com.kush.utils.remoting.server.ResolutionRequestsReceiver;
 import com.kush.utils.remoting.server.Resolver;
 import com.kush.utils.remoting.server.ShutdownFailedException;
@@ -29,6 +30,7 @@ public class ApplicationServer {
     }
 
     public final void start(Context context) throws StartupFailedException {
+        registerService(LoginService.class);
         LOGGER.debug("Starting Application Server");
         ServiceInitializer serviceInitializer = new ServiceInitializer(context);
         Resolver<ServiceRequest> requestResolver = initializeServicesAndGetRequestResolver(serviceInitializer);
@@ -38,6 +40,8 @@ public class ApplicationServer {
 
     public final void stop() throws ShutdownFailedException {
         serviceRequestReceiver.stop();
+        LOGGER.info("Application Server Stopped");
+        System.exit(0);
     }
 
     private void startServiceRequestReceivers(Resolver<ServiceRequest> requestResolver) throws StartupFailedException {

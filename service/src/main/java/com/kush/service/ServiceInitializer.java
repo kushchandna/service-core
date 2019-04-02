@@ -2,7 +2,6 @@ package com.kush.service;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
-import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -12,7 +11,6 @@ import org.apache.logging.log4j.Logger;
 import com.kush.lib.service.remoting.ServiceRequest;
 import com.kush.service.annotations.ServiceMethod;
 import com.kush.service.auth.Auth;
-import com.kush.service.auth.LoginService;
 import com.kush.utils.remoting.server.Resolver;
 
 class ServiceInitializer {
@@ -29,7 +27,7 @@ class ServiceInitializer {
 
     Resolver<ServiceRequest> initialize(Set<Class<? extends BaseService>> serviceClasses)
             throws ServiceInitializationFailedException {
-        Set<Class<? extends BaseService>> servicesToRegister = addLoginService(serviceClasses);
+        Set<Class<? extends BaseService>> servicesToRegister = serviceClasses;
         LOGGER.info("Initializing %d service(s)", servicesToRegister.size());
         Map<ServiceRequestKey, ServiceInvoker> serviceInvokers = new HashMap<>();
         for (Class<? extends BaseService> serviceClass : servicesToRegister) {
@@ -38,13 +36,6 @@ class ServiceInitializer {
         Auth authenticator = context.getInstance(Auth.class);
         requestResolver = new LocalServiceRequestResolver(authenticator, serviceInvokers);
         return requestResolver;
-    }
-
-    private Set<Class<? extends BaseService>> addLoginService(Set<Class<? extends BaseService>> serviceClasses) {
-        Set<Class<? extends BaseService>> servicesToRegister = new LinkedHashSet<>();
-        servicesToRegister.add(LoginService.class);
-        servicesToRegister.addAll(serviceClasses);
-        return servicesToRegister;
     }
 
     Resolver<ServiceRequest> getServiceRequestResolver() {

@@ -58,6 +58,6 @@ final class ServiceRequestKey {
 
     @Override
     public String toString() {
-        return "ServiceRequestKey [serviceName=" + serviceName + ", methodName=" + methodName + "]";
+        return serviceName + "_" + methodName;
     }
 }

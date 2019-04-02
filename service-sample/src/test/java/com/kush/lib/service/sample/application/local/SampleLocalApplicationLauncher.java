@@ -10,5 +10,6 @@ public class SampleLocalApplicationLauncher {
         application.setupServer();
         ApplicationClient client = application.setupClient();
         application.performClientOperations(client);
+        application.stopServer();
     }
 }
