@@ -54,5 +54,10 @@
 			<artifactId>jetty-server</artifactId>
 			<version>9.4.10.v20180503</version>
 		</dependency>
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>27.1-jre</version>
+		</dependency>
 	</dependencies>
 </project>
