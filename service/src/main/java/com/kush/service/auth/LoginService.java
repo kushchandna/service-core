@@ -9,7 +9,7 @@ import com.kush.lib.service.remoting.auth.User;
 import com.kush.service.BaseService;
 import com.kush.service.annotations.Service;
 import com.kush.service.annotations.ServiceMethod;
-import com.kush.service.auth.credentials.UserCredentialPersistor;
+import com.kush.service.auth.credentials.UserCredentialPersister;
 import com.kush.utils.exceptions.ValidationFailedException;
 import com.kush.utils.id.IdGenerator;
 import com.kush.utils.id.Identifier;
@@ -22,7 +22,7 @@ public class LoginService extends BaseService {
 
     @ServiceMethod
     public User register(Credential credential) throws PersistorOperationFailedException, ValidationFailedException {
-        UserCredentialPersistor userCredentialPersistor = getUserCredentialPersistor();
+        UserCredentialPersister userCredentialPersistor = getUserCredentialPersistor();
         validateCredentialDoesNotExists(credential, userCredentialPersistor);
         User user = createUser();
         userCredentialPersistor.addUserCredential(user, credential);
@@ -31,7 +31,7 @@ public class LoginService extends BaseService {
 
     @ServiceMethod
     public AuthToken login(Credential credential) throws AuthenticationFailedException {
-        UserCredentialPersistor userCredentialPersistor = getUserCredentialPersistor();
+        UserCredentialPersister userCredentialPersistor = getUserCredentialPersistor();
         Optional<User> user = getUser(credential, userCredentialPersistor);
         if (!user.isPresent()) {
             throw new AuthenticationFailedException("No user exists with specified credential");
@@ -50,14 +50,14 @@ public class LoginService extends BaseService {
 
     @Override
     protected void processContext() {
-        checkContextHasValueFor(UserCredentialPersistor.class);
+        checkContextHasValueFor(UserCredentialPersister.class);
         addIfDoesNotExist(KEY_USER_ID_GEN, new SequentialIdGenerator());
         addIfDoesNotExist(Auth.class, new Auth());
         addIfDoesNotExist(SessionManager.class, new SessionManager());
     }
 
-    private UserCredentialPersistor getUserCredentialPersistor() {
-        return getContext().getInstance(UserCredentialPersistor.class);
+    private UserCredentialPersister getUserCredentialPersistor() {
+        return getContext().getInstance(UserCredentialPersister.class);
     }
 
     private SessionManager getSessionManager() {
@@ -70,7 +70,7 @@ public class LoginService extends BaseService {
         return new User(userId);
     }
 
-    private void validateCredentialDoesNotExists(Credential credential, UserCredentialPersistor userCredentialPersistor)
+    private void validateCredentialDoesNotExists(Credential credential, UserCredentialPersister userCredentialPersistor)
             throws ValidationFailedException {
         try {
             Optional<User> user = userCredentialPersistor.getUserForCredential(credential);
@@ -82,7 +82,7 @@ public class LoginService extends BaseService {
         }
     }
 
-    private Optional<User> getUser(Credential credential, UserCredentialPersistor userCredentialPersistor) {
+    private Optional<User> getUser(Credential credential, UserCredentialPersister userCredentialPersistor) {
         try {
             return userCredentialPersistor.getUserForCredential(credential);
         } catch (PersistorOperationFailedException e) {

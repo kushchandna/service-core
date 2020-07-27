@@ -7,11 +7,11 @@ import java.util.function.Predicate;
 import com.kush.utils.id.Identifiable;
 import com.kush.utils.id.Identifier;
 
-public class DelegatingPersistor<T extends Identifiable> implements Persistor<T> {
+public class DelegatingPersister<T extends Identifiable> implements Persister<T> {
 
-    private final Persistor<T> delegate;
+    private final Persister<T> delegate;
 
-    public DelegatingPersistor(Persistor<T> delegate) {
+    public DelegatingPersister(Persister<T> delegate) {
         this.delegate = delegate;
     }
 

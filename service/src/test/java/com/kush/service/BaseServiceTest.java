@@ -10,8 +10,8 @@ import java.util.Map;
 import org.junit.After;
 import org.junit.Before;
 
-import com.kush.lib.persistence.api.Persistor;
-import com.kush.lib.persistence.helpers.InMemoryPersistor;
+import com.kush.lib.persistence.api.Persister;
+import com.kush.lib.persistence.helpers.InMemoryPersister;
 import com.kush.lib.service.remoting.auth.AuthToken;
 import com.kush.lib.service.remoting.auth.Credential;
 import com.kush.lib.service.remoting.auth.User;
@@ -21,7 +21,7 @@ import com.kush.service.auth.LoginService;
 import com.kush.service.auth.SessionManager;
 import com.kush.service.auth.credentials.DefaultUserCredentialPersistor;
 import com.kush.service.auth.credentials.UserCredential;
-import com.kush.service.auth.credentials.UserCredentialPersistor;
+import com.kush.service.auth.credentials.UserCredentialPersister;
 
 public class BaseServiceTest {
 
@@ -116,10 +116,10 @@ public class BaseServiceTest {
     }
 
     private void setupBasicMockContext() {
-        Persistor<UserCredential> userCredPersistor = InMemoryPersistor.forType(UserCredential.class);
+        Persister<UserCredential> userCredPersistor = InMemoryPersister.forType(UserCredential.class);
         addToContext(Auth.class, new Auth());
         addToContext(SessionManager.class, new SessionManager());
-        addToContext(UserCredentialPersistor.class, new DefaultUserCredentialPersistor(userCredPersistor));
+        addToContext(UserCredentialPersister.class, new DefaultUserCredentialPersistor(userCredPersistor));
         addToContext(Clock.class, CLOCK);
     }
 

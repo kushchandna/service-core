@@ -18,7 +18,7 @@ public class NotificationService extends BaseService {
 
     @ServiceMethod
     public void sendNotification(Identifier userId, Serializable data, String source) throws PersistorOperationFailedException {
-        NotificationPersistor notificationPersistor = getInstance(NotificationPersistor.class);
+        NotificationPersister notificationPersistor = getInstance(NotificationPersister.class);
         LocalDateTime notificationTime = LocalDateTime.now(getInstance(Clock.class));
         notificationPersistor.addNotification(userId, data, false, notificationTime, source);
     }
@@ -27,13 +27,13 @@ public class NotificationService extends BaseService {
     @ServiceMethod
     public List<? extends Notification> getUnreadNotifications() throws PersistorOperationFailedException {
         Identifier currentUserId = getCurrentUser().getId();
-        NotificationPersistor notificationPersistor = getInstance(NotificationPersistor.class);
+        NotificationPersister notificationPersistor = getInstance(NotificationPersister.class);
         return notificationPersistor.getRecentUnreadNotificationsForUser(currentUserId);
     }
 
     @Override
     protected void processContext() {
-        checkContextHasValueFor(NotificationPersistor.class);
+        checkContextHasValueFor(NotificationPersister.class);
         addIfDoesNotExist(Clock.class, Clock.systemUTC());
     }
 }

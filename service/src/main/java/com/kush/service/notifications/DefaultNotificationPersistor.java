@@ -4,14 +4,14 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import com.kush.lib.persistence.api.DelegatingPersistor;
-import com.kush.lib.persistence.api.Persistor;
+import com.kush.lib.persistence.api.DelegatingPersister;
+import com.kush.lib.persistence.api.Persister;
 import com.kush.lib.persistence.api.PersistorOperationFailedException;
 import com.kush.utils.id.Identifier;
 
-public class DefaultNotificationPersistor extends DelegatingPersistor<PersistableNotification> implements NotificationPersistor {
+public class DefaultNotificationPersistor extends DelegatingPersister<PersistableNotification> implements NotificationPersister {
 
-    public DefaultNotificationPersistor(Persistor<PersistableNotification> delegate) {
+    public DefaultNotificationPersistor(Persister<PersistableNotification> delegate) {
         super(delegate);
     }
 

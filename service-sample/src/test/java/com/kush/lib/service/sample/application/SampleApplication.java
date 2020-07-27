@@ -1,6 +1,6 @@
 package com.kush.lib.service.sample.application;
 
-import static com.kush.lib.persistence.helpers.InMemoryPersistor.forType;
+import static com.kush.lib.persistence.helpers.InMemoryPersister.forType;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -8,7 +8,7 @@ import java.util.concurrent.Executors;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.kush.lib.persistence.api.Persistor;
+import com.kush.lib.persistence.api.Persister;
 import com.kush.lib.service.remoting.auth.AuthToken;
 import com.kush.lib.service.remoting.auth.User;
 import com.kush.lib.service.remoting.auth.password.PasswordBasedCredential;
@@ -20,7 +20,7 @@ import com.kush.service.Context;
 import com.kush.service.ContextBuilder;
 import com.kush.service.auth.credentials.DefaultUserCredentialPersistor;
 import com.kush.service.auth.credentials.UserCredential;
-import com.kush.service.auth.credentials.UserCredentialPersistor;
+import com.kush.service.auth.credentials.UserCredentialPersister;
 import com.kush.serviceclient.ApplicationClient;
 import com.kush.serviceclient.ServiceClientActivationFailedException;
 import com.kush.serviceclient.ServiceClientProvider;
@@ -46,10 +46,10 @@ public abstract class SampleApplication {
         server = new ApplicationServer(serviceRequestReceiver);
         server.registerService(SampleHelloService.class);
         SampleHelloTextProvider greetingProvider = new SampleHelloTextProvider();
-        Persistor<UserCredential> delegate = forType(UserCredential.class);
+        Persister<UserCredential> delegate = forType(UserCredential.class);
         Context context = ContextBuilder.create()
             .withInstance(SampleHelloTextProvider.class, greetingProvider)
-            .withInstance(UserCredentialPersistor.class, new DefaultUserCredentialPersistor(delegate))
+            .withInstance(UserCredentialPersister.class, new DefaultUserCredentialPersistor(delegate))
             .build();
         server.start(context);
     }

@@ -7,7 +7,7 @@ import java.util.function.Predicate;
 import com.kush.utils.id.Identifiable;
 import com.kush.utils.id.Identifier;
 
-public interface Persistor<T extends Identifiable> {
+public interface Persister<T extends Identifiable> {
 
     T save(T object) throws PersistorOperationFailedException;
 

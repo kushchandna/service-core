@@ -3,18 +3,18 @@ package com.kush.service.auth.credentials;
 import java.util.List;
 import java.util.Optional;
 
-import com.kush.lib.persistence.api.DelegatingPersistor;
-import com.kush.lib.persistence.api.Persistor;
+import com.kush.lib.persistence.api.DelegatingPersister;
+import com.kush.lib.persistence.api.Persister;
 import com.kush.lib.persistence.api.PersistorOperationFailedException;
 import com.kush.lib.service.remoting.auth.Credential;
 import com.kush.lib.service.remoting.auth.User;
 import com.kush.service.auth.credentials.password.PasswordBasedCredentialHandler;
 
-public class DefaultUserCredentialPersistor extends DelegatingPersistor<UserCredential> implements UserCredentialPersistor {
+public class DefaultUserCredentialPersistor extends DelegatingPersister<UserCredential> implements UserCredentialPersister {
 
     private final CredentialHandler credentialHandler;
 
-    public DefaultUserCredentialPersistor(Persistor<UserCredential> delegate) {
+    public DefaultUserCredentialPersistor(Persister<UserCredential> delegate) {
         super(delegate);
         credentialHandler = new PasswordBasedCredentialHandler();
     }
