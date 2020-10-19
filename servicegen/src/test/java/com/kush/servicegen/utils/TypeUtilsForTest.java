@@ -3,7 +3,7 @@ package com.kush.servicegen.utils;
 import static com.kush.utils.commons.TypeUtils.getGenericTypeName;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
