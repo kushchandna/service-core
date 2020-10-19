@@ -18,7 +18,7 @@ import com.kush.lib.service.sample.server.SampleHelloTextProvider;
 import com.kush.service.ApplicationServer;
 import com.kush.service.Context;
 import com.kush.service.ContextBuilder;
-import com.kush.service.auth.credentials.DefaultUserCredentialPersistor;
+import com.kush.service.auth.credentials.DefaultUserCredentialPersister;
 import com.kush.service.auth.credentials.UserCredential;
 import com.kush.service.auth.credentials.UserCredentialPersister;
 import com.kush.serviceclient.ApplicationClient;
@@ -49,7 +49,7 @@ public abstract class SampleApplication {
         Persister<UserCredential> delegate = forType(UserCredential.class);
         Context context = ContextBuilder.create()
             .withInstance(SampleHelloTextProvider.class, greetingProvider)
-            .withInstance(UserCredentialPersister.class, new DefaultUserCredentialPersistor(delegate))
+            .withInstance(UserCredentialPersister.class, new DefaultUserCredentialPersister(delegate))
             .build();
         server.start(context);
     }

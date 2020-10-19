@@ -10,11 +10,11 @@ import com.kush.lib.service.remoting.auth.Credential;
 import com.kush.lib.service.remoting.auth.User;
 import com.kush.service.auth.credentials.password.PasswordBasedCredentialHandler;
 
-public class DefaultUserCredentialPersistor extends DelegatingPersister<UserCredential> implements UserCredentialPersister {
+public class DefaultUserCredentialPersister extends DelegatingPersister<UserCredential> implements UserCredentialPersister {
 
     private final CredentialHandler credentialHandler;
 
-    public DefaultUserCredentialPersistor(Persister<UserCredential> delegate) {
+    public DefaultUserCredentialPersister(Persister<UserCredential> delegate) {
         super(delegate);
         credentialHandler = new PasswordBasedCredentialHandler();
     }

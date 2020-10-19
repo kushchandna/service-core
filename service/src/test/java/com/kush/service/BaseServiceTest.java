@@ -19,7 +19,7 @@ import com.kush.lib.service.remoting.auth.password.PasswordBasedCredential;
 import com.kush.service.auth.Auth;
 import com.kush.service.auth.LoginService;
 import com.kush.service.auth.SessionManager;
-import com.kush.service.auth.credentials.DefaultUserCredentialPersistor;
+import com.kush.service.auth.credentials.DefaultUserCredentialPersister;
 import com.kush.service.auth.credentials.UserCredential;
 import com.kush.service.auth.credentials.UserCredentialPersister;
 
@@ -119,7 +119,7 @@ public class BaseServiceTest {
         Persister<UserCredential> userCredPersistor = InMemoryPersister.forType(UserCredential.class);
         addToContext(Auth.class, new Auth());
         addToContext(SessionManager.class, new SessionManager());
-        addToContext(UserCredentialPersister.class, new DefaultUserCredentialPersistor(userCredPersistor));
+        addToContext(UserCredentialPersister.class, new DefaultUserCredentialPersister(userCredPersistor));
         addToContext(Clock.class, CLOCK);
     }
 
