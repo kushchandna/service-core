@@ -49,7 +49,11 @@ public interface IterableResult<T> extends Iterable<T> {
     }
 
     static <T> IterableResult<T> fromStream(Stream<T> stream) {
-        return new DefaultIterableResult<>(stream, UNKNOWN_COUNT);
+        return fromStream(stream, UNKNOWN_COUNT);
+    }
+
+    static <T> IterableResult<T> fromStream(Stream<T> stream, long count) {
+        return new DefaultIterableResult<>(stream, count);
     }
 
     static <T> IterableResult<T> merge(IterableResult<T> result1, IterableResult<T> result2) {
