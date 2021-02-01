@@ -1,5 +1,8 @@
 package com.kush.utils.testhelpers;
 
+import java.util.concurrent.atomic.AtomicLong;
+import java.util.stream.Stream;
+
 public class SampleObjectUtils {
 
     public static SampleObject obj(String id) {
@@ -20,5 +23,13 @@ public class SampleObjectUtils {
 
     public static String name(String name) {
         return name;
+    }
+
+    public static Stream<SampleObject> generate() {
+        AtomicLong idCounter = new AtomicLong(0);
+        return Stream.generate(() -> {
+            long id = idCounter.addAndGet(1L);
+            return obj("id" + id, "name" + id);
+        });
     }
 }
