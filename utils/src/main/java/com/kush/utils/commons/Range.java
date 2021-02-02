@@ -15,9 +15,9 @@ public class Range<T> {
 
     private Range(T start, boolean isStartInclusive, T end, boolean isEndInclusive) {
         this.start = Optional.ofNullable(start);
-        this.isStartInclusive = start == null ? false : isStartInclusive;
+        this.isStartInclusive = isStartInclusive;
         this.end = Optional.ofNullable(end);
-        this.isEndInclusive = end == null ? false : isEndInclusive;
+        this.isEndInclusive = isEndInclusive;
     }
 
     public Optional<T> getStart() {
