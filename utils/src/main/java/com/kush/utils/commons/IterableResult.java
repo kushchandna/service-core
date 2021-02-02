@@ -2,6 +2,7 @@ package com.kush.utils.commons;
 
 import static java.util.stream.Collectors.toList;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.stream.Stream;
@@ -49,19 +50,27 @@ public interface IterableResult<T> extends Iterable<T> {
     }
 
     static <T> IterableResult<T> fromStream(Stream<T> stream) {
-        return fromStream(stream, UNKNOWN_COUNT);
+        return new DefaultIterableResult<>(stream, UNKNOWN_COUNT);
     }
 
-    static <T> IterableResult<T> fromStream(Stream<T> stream, long count) {
-        return new DefaultIterableResult<>(stream, count);
-    }
-
-    static <T> IterableResult<T> merge(IterableResult<T> result1, IterableResult<T> result2) {
-        long total = UNKNOWN_COUNT;
-        if (result1.isCountKnown() && result2.isCountKnown()) {
-            total = result1.count() + result2.count();
+    static <T> IterableResult<T> merge(Collection<IterableResult<T>> results) {
+        Stream<T> mergedStream = results.stream()
+            .map(IterableResult::stream)
+            .flatMap(stream -> stream);
+        long count = 0L;
+        for (IterableResult<T> result : results) {
+            if (!result.isCountKnown()) {
+                count = UNKNOWN_COUNT;
+                break;
+            }
+            count += result.count();
         }
-        return new DefaultIterableResult<>(Stream.concat(result1.stream(), result2.stream()), total);
+        return new DefaultIterableResult<>(mergedStream, count);
+    }
+
+    @SafeVarargs
+    static <T> IterableResult<T> merge(IterableResult<T>... results) {
+        return merge(Arrays.asList(results));
     }
 
     static class DefaultIterableResult<T> implements IterableResult<T> {
