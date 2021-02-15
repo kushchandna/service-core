@@ -1,5 +1,6 @@
 package com.kush.utils.commons;
 
+import java.util.Comparator;
 import java.util.Optional;
 
 public class Range<T> {
@@ -34,6 +35,28 @@ public class Range<T> {
 
     public boolean isEndInclusive() {
         return isEndInclusive;
+    }
+
+    public boolean isInRange(T key, Comparator<T> comparator) {
+        if (start.isPresent()) {
+            int resultStart = comparator.compare(key, start.get());
+            if (resultStart < 0) {
+                return false;
+            }
+            if (resultStart == 0 && !isStartInclusive) {
+                return false;
+            }
+        }
+        if (end.isPresent()) {
+            int resultEnd = comparator.compare(key, end.get());
+            if (resultEnd < 0) {
+                return false;
+            }
+            if (resultEnd == 0 && !isEndInclusive) {
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override
