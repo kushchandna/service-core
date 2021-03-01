@@ -1,6 +1,6 @@
 package com.kush.servicegen.maven;
 
-import static com.kush.utils.commons.CollectionUtils.nonNull;
+import static com.kush.lib.collections.utils.CollectionUtils.nonNull;
 
 import java.io.File;
 import java.util.Properties;

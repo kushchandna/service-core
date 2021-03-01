@@ -76,5 +76,10 @@
 			<artifactId>maven-project</artifactId>
 			<version>2.0.8</version>
 		</dependency>
+		<dependency>
+			<groupId>com.kush.lib</groupId>
+			<artifactId>collections</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
 	</dependencies>
 </project>
