@@ -15,7 +15,9 @@ matrix-auth:latest
 pam-auth:latest
 pipeline-github-lib:latest
 pipeline-stage-view:latest
+pipeline-maven:latest
 ssh-slaves:latest
 timestamper:latest
 workflow-aggregator:latest
 ws-cleanup:latest
+job-dsl:latest
