@@ -3,12 +3,12 @@ package com.kush.serviceclient.auth;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.kush.commons.async.Response;
+import com.kush.commons.async.Response.ResultListener;
 import com.kush.lib.service.remoting.auth.AuthToken;
 import com.kush.lib.service.remoting.auth.Credential;
 import com.kush.lib.service.remoting.auth.User;
 import com.kush.serviceclient.ServiceClient;
-import com.kush.utils.async.Response;
-import com.kush.utils.async.Response.ResultListener;
 
 public class LoginServiceClient extends ServiceClient {
 

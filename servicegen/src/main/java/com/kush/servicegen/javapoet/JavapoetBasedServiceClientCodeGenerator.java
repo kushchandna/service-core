@@ -11,13 +11,13 @@ import java.util.List;
 import javax.tools.JavaFileObject;
 
 import com.google.common.primitives.Primitives;
+import com.kush.commons.async.Response;
 import com.kush.serviceclient.ServiceClient;
 import com.kush.servicegen.CodeGenerationFailedException;
 import com.kush.servicegen.CodeGenerator;
 import com.kush.servicegen.ParameterInfo;
 import com.kush.servicegen.ServiceInfo;
 import com.kush.servicegen.ServiceMethodInfo;
-import com.kush.utils.async.Response;
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.ParameterSpec;
