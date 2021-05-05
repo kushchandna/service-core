@@ -2,21 +2,15 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
+	<name>serviceclient-maven-plugin</name>
+	<url>http://maven.apache.org</url>
 	<artifactId>serviceclient-maven-plugin</artifactId>
 	<packaging>maven-plugin</packaging>
 
-	<name>serviceclient-maven-plugin</name>
-	<url>http://maven.apache.org</url>
-
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-	</properties>
-
 	<parent>
-		<version>0.0.1-SNAPSHOT</version>
+		<groupId>com.kush.service-core</groupId>
 		<artifactId>parent</artifactId>
-		<groupId>com.kush</groupId>
-		<relativePath>../parent</relativePath>
+		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 
 	<build>
@@ -52,12 +46,12 @@
 			<version>0.9.11</version>
 		</dependency>
 		<dependency>
-			<groupId>com.kush</groupId>
+			<groupId>com.kush.service-core</groupId>
 			<artifactId>servicegen</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
-			<groupId>com.kush</groupId>
+			<groupId>com.kush.service-core</groupId>
 			<artifactId>utils</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
@@ -77,8 +71,8 @@
 			<version>2.0.8</version>
 		</dependency>
 		<dependency>
-			<groupId>com.kush.lib</groupId>
-			<artifactId>collections</artifactId>
+			<groupId>com.kush</groupId>
+			<artifactId>commons</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 	</dependencies>

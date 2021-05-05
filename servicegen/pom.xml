@@ -2,21 +2,15 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
+	<name>servicegen</name>
+	<url>http://maven.apache.org</url>
 	<artifactId>servicegen</artifactId>
 	<packaging>jar</packaging>
 
-	<name>servicegen</name>
-	<url>http://maven.apache.org</url>
-
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-	</properties>
-
 	<parent>
-		<version>0.0.1-SNAPSHOT</version>
+		<groupId>com.kush.service-core</groupId>
 		<artifactId>parent</artifactId>
-		<groupId>com.kush</groupId>
-		<relativePath>../parent</relativePath>
+		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 
 	<dependencies>
@@ -26,22 +20,22 @@
 			<version>1.9.0</version>
 		</dependency>
 		<dependency>
-			<groupId>com.kush</groupId>
+			<groupId>com.kush.service-core</groupId>
 			<artifactId>service</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
-			<groupId>com.kush</groupId>
+			<groupId>com.kush.service-core</groupId>
 			<artifactId>service-remoting</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
-			<groupId>com.kush</groupId>
+			<groupId>com.kush.service-core</groupId>
 			<artifactId>service-client</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
-			<groupId>com.kush</groupId>
+			<groupId>com.kush.service-core</groupId>
 			<artifactId>utils</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>

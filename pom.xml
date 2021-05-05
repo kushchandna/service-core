@@ -2,22 +2,27 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	
-	<groupId>com.kush</groupId>
-	<artifactId>commons</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+
+	<groupId>com.kush.service-core</groupId>
+	<artifactId>parent</artifactId>
 	<packaging>pom</packaging>
 
+	<parent>
+		<groupId>com.kush</groupId>
+		<artifactId>parent</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+		<relativePath>../parent</relativePath>
+	</parent>
+
 	<modules>
-		<module>parent</module>
-		<module>utils</module>
+		<module>service-utils</module>
 		<module>persistence</module>
 		<module>service-remoting</module>
 		<module>service</module>
 		<module>service-client</module>
 		<module>servicegen</module>
 		<module>serviceclient-maven-plugin</module>
-		<module>service-sample</module>
+		<module>service-test</module>
 	</modules>
-	
+
 </project>
