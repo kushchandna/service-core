@@ -1,7 +1,7 @@
 package com.kush.utils.signaling;
 
-import static com.kush.utils.commons.CommonExecutors.newThreadExecutor;
-import static com.kush.utils.commons.CommonExecutors.sameThreadExecutor;
+import static com.kush.commons.utils.ExecutorUtils.newThreadExecutor;
+import static com.kush.commons.utils.ExecutorUtils.sameThreadExecutor;
 
 import java.util.concurrent.Executor;
 
