@@ -1,6 +1,5 @@
 package com.kush.servicegen.clients;
 
-import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toList;
 
 import java.io.File;
@@ -9,9 +8,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Serializable;
-import java.net.URL;
-import java.net.URLClassLoader;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -20,14 +16,12 @@ import java.util.jar.Attributes;
 import java.util.jar.JarOutputStream;
 import java.util.jar.Manifest;
 
-import javax.tools.JavaCompiler;
-import javax.tools.JavaCompiler.CompilationTask;
 import javax.tools.JavaFileObject;
-import javax.tools.ToolProvider;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.kush.commons.utils.JavaUtils;
 import com.kush.service.annotations.Exportable;
 import com.kush.service.auth.LoginService;
 import com.kush.servicegen.CodeGenerationFailedException;
@@ -79,7 +73,7 @@ public class ServiceClientJarGenerator {
             JavapoetBasedServiceClientCodeGenerator codeGenerator = createCodeGenerator(serviceClass);
             String targetPackage = getTargetPackage(serviceClass);
             JavaFileObject javaFileObject = codeGenerator.generate(targetPackage, sourceDir);
-            compileGeneratedFile(javaFileObject, binDir.getAbsolutePath());
+            compileGeneratedFile(binDir, javaFileObject);
         }
         LOGGER.info("Exporting requires exportable classes %s", classesToExport);
         List<Class<?>> nonSerializable =
@@ -100,25 +94,12 @@ public class ServiceClientJarGenerator {
         return generateJar(binDir);
     }
 
+    private void compileGeneratedFile(File binDir, JavaFileObject javaFileObject) {
+        JavaUtils.compile(binDir.getAbsolutePath(), javaFileObject);
+    }
+
     private String getTargetPackage(Class<?> serviceClass) {
         return serviceClass.getPackage().getName() + ".servicegen.generated.clients";
-    }
-
-    private void compileGeneratedFile(JavaFileObject generatedFileObject, String targetDirectory) throws IOException {
-        JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
-        String classPath = Arrays.toString(getClassPath()).replace(", ", ";").replace('\\', '/');
-        String classPathText = "\"" + classPath.substring(1, classPath.length() - 1) + "\"";
-        Iterable<String> options = Arrays.asList(
-                "-d", targetDirectory,
-                "-cp", classPathText);
-        CompilationTask task = compiler.getTask(null, null, null, options, null, asList(generatedFileObject));
-        task.call();
-    }
-
-    private File[] getClassPath() {
-        URLClassLoader classLoader = (URLClassLoader) getClass().getClassLoader();
-        URL[] urls = classLoader.getURLs();
-        return Arrays.stream(urls).map(url -> new File(url.getFile())).toArray(File[]::new);
     }
 
     private File generateJar(File parentDir) throws FileNotFoundException, IOException {
