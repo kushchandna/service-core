@@ -1,5 +1,6 @@
 package com.kush.service;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
@@ -52,8 +53,9 @@ class ServiceInitializer {
     private BaseService instantiateService(Class<? extends BaseService> serviceClass)
             throws ServiceInitializationFailedException {
         try {
-            return serviceClass.newInstance();
-        } catch (InstantiationException | IllegalAccessException e) {
+            Constructor<? extends BaseService> constructor = serviceClass.getConstructor();
+            return constructor.newInstance();
+        } catch (ReflectiveOperationException e) {
             throw new ServiceInitializationFailedException(e.getMessage(), e);
         }
     }

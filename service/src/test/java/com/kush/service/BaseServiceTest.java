@@ -1,5 +1,6 @@
 package com.kush.service;
 
+import java.lang.reflect.Constructor;
 import java.time.Clock;
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -62,7 +63,8 @@ public class BaseServiceTest {
     }
 
     protected final <S extends BaseService> S registerService(Class<S> serviceClass) throws Exception {
-        S service = serviceClass.newInstance();
+        Constructor<S> constructor = serviceClass.getConstructor();
+        S service = constructor.newInstance();
         service.initialize(context);
         return service;
     }
@@ -123,7 +125,7 @@ public class BaseServiceTest {
         addToContext(Clock.class, CLOCK);
     }
 
-    protected static interface Operation {
+    protected interface Operation {
 
         void run() throws Exception;
     }

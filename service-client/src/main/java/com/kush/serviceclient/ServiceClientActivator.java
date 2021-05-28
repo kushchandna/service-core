@@ -1,5 +1,6 @@
 package com.kush.serviceclient;
 
+import java.lang.reflect.Constructor;
 import java.util.concurrent.Executor;
 
 import com.kush.serviceclient.auth.SessionManager;
@@ -25,7 +26,8 @@ class ServiceClientActivator {
     private <C extends ServiceClient> C instantiateServiceClient(Class<C> serviceClientClass)
             throws ServiceClientActivationFailedException {
         try {
-            return serviceClientClass.newInstance();
+            Constructor<C> constructor = serviceClientClass.getConstructor();
+            return constructor.newInstance();
         } catch (ReflectiveOperationException e) {
             throw new ServiceClientActivationFailedException("Failed to activate service client " + serviceClientClass.getName(),
                     e);
