@@ -22,23 +22,19 @@ public class Context {
         return instances.containsKey(prepareInstanceKey(key));
     }
 
-    public <T> T getInstance(Object key, Class<T> returnType, T defaultValue) {
-        if (!containsKey(key)) {
-            return defaultValue;
-        }
-        return returnType.cast(getInstanceValue(instances, key));
-    }
-
     public <T> T getInstance(Object key, Class<T> returnType) {
         return getInstance(key, returnType, null);
     }
 
-    public <T> T getInstance(Class<T> returnType, T defaultValue) {
-        return getInstance(returnType, returnType, defaultValue);
-    }
-
     public <T> T getInstance(Class<T> returnType) {
         return getInstance(returnType, returnType, null);
+    }
+
+    private <T> T getInstance(Object key, Class<T> returnType, T defaultValue) {
+        if (!containsKey(key)) {
+            return defaultValue;
+        }
+        return returnType.cast(getInstanceValue(instances, key));
     }
 
     static void addInstance(Map<Object, Object> instances, Object key, Object value) {
