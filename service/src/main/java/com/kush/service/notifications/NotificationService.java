@@ -5,13 +5,13 @@ import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.kush.commons.id.Identifier;
 import com.kush.lib.persistence.api.PersistorOperationFailedException;
 import com.kush.lib.service.remoting.notifications.Notification;
 import com.kush.service.BaseService;
 import com.kush.service.annotations.Service;
 import com.kush.service.annotations.ServiceMethod;
 import com.kush.service.auth.AuthenticationRequired;
-import com.kush.utils.id.Identifier;
 
 @Service
 public class NotificationService extends BaseService {

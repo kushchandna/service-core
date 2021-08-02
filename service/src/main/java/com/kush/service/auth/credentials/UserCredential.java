@@ -1,9 +1,9 @@
 package com.kush.service.auth.credentials;
 
+import com.kush.commons.id.Identifiable;
+import com.kush.commons.id.Identifier;
 import com.kush.lib.service.remoting.auth.Credential;
 import com.kush.lib.service.remoting.auth.User;
-import com.kush.utils.id.Identifiable;
-import com.kush.utils.id.Identifier;
 
 public class UserCredential implements Identifiable {
 

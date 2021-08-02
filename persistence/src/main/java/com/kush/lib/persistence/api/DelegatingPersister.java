@@ -4,8 +4,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.function.Predicate;
 
-import com.kush.utils.id.Identifiable;
-import com.kush.utils.id.Identifier;
+import com.kush.commons.id.Identifiable;
+import com.kush.commons.id.Identifier;
 
 public class DelegatingPersister<T extends Identifiable> implements Persister<T> {
 

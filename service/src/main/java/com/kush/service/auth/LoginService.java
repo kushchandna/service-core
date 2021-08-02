@@ -2,6 +2,9 @@ package com.kush.service.auth;
 
 import java.util.Optional;
 
+import com.kush.commons.id.IdGenerator;
+import com.kush.commons.id.Identifier;
+import com.kush.commons.id.SequentialIdGenerator;
 import com.kush.lib.persistence.api.PersistorOperationFailedException;
 import com.kush.lib.service.remoting.auth.AuthToken;
 import com.kush.lib.service.remoting.auth.Credential;
@@ -11,9 +14,6 @@ import com.kush.service.annotations.Service;
 import com.kush.service.annotations.ServiceMethod;
 import com.kush.service.auth.credentials.UserCredentialPersister;
 import com.kush.utils.exceptions.ValidationFailedException;
-import com.kush.utils.id.IdGenerator;
-import com.kush.utils.id.Identifier;
-import com.kush.utils.id.SequentialIdGenerator;
 
 @Service
 public class LoginService extends BaseService {

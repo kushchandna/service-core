@@ -2,8 +2,8 @@ package com.kush.lib.service.remoting.auth;
 
 import java.io.Serializable;
 
-import com.kush.utils.id.Identifiable;
-import com.kush.utils.id.Identifier;
+import com.kush.commons.id.Identifiable;
+import com.kush.commons.id.Identifier;
 
 public class User implements Identifiable, Serializable {
 

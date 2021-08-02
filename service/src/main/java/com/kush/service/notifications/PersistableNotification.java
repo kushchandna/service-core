@@ -3,9 +3,9 @@ package com.kush.service.notifications;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
+import com.kush.commons.id.Identifiable;
+import com.kush.commons.id.Identifier;
 import com.kush.lib.service.remoting.notifications.Notification;
-import com.kush.utils.id.Identifiable;
-import com.kush.utils.id.Identifier;
 
 public class PersistableNotification implements Identifiable, Notification {
 

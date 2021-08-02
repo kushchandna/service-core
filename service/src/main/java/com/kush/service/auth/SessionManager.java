@@ -3,9 +3,9 @@ package com.kush.service.auth;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import com.kush.commons.id.Identifier;
 import com.kush.lib.service.remoting.auth.AuthToken;
 import com.kush.lib.service.remoting.auth.User;
-import com.kush.utils.id.Identifier;
 
 public class SessionManager {
 

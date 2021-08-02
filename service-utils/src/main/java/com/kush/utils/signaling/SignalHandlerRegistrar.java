@@ -1,6 +1,6 @@
 package com.kush.utils.signaling;
 
-import static com.kush.utils.id.Identifier.id;
+import static com.kush.commons.id.Identifier.id;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -8,7 +8,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import com.kush.utils.id.Identifier;
+import com.kush.commons.id.Identifier;
 
 public class SignalHandlerRegistrar {
 

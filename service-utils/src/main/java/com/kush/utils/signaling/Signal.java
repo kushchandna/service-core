@@ -2,7 +2,7 @@ package com.kush.utils.signaling;
 
 import java.io.Serializable;
 
-import com.kush.utils.id.Identifier;
+import com.kush.commons.id.Identifier;
 import com.kush.utils.remoting.Resolvable;
 
 public abstract class Signal<S extends SignalHandler> implements Resolvable, Serializable {

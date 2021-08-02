@@ -10,12 +10,12 @@ import java.util.Map;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import com.kush.commons.id.IdGenerator;
+import com.kush.commons.id.Identifiable;
+import com.kush.commons.id.Identifier;
+import com.kush.commons.id.SequentialIdGenerator;
 import com.kush.lib.persistence.api.Persister;
 import com.kush.lib.persistence.api.PersistorOperationFailedException;
-import com.kush.utils.id.IdGenerator;
-import com.kush.utils.id.Identifiable;
-import com.kush.utils.id.Identifier;
-import com.kush.utils.id.SequentialIdGenerator;
 
 public class InMemoryPersister<T extends Identifiable> implements Persister<T> {
 
