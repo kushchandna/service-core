@@ -15,7 +15,7 @@ import com.kush.commons.async.Response.ResultListener;
 import com.kush.lib.persistence.api.Persister;
 import com.kush.lib.service.remoting.auth.AuthToken;
 import com.kush.lib.service.remoting.auth.User;
-import com.kush.lib.service.remoting.auth.password.PasswordBasedCredential;
+import com.kush.lib.service.remoting.auth.credentials.PasswordBasedCredential;
 import com.kush.lib.service.sample.client.SampleHelloServiceClient;
 import com.kush.lib.service.sample.server.SampleHelloService;
 import com.kush.lib.service.sample.server.SampleHelloTextProvider;

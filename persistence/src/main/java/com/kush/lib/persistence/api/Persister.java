@@ -9,15 +9,15 @@ import com.kush.commons.id.Identifier;
 
 public interface Persister<T extends Identifiable> {
 
-    T save(T object) throws PersistorOperationFailedException;
+    T save(T object) throws PersistenceOperationFailedException;
 
-    T fetch(Identifier id) throws PersistorOperationFailedException;
+    T fetch(Identifier id) throws PersistenceOperationFailedException;
 
-    List<T> fetch(Predicate<T> filter, Comparator<T> order, int count) throws PersistorOperationFailedException;
+    List<T> fetch(Predicate<T> filter, Comparator<T> order, int count) throws PersistenceOperationFailedException;
 
-    List<T> fetch(Predicate<T> filter) throws PersistorOperationFailedException;
+    List<T> fetch(Predicate<T> filter) throws PersistenceOperationFailedException;
 
-    List<T> fetchAll() throws PersistorOperationFailedException;
+    List<T> fetchAll() throws PersistenceOperationFailedException;
 
-    boolean remove(Identifier id) throws PersistorOperationFailedException;
+    boolean remove(Identifier id) throws PersistenceOperationFailedException;
 }

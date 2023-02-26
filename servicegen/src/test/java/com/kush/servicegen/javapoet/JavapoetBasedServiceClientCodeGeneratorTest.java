@@ -31,6 +31,7 @@ import com.kush.serviceclient.ServiceClient;
 import com.kush.servicegen.CodeGenerator;
 import com.kush.servicegen.ServiceInfo;
 import com.kush.servicegen.ServiceReader;
+import com.kush.servicegen.clients.JavapoetBasedServiceClientCodeGenerator;
 
 public class JavapoetBasedServiceClientCodeGeneratorTest {
 

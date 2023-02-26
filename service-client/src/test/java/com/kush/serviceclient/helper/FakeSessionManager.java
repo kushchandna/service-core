@@ -7,7 +7,7 @@ import org.junit.rules.ExternalResource;
 
 import com.kush.lib.service.remoting.auth.Credential;
 import com.kush.lib.service.remoting.auth.User;
-import com.kush.lib.service.remoting.auth.password.PasswordBasedCredential;
+import com.kush.lib.service.remoting.auth.credentials.PasswordBasedCredential;
 import com.kush.serviceclient.auth.LoginServiceClient;
 
 public class FakeSessionManager extends ExternalResource {

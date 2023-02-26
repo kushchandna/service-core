@@ -16,32 +16,32 @@ public class DelegatingPersister<T extends Identifiable> implements Persister<T>
     }
 
     @Override
-    public T save(T object) throws PersistorOperationFailedException {
+    public T save(T object) throws PersistenceOperationFailedException {
         return delegate.save(object);
     }
 
     @Override
-    public T fetch(Identifier id) throws PersistorOperationFailedException {
+    public T fetch(Identifier id) throws PersistenceOperationFailedException {
         return delegate.fetch(id);
     }
 
     @Override
-    public List<T> fetch(Predicate<T> filter, Comparator<T> order, int count) throws PersistorOperationFailedException {
+    public List<T> fetch(Predicate<T> filter, Comparator<T> order, int count) throws PersistenceOperationFailedException {
         return delegate.fetch(filter, order, count);
     }
 
     @Override
-    public List<T> fetch(Predicate<T> filter) throws PersistorOperationFailedException {
+    public List<T> fetch(Predicate<T> filter) throws PersistenceOperationFailedException {
         return delegate.fetch(filter);
     }
 
     @Override
-    public List<T> fetchAll() throws PersistorOperationFailedException {
+    public List<T> fetchAll() throws PersistenceOperationFailedException {
         return delegate.fetchAll();
     }
 
     @Override
-    public boolean remove(Identifier id) throws PersistorOperationFailedException {
+    public boolean remove(Identifier id) throws PersistenceOperationFailedException {
         return delegate.remove(id);
     }
 }

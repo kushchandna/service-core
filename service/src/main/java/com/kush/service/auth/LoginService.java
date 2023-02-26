@@ -5,7 +5,7 @@ import java.util.Optional;
 import com.kush.commons.id.IdGenerator;
 import com.kush.commons.id.Identifier;
 import com.kush.commons.id.SequentialIdGenerator;
-import com.kush.lib.persistence.api.PersistorOperationFailedException;
+import com.kush.lib.persistence.api.PersistenceOperationFailedException;
 import com.kush.lib.service.remoting.auth.AuthToken;
 import com.kush.lib.service.remoting.auth.Credential;
 import com.kush.lib.service.remoting.auth.User;
@@ -21,7 +21,7 @@ public class LoginService extends BaseService {
     public static final String KEY_USER_ID_GEN = "USER_ID_GEN";
 
     @ServiceMethod
-    public User register(Credential credential) throws PersistorOperationFailedException, ValidationFailedException {
+    public User register(Credential credential) throws PersistenceOperationFailedException, ValidationFailedException {
         UserCredentialPersister userCredentialPersistor = getUserCredentialPersistor();
         validateCredentialDoesNotExists(credential, userCredentialPersistor);
         User user = createUser();
@@ -77,7 +77,7 @@ public class LoginService extends BaseService {
             if (user.isPresent()) {
                 throw new ValidationFailedException("User with specified credential already exists");
             }
-        } catch (PersistorOperationFailedException e) {
+        } catch (PersistenceOperationFailedException e) {
             throw new ValidationFailedException(e.getMessage(), e);
         }
     }
@@ -85,7 +85,7 @@ public class LoginService extends BaseService {
     private Optional<User> getUser(Credential credential, UserCredentialPersister userCredentialPersistor) {
         try {
             return userCredentialPersistor.getUserForCredential(credential);
-        } catch (PersistorOperationFailedException e) {
+        } catch (PersistenceOperationFailedException e) {
             throw new AuthenticationFailedException(e.getMessage(), e);
         }
     }

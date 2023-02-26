@@ -15,7 +15,7 @@ import com.kush.commons.id.Identifiable;
 import com.kush.commons.id.Identifier;
 import com.kush.commons.id.SequentialIdGenerator;
 import com.kush.lib.persistence.api.Persister;
-import com.kush.lib.persistence.api.PersistorOperationFailedException;
+import com.kush.lib.persistence.api.PersistenceOperationFailedException;
 
 public class InMemoryPersister<T extends Identifiable> implements Persister<T> {
 
@@ -63,13 +63,13 @@ public class InMemoryPersister<T extends Identifiable> implements Persister<T> {
     }
 
     @Override
-    public List<T> fetch(Predicate<T> filter, Comparator<T> order, int count) throws PersistorOperationFailedException {
+    public List<T> fetch(Predicate<T> filter, Comparator<T> order, int count) throws PersistenceOperationFailedException {
         return savedObjects.values().stream().filter(filter).sorted(order).limit(count == -1 ? Integer.MAX_VALUE : count)
             .collect(Collectors.toList());
     }
 
     @Override
-    public List<T> fetch(Predicate<T> filter) throws PersistorOperationFailedException {
+    public List<T> fetch(Predicate<T> filter) throws PersistenceOperationFailedException {
         return savedObjects.values().stream().filter(filter).collect(Collectors.toList());
     }
 

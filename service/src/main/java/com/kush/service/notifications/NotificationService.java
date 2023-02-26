@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import com.kush.commons.id.Identifier;
-import com.kush.lib.persistence.api.PersistorOperationFailedException;
+import com.kush.lib.persistence.api.PersistenceOperationFailedException;
 import com.kush.lib.service.remoting.notifications.Notification;
 import com.kush.service.BaseService;
 import com.kush.service.annotations.Service;
@@ -17,7 +17,7 @@ import com.kush.service.auth.AuthenticationRequired;
 public class NotificationService extends BaseService {
 
     @ServiceMethod
-    public void sendNotification(Identifier userId, Serializable data, String source) throws PersistorOperationFailedException {
+    public void sendNotification(Identifier userId, Serializable data, String source) throws PersistenceOperationFailedException {
         NotificationPersister notificationPersistor = getInstance(NotificationPersister.class);
         LocalDateTime notificationTime = LocalDateTime.now(getInstance(Clock.class));
         notificationPersistor.addNotification(userId, data, false, notificationTime, source);
@@ -25,7 +25,7 @@ public class NotificationService extends BaseService {
 
     @AuthenticationRequired
     @ServiceMethod
-    public List<? extends Notification> getUnreadNotifications() throws PersistorOperationFailedException {
+    public List<? extends Notification> getUnreadNotifications() throws PersistenceOperationFailedException {
         Identifier currentUserId = getCurrentUser().getId();
         NotificationPersister notificationPersistor = getInstance(NotificationPersister.class);
         return notificationPersistor.getRecentUnreadNotificationsForUser(currentUserId);

@@ -27,7 +27,6 @@ import com.kush.service.auth.LoginService;
 import com.kush.servicegen.CodeGenerationFailedException;
 import com.kush.servicegen.ServiceInfo;
 import com.kush.servicegen.ServiceReader;
-import com.kush.servicegen.javapoet.JavapoetBasedServiceClientCodeGenerator;
 import com.kush.utils.commons.AssociatedClassesFinder;
 import com.kush.utils.commons.JarUtils;
 

@@ -1,4 +1,4 @@
-package com.kush.servicegen.javapoet;
+package com.kush.servicegen.clients;
 
 import static javax.lang.model.element.Modifier.PUBLIC;
 

@@ -3,7 +3,7 @@ package com.kush.servicegen;
 import java.io.File;
 
 import com.kush.service.BaseService;
-import com.kush.servicegen.javapoet.JavapoetBasedServiceClientCodeGenerator;
+import com.kush.servicegen.clients.JavapoetBasedServiceClientCodeGenerator;
 
 public class ServiceClientCodeGeneratorFactory {
 

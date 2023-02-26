@@ -1,9 +1,9 @@
-package com.kush.service.auth.credentials.password;
+package com.kush.service.auth.credentials.handlers;
 
 import java.util.Arrays;
 
 import com.kush.lib.service.remoting.auth.Credential;
-import com.kush.lib.service.remoting.auth.password.PasswordBasedCredential;
+import com.kush.lib.service.remoting.auth.credentials.PasswordBasedCredential;
 import com.kush.service.auth.credentials.CredentialHandler;
 
 public class PasswordBasedCredentialHandler implements CredentialHandler {
