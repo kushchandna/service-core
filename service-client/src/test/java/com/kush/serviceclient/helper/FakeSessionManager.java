@@ -58,10 +58,10 @@ public class FakeSessionManager extends ExternalResource {
     }
 
     public void beginSession(User user) throws Exception {
-        loginServiceClient.login(userVsCredential.get(user)).waitForResult();
+        loginServiceClient.login(userVsCredential.get(user)).await();
     }
 
     public void endSession() throws Exception {
-        loginServiceClient.logout().waitForResult();
+        loginServiceClient.logout().await();
     }
 }

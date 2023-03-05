@@ -109,20 +109,20 @@ public abstract class SampleApplication {
             throws Exception {
         LoginServiceClient loginServiceClient = serviceClientProvider.getServiceClient(LoginServiceClient.class);
         Response<AuthToken> response = loginServiceClient.login(credential);
-        response.waitForResult();
+        response.await();
     }
 
     private static void doLogout(ServiceClientProvider serviceClientProvider)
             throws ObjectNotFoundException, InterruptedException, RequestFailedException {
         LoginServiceClient loginServiceClient = serviceClientProvider.getServiceClient(LoginServiceClient.class);
         Response<Void> response = loginServiceClient.logout();
-        response.waitForResult();
+        response.await();
     }
 
     private static void registerUser(ServiceClientProvider serviceClientProvider, PasswordBasedCredential credential)
             throws ObjectNotFoundException, InterruptedException, RequestFailedException {
         LoginServiceClient loginServiceClient = serviceClientProvider.getServiceClient(LoginServiceClient.class);
         Response<User> response = loginServiceClient.register(credential);
-        response.waitForResult();
+        response.await();
     }
 }
